@@ -1,65 +1,300 @@
-import Image from "next/image";
+import { mockProperties } from '../data/mockProperties';
+import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-[#030305] text-slate-100 selection:bg-indigo-500 selection:text-white antialiased relative overflow-x-hidden">
+
+      {/* ================= FULL-SCREEN BACKGROUND VIDEO LAYER ================= */}
+      <div className="fixed inset-0 w-screen h-screen object-cover z-0 pointer-events-none overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ mixBlendMode: 'screen' }}
+        >
+          <source src="/matrix.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        
+        {/* Subtle layered overlays: blend video seamlessly with UI */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#030305] via-[#030305]/40 to-[#030305] opacity-50 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#030305]/50 via-transparent to-[#030305]/50 opacity-40 pointer-events-none" />
+        
+        {/* Radial gradient for softer fade */}
+        <div className="absolute inset-0 bg-radial-gradient from-transparent via-[#030305]/20 to-[#030305]/50 opacity-50 pointer-events-none" />
+      </div>
+      {/* ========================================================== */}
+      
+      {/* Enhanced Background Decorative Laser Grids & Glows */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-gradient-to-b from-indigo-950/25 via-transparent to-transparent pointer-events-none z-0" />
+      <div className="absolute top-[15vh] left-[-15%] w-[50vw] h-[50vw] rounded-full bg-gradient-radial from-indigo-600/10 via-transparent to-transparent blur-3xl pointer-events-none z-0" />
+      <div className="absolute top-[30vh] right-[-20%] w-[45vw] h-[45vw] rounded-full bg-gradient-radial from-emerald-600/8 via-transparent to-transparent blur-3xl pointer-events-none z-0" />
+      
+      {/* Cybernetic Navigation Bar */}
+      <nav className="border-b border-slate-800/40 sticky top-0 bg-[#030305]/30 backdrop-blur-3xl z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="relative flex h-4 w-4">
+              <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-60"></span>
+              <span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.7)]"></span>
+            </div>
+            <span className="font-mono tracking-[0.15em] text-sm uppercase font-black bg-gradient-to-r from-indigo-300 via-white to-purple-300 bg-clip-text text-transparent">
+              FINDLE
+            </span>
+          </div>
+          
+          <div className="hidden md:flex items-center gap-8 text-[11px] font-mono tracking-widest uppercase text-slate-400">
+            <span className="text-indigo-400 cursor-pointer flex items-center gap-1 hover:text-indigo-300 transition">
+              <span className="text-[9px]">&gt;</span> Browse
+            </span>
+            <span className="hover:text-white cursor-pointer transition duration-300">Listings</span>
+            <Link href="/portal" className="hover:text-white cursor-pointer transition duration-300">Login</Link>
+          </div>
+          
+          <div className="font-mono text-[10px] text-slate-400 border border-slate-600/30 px-3 py-1.5 bg-slate-900/20 rounded-md hover:border-indigo-400/50 backdrop-blur-sm transition">
+            PLATFORM: <span className="text-indigo-300 font-semibold">LIVE</span>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </nav>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        {/* ===== Enhanced Hero Section ===== */}
+        <section className="py-16 sm:py-24 lg:py-32 relative">
+          {/* Animated accent line */}
+          <div className="absolute -left-4 top-1/3 w-1 h-24 bg-gradient-to-b from-indigo-500/0 via-indigo-500/50 to-indigo-500/0 rounded-full blur-sm" />
+          
+          <header className="mb-12 max-w-5xl">
+          <div className="inline-flex items-center gap-2 rounded-lg border border-indigo-500/30 bg-indigo-950/20 px-4 py-2 text-[10px] font-mono tracking-widest text-indigo-300 mb-8 uppercase backdrop-blur-md hover:border-indigo-400/50 transition">
+              [ ✓ PROPERTY DISCOVERY ENGINE ACTIVE ]
+            </div>
+            
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-tight mb-6">
+              Find Your <br />
+              <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
+                Perfect Property
+              </span>
+            </h1>
+            
+            <p className="text-lg sm:text-xl font-mono text-slate-400 max-w-3xl leading-relaxed">
+              <span className="text-indigo-400">// </span>Discover premium real estate opportunities with AI-powered insights and real-time market intelligence.
+            </p>
+          </header>
+
+          {/* Advanced Stats Bar */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 mb-12">
+            {[
+              { label: 'PROPERTIES_LISTED', value: mockProperties.length, unit: '' },
+              { label: 'MATCH_ACCURACY', value: '99.9', unit: '%' },
+              { label: 'MARKET_COVERAGE', value: '24/7', unit: '' },
+              { label: 'USER_SATISFACTION', value: '98.5', unit: '%' }
+            ].map((stat, idx) => (
+              <div key={idx} className="group relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300" />
+                <div className="relative border border-slate-700/40 bg-slate-900/15 rounded-lg p-4 backdrop-blur-md group-hover:border-indigo-500/50 transition">
+                  <div className="text-[10px] font-mono tracking-widest text-slate-400 uppercase mb-2">{stat.label}</div>
+                  <div className="flex items-baseline gap-1">
+                    <div className="text-3xl font-black text-white">{stat.value}</div>
+                    <div className="text-slate-500 text-sm">{stat.unit}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ===== Enhanced HUD Data Filter Strip ===== */}
+        <div className="relative mb-16">
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/5 to-purple-600/5 rounded-xl blur" />
+          <div className="relative border border-slate-700/40 bg-slate-900/20 backdrop-blur-xl rounded-xl p-4 hover:border-slate-600/60 transition">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div className="flex flex-wrap items-center gap-2">
+                <button className="group relative bg-gradient-to-r from-indigo-600/25 to-indigo-600/5 border border-indigo-500/50 text-indigo-300 text-[10px] uppercase px-5 py-2.5 rounded-lg tracking-wider font-bold hover:from-indigo-600/35 hover:to-indigo-600/15 hover:border-indigo-400/70 transition-all shadow-[0_0_20px_rgba(99,102,241,0.2)] group-hover:shadow-[0_0_40px_rgba(99,102,241,0.35)] backdrop-blur-md">
+                  <span className="flex items-center gap-2">
+                    <span className="text-xs">◆</span> SYS.ALL_NODES
+                  </span>
+                </button>
+                <button className="border border-slate-700/60 hover:border-slate-600 hover:bg-slate-800/40 text-slate-400 hover:text-slate-300 text-[10px] uppercase px-4 py-2.5 rounded-lg tracking-wider transition duration-200">
+                  STAGE.REGISTRATION
+                </button>
+                <button className="border border-slate-700/60 hover:border-slate-600 hover:bg-slate-800/40 text-slate-400 hover:text-slate-300 text-[10px] uppercase px-4 py-2.5 rounded-lg tracking-wider transition duration-200">
+                  STAGE.CONSTRUCTION
+                </button>
+              </div>
+              <div className="text-[11px] text-slate-400 px-4 py-2 border-l border-slate-700/40">
+                LISTINGS: <span className="text-indigo-400 font-bold ml-1">{mockProperties.length} AVAILABLE</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
-    </div>
+
+        {/* ===== Features Section ===== */}
+        <section className="py-16 mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { 
+              imgUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80', 
+              title: 'Smart Search', 
+              desc: 'AI-powered tactical search matrices to locate your ideal property nodes in seconds.' 
+            },
+            { 
+              imgUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80', 
+              title: 'Market Insights', 
+              desc: 'Real-time structural pricing trends and predictive valuation algorithms running continuously.' 
+            },
+            { 
+              imgUrl: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80', 
+              title: 'Verified Listings', 
+              desc: 'All structural specifications locked, authenticated, and backed by expert broker nodes.' 
+            }
+          ].map((feature, idx) => (
+            <div key={idx} className="group relative overflow-hidden rounded-xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-purple-600/5 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition duration-500" />
+              
+              <div className="relative border border-slate-700/50 bg-slate-900/30 rounded-xl overflow-hidden backdrop-blur-sm group-hover:border-indigo-500/50 transition duration-300 flex flex-col h-full">
+                
+                {/* Tech Card Image Header Header */}
+                <div className="h-32 w-full relative overflow-hidden opacity-40 group-hover:opacity-70 transition duration-500 border-b border-slate-800">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={feature.imgUrl} alt={feature.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent" />
+                </div>
+
+                {/* Card Content Text */}
+                <div className="p-6 flex-1 flex flex-col justify-center">
+                  <h3 className="text-lg font-mono font-bold uppercase tracking-wider text-white mb-2 group-hover:text-indigo-400 transition">
+                    // {feature.title}
+                  </h3>
+                  <p className="text-xs font-mono leading-relaxed text-slate-400 group-hover:text-slate-300 transition">
+                    {feature.desc}
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          ))}
+        </section>
+
+        {/* ===== Enhanced Futuristic Card Grid ===== */}
+        <section className="mb-20">
+          <div className="flex items-center justify-between mb-12">
+            <div>
+              <h2 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight mb-2">
+                Featured Properties
+              </h2>
+              <p className="text-slate-400 font-mono text-sm">Curated premium listings from our network</p>
+            </div>
+            <button className="hidden sm:inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-slate-700/50 hover:border-indigo-500/60 bg-slate-900/20 hover:bg-indigo-600/15 text-slate-300 hover:text-white transition duration-300 font-mono text-sm uppercase tracking-wider backdrop-blur-md">
+              View All <span>→</span>
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-1 gap-y-12 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
+            {mockProperties.map((property) => (
+              <div 
+                key={property.id} 
+                className="group flex flex-col bg-slate-900/20 border border-slate-700/40 rounded-xl overflow-hidden transition-all duration-500 hover:border-indigo-500/60 hover:bg-slate-900/35 hover:shadow-[0_0_50px_rgba(99,102,241,0.2)] relative backdrop-blur-sm"
+              >
+                {/* Corner tech accents */}
+                <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-slate-600 group-hover:border-indigo-400 transition-colors z-20" />
+                <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-slate-600 group-hover:border-indigo-400 transition-colors z-20" />
+                
+                {/* Holographic Media Container */}
+                <div className="aspect-[16/10] w-full bg-slate-950 relative overflow-hidden border-b border-slate-700/40">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={property.imageUrl}
+                    alt={property.name}
+                    className="h-full w-full object-cover object-center grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-90 transition-all duration-700 group-hover:scale-105"
+                  />
+                  
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                  
+                  {/* Neon Status Badge */}
+                  <div className="absolute top-4 left-4">
+                    <span className={`inline-flex items-center rounded-lg px-3 py-1 text-[9px] font-mono tracking-widest uppercase font-bold bg-black/80 border backdrop-blur-sm text-slate-300 ${
+                      property.status === 'Registration' ? 'border-purple-500/50 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.3)]' :
+                      property.status === 'Selling' ? 'border-emerald-500/50 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 
+                      'border-amber-500/50 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.3)]'
+                    }`}>
+                      ● {property.status}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metadata Cluster */}
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="flex-1">
+                    {/* System Tags */}
+                    <div className="flex items-center justify-between text-[9px] font-mono tracking-widest text-slate-500 uppercase">
+                      <span className="hover:text-slate-400 transition">LISTED_BY // {property.developer}</span>
+                      <span className="text-slate-600">ID: #{property.id}</span>
+                    </div>
+                    
+                    {/* Property Asset Title */}
+                    <h3 className="mt-3 text-lg font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors font-mono uppercase">
+                      {property.name}
+                    </h3>
+                    
+                    {/* Digital Grid Specs */}
+                    <div className="mt-6 grid grid-cols-2 gap-4 border-t border-slate-700/40 pt-4 text-xs font-mono">
+                      <div className="group/info hover:bg-slate-800/30 p-2 rounded transition">
+                        <span className="block text-[8px] text-slate-500 uppercase tracking-widest">LOCATION</span>
+                        <span className="font-medium text-slate-300 uppercase mt-1 block tracking-wider text-sm">{property.neighborhood}</span>
+                      </div>
+                      <div className="group/info hover:bg-slate-800/30 p-2 rounded transition">
+                        <span className="block text-[8px] text-slate-500 uppercase tracking-widest">AVAILABLE</span>
+                        <span className="font-medium text-slate-300 mt-1 block tracking-wider text-sm">Q{Math.ceil(property.completionYear % 12 / 3)}_{property.completionYear}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Transaction Footer */}
+                  <div className="mt-8 pt-4 border-t border-slate-700/40 flex items-center justify-between">
+                    <div>
+                      <span className="block text-[8px] font-mono text-slate-500 uppercase tracking-widest">ASKING_PRICE</span>
+                      <span className="text-2xl font-black text-white tracking-tight font-mono">
+                        ${property.startingPrice.toLocaleString()}
+                      </span>
+                    </div>
+                    
+                    {/* Enhanced CTA Button */}
+                    <button className="relative group/btn inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 hover:from-indigo-600/30 hover:to-indigo-600/15 text-indigo-300 hover:text-indigo-100 font-mono text-[10px] tracking-widest uppercase px-4 py-3 transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.15)] hover:shadow-[0_0_30px_rgba(99,102,241,0.25)]">
+                      <span>VIEW DETAILS</span>
+                      <span className="ml-1 group-hover/btn:translate-x-0.5 transition">→</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ===== CTA Section ===== */}
+        <section className="py-20 mb-12 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-2xl blur-xl" />
+          <div className="relative border border-slate-700/40 bg-slate-900/25 backdrop-blur-2xl rounded-2xl p-12 text-center">
+            <h2 className="text-4xl font-black text-white mb-4 uppercase">Start Finding Today</h2>
+            <p className="text-lg text-slate-300 mb-8 max-w-2xl mx-auto font-mono">
+              Explore thousands of premium properties with intelligent matching and expert insights from Findle.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              {/* Linked directly to your new route path */}
+              <Link href="/directory" className="px-8 py-4 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_0_30px_rgba(99,102,241,0.3)] hover:shadow-[0_0_40px_rgba(99,102,241,0.4)] text-center">
+                Browse Properties
+              </Link>
+              <button className="px-8 py-4 rounded-lg border-2 border-slate-600 hover:border-indigo-500 text-slate-300 hover:text-white font-bold uppercase tracking-wider transition-all duration-300">
+                Create Profile
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
   );
 }
