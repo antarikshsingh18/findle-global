@@ -50,8 +50,12 @@ export default function Home() {
             <span className="text-indigo-400 cursor-pointer flex items-center gap-1 hover:text-indigo-300 transition">
               <span className="text-[9px]">&gt;</span> Browse
             </span>
-            <span className="hover:text-white cursor-pointer transition duration-300">Listings</span>
-            <Link href="/portal" className="hover:text-white cursor-pointer transition duration-300">Login</Link>
+           <Link href="/directory" className="hover:text-white cursor-pointer transition duration-300">
+              Listings
+            </Link>
+            <Link href="/portal" className="hover:text-white cursor-pointer transition duration-300">
+              Login
+            </Link>
           </div>
           
           <div className="font-mono text-[10px] text-slate-400 border border-slate-600/30 px-3 py-1.5 bg-slate-900/20 rounded-md hover:border-indigo-400/50 backdrop-blur-sm transition">
@@ -132,6 +136,7 @@ export default function Home() {
         </div>
 
         {/* ===== Features Section ===== */}
+        {/* ===== Features Section ===== */}
         <section className="py-16 mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             { 
@@ -149,34 +154,52 @@ export default function Home() {
               title: 'Verified Listings', 
               desc: 'All structural specifications locked, authenticated, and backed by expert broker nodes.' 
             }
-          ].map((feature, idx) => (
-            <div key={idx} className="group relative overflow-hidden rounded-xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-purple-600/5 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition duration-500" />
-              
-              <div className="relative border border-slate-700/50 bg-slate-900/30 rounded-xl overflow-hidden backdrop-blur-sm group-hover:border-indigo-500/50 transition duration-300 flex flex-col h-full">
+          ].map((feature, idx) => {
+            // 1. Maintain identical visual elements across all items
+            const cardInnerContent = (
+              <>
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-purple-600/5 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition duration-500" />
                 
-                {/* Tech Card Image Header Header */}
-                <div className="h-32 w-full relative overflow-hidden opacity-40 group-hover:opacity-70 transition duration-500 border-b border-slate-800">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={feature.imgUrl} alt={feature.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent" />
-                </div>
+                <div className="relative border border-slate-700/50 bg-slate-900/30 rounded-xl overflow-hidden backdrop-blur-sm group-hover:border-indigo-500/50 transition duration-300 flex flex-col h-full">
+                  
+                  {/* Tech Card Image Header */}
+                  <div className="h-32 w-full relative overflow-hidden opacity-40 group-hover:opacity-70 transition duration-500 border-b border-slate-800">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={feature.imgUrl} alt={feature.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent" />
+                  </div>
 
-                {/* Card Content Text */}
-                <div className="p-6 flex-1 flex flex-col justify-center">
-                  <h3 className="text-lg font-mono font-bold uppercase tracking-wider text-white mb-2 group-hover:text-indigo-400 transition">
-                    // {feature.title}
-                  </h3>
-                  <p className="text-xs font-mono leading-relaxed text-slate-400 group-hover:text-slate-300 transition">
-                    {feature.desc}
-                  </p>
-                </div>
+                  {/* Card Content Text */}
+                  <div className="p-6 flex-1 flex flex-col justify-center">
+                    <h3 className="text-lg font-mono font-bold uppercase tracking-wider text-white mb-2 group-hover:text-indigo-400 transition">
+                      // {feature.title}
+                    </h3>
+                    <p className="text-xs font-mono leading-relaxed text-slate-400 group-hover:text-slate-300 transition">
+                      {feature.desc}
+                    </p>
+                  </div>
 
+                </div>
+              </>
+            );
+
+            // 2. Wrap ONLY the middle item (Market Insights, index 1) with an active route path link
+            if (idx === 1) {
+              return (
+                <Link href="/marketInsights" key={idx} className="group relative overflow-hidden rounded-xl block cursor-pointer">
+                  {cardInnerContent}
+                </Link>
+              );
+            }
+
+            // 3. Fallback wrapper to keep the remaining nodes static, unclickable divs
+            return (
+              <div key={idx} className="group relative overflow-hidden rounded-xl">
+                {cardInnerContent}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </section>
-
         {/* ===== Enhanced Futuristic Card Grid ===== */}
         <section className="mb-20">
           <div className="flex items-center justify-between mb-12">
