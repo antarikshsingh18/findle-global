@@ -29,7 +29,6 @@ export default function DirectoryPage() {
     async function fetchCloudData() {
       try {
         setLoading(true);
-        // Updated to target your real 'projects' table populated by your crawler script
         const { data, error } = await supabase
           .from('projects')
           .select('*');
@@ -49,26 +48,18 @@ export default function DirectoryPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCity, setSelectedCity] = useState<string>('ALL');
   const [selectedStage, setSelectedStage] = useState<string>('ALL');
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeProjectName, setActiveProjectName] = useState('');
-  const [leadType, setLeadType] = useState<'BUYER' | 'AGENT'>('BUYER');
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
-
   const [viewMode, setViewMode] = useState<'GRID' | 'MAP'>('GRID');
 
   // --- Filtering Engine Logic ---
   const filteredProperties = properties.filter((property) => {
     const titleMatch = property.title?.toLowerCase().includes(searchQuery.toLowerCase()) || false;
     const developerMatch = property.developer?.toLowerCase().includes(searchQuery.toLowerCase()) || false;
-    // Uses city fallback if neighborhood wasn't explicitly captured in your script
     const locationMatch = (property.neighborhood || property.city || '').toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesSearch = titleMatch || developerMatch || locationMatch;
       
     const matchesCity = selectedCity === 'ALL' || (property.city && property.city.toUpperCase() === selectedCity.toUpperCase());
     
-    // Maps your database 'selling_status' (e.g. "Active") matching against your UI layout buttons
     const currentStatus = property.selling_status || 'SELLING';
     const matchesStage = selectedStage === 'ALL' || 
       (selectedStage === 'SELLING' && currentStatus.toUpperCase() === 'ACTIVE') ||
@@ -126,7 +117,6 @@ export default function DirectoryPage() {
           </div>
           
           <div className="grid grid-cols-1 gap-6">
-            {/* Fallback to display the first item if no item explicitly contains an is_featured flag */}
             {(properties.some(p => p.is_featured) ? properties.filter(p => p.is_featured) : properties.slice(0, 1)).map((featured: any) => (
               <div 
                 key={`featured-${featured.id}`}
@@ -176,15 +166,11 @@ export default function DirectoryPage() {
                         </span>
                       </div>
                       
-                      <button 
-                        onClick={() => {
-                          setActiveProjectName(featured.title);
-                          setIsModalOpen(true);
-                        }}
-                        className="mt-3 w-full lg:w-auto px-5 py-2.5 rounded-lg border border-amber-500/50 bg-amber-500/10 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold text-[10px] tracking-widest uppercase transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.1)] hover:shadow-[0_0_25px_rgba(245,158,11,0.3)]"
-                      >
-                        GET_PLATINUM_ACCESS
-                      </button>
+                      <Link href={`/directory/${featured.id}`} className="mt-3 w-full lg:w-auto block">
+                        <button className="w-full lg:w-auto px-5 py-2.5 rounded-lg border border-amber-500/50 bg-amber-500/10 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold text-[10px] tracking-widest uppercase transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.1)] hover:shadow-[0_0_25px_rgba(245,158,11,0.3)]">
+                          OPEN_NODE →
+                        </button>
+                      </Link>
                     </div>
                   </div>
 
@@ -197,7 +183,6 @@ export default function DirectoryPage() {
         {/* ================= INTERACTIVE HUD FILTER CONTROLLER ================= */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-12 font-mono text-xs">
           
-          {/* 1. Live Text Data Input Search */}
           <div className="lg:col-span-2 relative">
             <input
               type="text"
@@ -209,7 +194,6 @@ export default function DirectoryPage() {
             <span className="absolute right-4 top-4 text-slate-600">⌨</span>
           </div>
 
-          {/* 2. Geolocation Zone Node Selector */}
           <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-1.5 flex gap-1 items-center overflow-x-auto">
             {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE'].map((city) => (
               <button
@@ -227,7 +211,6 @@ export default function DirectoryPage() {
             ))}
           </div>
 
-          {/* 3. Construction Lifecycle Selector */}
           <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-1.5 flex gap-1 items-center">
             {['ALL', 'REGISTRATION', 'SELLING', 'CONSTRUCTION'].map((stage) => (
               <button
@@ -284,7 +267,6 @@ export default function DirectoryPage() {
                   key={property.id} 
                   className="group flex flex-col bg-slate-900/40 border border-slate-700/60 rounded-xl overflow-hidden transition-all duration-500 hover:border-indigo-500/50 hover:bg-slate-900/60 hover:shadow-[0_0_40px_rgba(99,102,241,0.15)] relative"
                 >
-                  {/* Image Block */}
                   <div className="aspect-[16/10] w-full bg-slate-950 relative overflow-hidden border-b border-slate-700/40">
                     {property.image_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -303,7 +285,6 @@ export default function DirectoryPage() {
                     </div>
                   </div>
 
-                  {/* Info Payload */}
                   <div className="flex flex-1 flex-col p-6">
                     <div className="flex-1">
                       <div className="text-[9px] font-mono tracking-widest text-slate-500 uppercase">
@@ -331,16 +312,15 @@ export default function DirectoryPage() {
                           {property.price_text}
                         </span>
                       </div>
-                      <button 
-                        type="button"
-                        onClick={() => {
-                          setActiveProjectName(property.title);
-                          setIsModalOpen(true);
-                        }}
-                        className="relative inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 text-indigo-300 font-mono text-[10px] tracking-widest uppercase px-4 py-2.5 transition-all"
-                      >
-                        OPEN_NODE →
-                      </button>
+                      
+                      <Link href={`/directory/${property.id}`}>
+                        <button 
+                          type="button"
+                          className="relative inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 text-indigo-300 font-mono text-[10px] tracking-widest uppercase px-4 py-2.5 transition-all hover:bg-indigo-600/30 hover:text-white"
+                        >
+                          OPEN_NODE →
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -354,28 +334,23 @@ export default function DirectoryPage() {
                   // ACTIVE_SATELLITE_FEED: {filteredProperties.length} LOCATIONS MATRIXED
                 </div>
                 {filteredProperties.map((property) => (
-                  <div 
-                    key={`map-list-${property.id}`}
-                    onClick={() => {
-                      setActiveProjectName(property.title);
-                      setIsModalOpen(true);
-                    }}
-                    className="bg-[#09090e] border border-slate-800 hover:border-indigo-500 p-4 rounded-xl transition-all group cursor-pointer"
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1 min-w-0 pr-2">
-                        <div className="text-[10px] text-slate-500 tracking-wider truncate">NODE_REF: #{property.id.slice(0, 8)}</div>
-                        <h4 className="text-sm font-black text-white group-hover:text-indigo-400 uppercase transition-colors mt-0.5 truncate">{property.title}</h4>
-                        <p className="text-[11px] text-slate-400 font-sans mt-0.5">{property.city}, ON</p>
+                  <Link href={`/directory/${property.id}`} key={`map-list-${property.id}`} className="block">
+                    <div className="bg-[#09090e] border border-slate-800 hover:border-indigo-500 p-4 rounded-xl transition-all group cursor-pointer">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1 min-w-0 pr-2">
+                          <div className="text-[10px] text-slate-500 tracking-wider truncate">NODE_REF: #{property.id.slice(0, 8)}</div>
+                          <h4 className="text-sm font-black text-white group-hover:text-indigo-400 uppercase transition-colors mt-0.5 truncate">{property.title}</h4>
+                          <p className="text-[11px] text-slate-400 font-sans mt-0.5">{property.city}, ON</p>
+                        </div>
+                        <span className="text-[10px] bg-slate-950 border border-slate-800 px-2 py-0.5 rounded text-indigo-400 font-bold shrink-0">
+                          {property.price_text}
+                        </span>
                       </div>
-                      <span className="text-[10px] bg-slate-950 border border-slate-800 px-2 py-0.5 rounded text-indigo-400 font-bold shrink-0">
-                        {property.price_text}
-                      </span>
+                      <div className="mt-3 flex gap-4 text-[9px] text-slate-600 border-t border-slate-900 pt-2.5">
+                        <div>LAYOUT: <span className="text-slate-400">{property.beds_text}</span></div>
+                      </div>
                     </div>
-                    <div className="mt-3 flex gap-4 text-[9px] text-slate-600 border-t border-slate-900 pt-2.5">
-                      <div>LAYOUT: <span className="text-slate-400">{property.beds_text}</span></div>
-                    </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
 
@@ -394,14 +369,18 @@ export default function DirectoryPage() {
                 <div className="relative w-full h-80 max-w-md border border-slate-900/50 rounded-xl flex items-center justify-center">
                   <div className="absolute inset-x-4 inset-y-12 border border-indigo-500/5 rounded-full rotate-12 blur-sm bg-gradient-to-tr from-indigo-500/5 to-transparent pointer-events-none" />
                   
-                  <div className="absolute top-1/2 left-1/3 -translate-x-1/2 group cursor-pointer" onClick={() => { setActiveProjectName('Metro Center Focus'); setIsModalOpen(true); }}>
-                    <div className="absolute -inset-2 bg-amber-400/20 rounded-full blur animate-ping duration-1000" />
-                    <div className="relative h-3 w-3 bg-amber-500 rounded-full border border-black shadow-[0_0_10px_#f59e0b]" />
-                  </div>
-                  <div className="absolute top-1/3 left-1/2 group cursor-pointer" onClick={() => { setActiveProjectName('West Hub Complex'); setIsModalOpen(true); }}>
-                    <div className="absolute -inset-2 bg-indigo-500/20 rounded-full blur animate-pulse" />
-                    <div className="relative h-3 w-3 bg-indigo-500 rounded-full border border-black shadow-[0_0_10px_#6366f1]" />
-                  </div>
+                  {filteredProperties[0] && (
+                    <Link href={`/directory/${filteredProperties[0].id}`} className="absolute top-1/2 left-1/3 -translate-x-1/2 group cursor-pointer">
+                      <div className="absolute -inset-2 bg-amber-400/20 rounded-full blur animate-ping duration-1000" />
+                      <div className="relative h-3 w-3 bg-amber-500 rounded-full border border-black shadow-[0_0_10px_#f59e0b]" />
+                    </Link>
+                  )}
+                  {filteredProperties[1] && (
+                    <Link href={`/directory/${filteredProperties[1].id}`} className="absolute top-1/3 left-1/2 group cursor-pointer">
+                      <div className="absolute -inset-2 bg-indigo-500/20 rounded-full blur animate-pulse" />
+                      <div className="relative h-3 w-3 bg-indigo-500 rounded-full border border-black shadow-[0_0_10px_#6366f1]" />
+                    </Link>
+                  )}
                 </div>
 
                 <div className="w-full border-t border-slate-900 mt-auto pt-4 flex justify-between text-[8px] text-slate-600 tracking-widest">
@@ -416,141 +395,6 @@ export default function DirectoryPage() {
             <div className="text-slate-600 text-3xl mb-4">⚠️</div>
             <div className="text-sm uppercase text-slate-400 tracking-wider">Zero Matching Data Clusters Found</div>
             <p className="text-xs text-slate-600 mt-2">Adjust your query arrays or clear geolocation node matrix filters.</p>
-          </div>
-        )}
-
-        {/* Access Modal Layer */}
-        {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md bg-black/70 animate-fade-in">
-            <div className="relative w-full max-w-md bg-[#09090e] border border-slate-800 rounded-2xl p-6 shadow-[0_0_50px_rgba(99,102,241,0.15)] font-mono">
-              
-              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
-
-              <button 
-                type="button"
-                onClick={() => setIsModalOpen(false)}
-                className="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors text-sm"
-              >
-                [ESC_X]
-              </button>
-
-              <div className="mb-6">
-                <div className="text-[9px] text-indigo-400 tracking-[0.2em] uppercase mb-1">
-                  SECURE_CHANNEL // PROTOCOL_INITIALIZATION
-                </div>
-                <h3 className="text-lg font-black text-white uppercase tracking-tight">
-                  Request Allocation Access
-                </h3>
-                <p className="text-[11px] text-slate-400 font-sans mt-1">
-                  Decrypting node manifests for: <span className="text-amber-400 font-bold uppercase">{activeProjectName}</span>
-                </p>
-              </div>
-
-              <div className="bg-slate-950 border border-slate-800 p-1 rounded-xl flex gap-1 mb-5 text-[10px] tracking-wider font-bold">
-                <button
-                  type="button"
-                  onClick={() => setLeadType('BUYER')}
-                  className={`flex-1 py-2 rounded-lg transition-all ${
-                    leadType === 'BUYER' 
-                      ? 'bg-indigo-600 text-white shadow-[0_0_10px_rgba(99,102,241,0.2)]' 
-                      : 'text-slate-500 hover:text-slate-300'
-                  }`}
-                >
-                  INDIVIDUAL_INVESTOR
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLeadType('AGENT')}
-                  className={`flex-1 py-2 rounded-lg transition-all ${
-                    leadType === 'AGENT' 
-                      ? 'bg-purple-600 text-white shadow-[0_0_10px_rgba(168,85,247,0.2)]' 
-                      : 'text-slate-500 hover:text-slate-300'
-                  }`}
-                >
-                  LICENSED_BROKER_NODE
-                </button>
-              </div>
-
-              {/* Unleashed Lead Capture Submission Engine */}
-              <form 
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  
-                  try {
-                    const { error } = await supabase
-                      .from('leads')
-                      .insert([
-                        // {
-                        //   full_name: formData.name,
-                        //   email: formData.email,
-                        //   phone: formData.phone,
-                        //   target_property: activeProjectName,
-                        //   buyer_type: leadType
-                        // }
-                      ]);
-
-                    if (error) throw error;
-
-                    alert(`[UPLINK_SUCCESSFUL]\nTarget Node: ${activeProjectName}\nIdentity Matrix: ${formData.name}\nRouting Type: ${leadType}`);
-                    setIsModalOpen(false);
-                    setFormData({ name: '', email: '', phone: '' });
-
-                  } catch (err: any) {
-                    console.error("Supabase Matrix Error:", err);
-                    alert(`[UPLINK_FAILED]\nDatabase rejected sequence: ${err.message || err}`);
-                  }
-                }}
-                className="space-y-4 text-xs"
-              >
-                <div>
-                  <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-1.5">LEAD_IDENTITY_NAME</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="ENTER FULL LEGAL NAME..."
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-white outline-none focus:border-indigo-500 transition uppercase tracking-wider"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-1.5">COMM_ROUTING_EMAIL</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="SECURE_EMAIL@DOMAIN.COM"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-white outline-none focus:border-indigo-500 transition tracking-wider"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-1.5">TELEPHONY_MOBILE_SIGNAL</label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="+1 (XXX) XXX-XXXX"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-white outline-none focus:border-indigo-500 transition tracking-wider"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className={`w-full py-3 mt-2 rounded-xl text-[10px] font-black tracking-widest uppercase transition-all duration-300 border ${
-                    leadType === 'BUYER'
-                      ? 'border-indigo-500/50 bg-indigo-500/10 hover:bg-indigo-600 text-indigo-300 hover:text-white shadow-[0_0_15px_rgba(99,102,241,0.1)]'
-                      : 'border-purple-500/50 bg-purple-500/10 hover:bg-purple-600 text-purple-300 hover:text-white shadow-[0_0_15px_rgba(168,85,247,0.1)]'
-                  }`}
-                >
-                  AUTHORIZE_PLATINUM_UPLINK →
-                </button>
-              </form>
-
-            </div>
           </div>
         )}
 
