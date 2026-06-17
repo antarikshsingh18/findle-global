@@ -22,6 +22,7 @@ interface Project {
   incentives_list?: string[]; // Arrays or fallbacks mapped below
   deposit_list?: string[];
   facts_list?: string[];
+  document_links?: string[];
 }
 
 interface PageProps {
@@ -53,7 +54,7 @@ function AccordionSection({ title, children, defaultOpen = false }: { title: str
 }
 
 export default function ProjectDetailPage({ params }: PageProps) {
-  const { id } = use(params);
+  const { id } = use(params) as { id: string }  ;
 
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
@@ -61,30 +62,40 @@ export default function ProjectDetailPage({ params }: PageProps) {
   // --- Lead Form Logic States ---
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
-  const [leadType, setLeadType] = useState<'BUYER' | 'AGENT'>('BUYER');
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
+  const [leadType, setLeadType] = useState<'BUYER' |'END_USER'| 'AGENT'>('BUYER');
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '' });
 
-  useEffect(() => {
-    async function fetchProjectNode() {
-      try {
-        setLoading(true);
-        const { data, error } = await supabase
-          .from('projects')
-          .select('*')
-          .eq('id', id)
-          .single();
+ useEffect(() => {
+  async function fetchProjectNode() {
+    try {
+      setLoading(true);
 
-        if (error) throw error;
-        setProject(data);
-      } catch (err) {
-        console.error('Error fetching project node matrix:', err);
-      } finally {
-        setLoading(false);
-      }
+      const isC21 = typeof id === 'string' && id.startsWith('c21-');
+      const cleanDbId = isC21 ? id.replace('c21-', '') : id;
+
+      const { data, error } = await supabase
+        .from(isC21 ? 'c21_portal_listings' : 'projects')
+        .select('*')
+        .eq('id', cleanDbId)
+        .single();
+
+      if (error) throw error;
+
+      setProject(data);
+
+      // Auth check — inside the same try block, no need for a separate try
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) setIsUnlocked(true);
+
+    } catch (err) {
+      console.error('Error fetching project node matrix:', err);
+    } finally {
+      setLoading(false);
     }
+  }
 
-    if (id) fetchProjectNode();
-  }, [id]);
+  if (id) fetchProjectNode();
+}, [id]);
 
   if (loading) {
     return (
@@ -223,10 +234,10 @@ export default function ProjectDetailPage({ params }: PageProps) {
               </div>
               <div>
                 <h4 className="text-sm font-bold text-slate-200 font-mono mb-2 uppercase">{project.developer || 'Caivan Communities'}</h4>
-                <p className="font-sans text-slate-400 leading-relaxed">
+                {/* <p className="font-sans text-slate-400 leading-relaxed">
                   {project.developer_description || 
                     `Based in Ottawa, Canada, ${project.developer || 'Caivan Communities'} is a homebuilder and real estate developer with ongoing projects throughout the city, the Greater Toronto Area (GTA), and other nearby areas. They build a range of housing alternatives in well-planned, master-planned communities.`}
-                </p>
+                </p> */}
               </div>
             </div>
           </AccordionSection>
@@ -279,15 +290,24 @@ export default function ProjectDetailPage({ params }: PageProps) {
                 <span className="text-indigo-400 font-bold block mb-1">💰 PLATINUM INCENTIVE PRICING</span>
                 <p className="font-sans text-slate-300">Complete allocation schedules and specific parking configuration rules are bundled in the documentation package.</p>
               </div>
-              <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 flex flex-col justify-center">
-                <span className="text-emerald-400 font-bold block mb-1">📋 ARCHITECTURAL MAP FILES</span>
-                <a href="#" className="font-mono text-indigo-400 underline hover:text-indigo-300 text-xs mt-1 block">
-                  Download_VIP_Floorplans.pdf
-                </a>
-                <a href="#" className="font-mono text-indigo-400 underline hover:text-indigo-300 text-xs mt-1 block">
-                  Developer_Incentive_Matrix.pdf
-                </a>
-              </div>
+             <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 flex flex-col justify-center">
+  <span className="text-emerald-400 font-bold block mb-1">📋 ARCHITECTURAL MAP FILES</span>
+  {project.document_links && project.document_links.length > 0 ? (
+    project.document_links.map((link, idx) => (
+     <a 
+        key={idx}
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-mono text-indigo-400 underline hover:text-indigo-300 text-xs mt-1 block truncate"
+      >
+        Document_{idx + 1} →
+      </a>
+    ))
+  ) : (
+    <p className="font-sans text-slate-500 text-xs mt-1">No documents uploaded yet.</p>
+  )}
+</div>
             </div>
           ) : (
             <div className="border border-slate-800/40 rounded-xl bg-slate-950/20 p-8 text-center">
@@ -335,6 +355,13 @@ export default function ProjectDetailPage({ params }: PageProps) {
               </button>
               <button
                 type="button"
+                onClick={() => setLeadType('END_USER')}
+                className={`flex-1 py-2 rounded-lg transition-all ${leadType === 'END_USER' ? 'bg-purple-600 text-white' : 'text-slate-500'}`}
+                 >
+                 END_USER
+              </button>
+              <button
+                type="button"
                 onClick={() => setLeadType('AGENT')}
                 className={`flex-1 py-2 rounded-lg transition-all ${leadType === 'AGENT' ? 'bg-purple-600 text-white' : 'text-slate-500'}`}
               >
@@ -343,32 +370,65 @@ export default function ProjectDetailPage({ params }: PageProps) {
             </div>
 
             <form 
-              onSubmit={async (e) => {
-                e.preventDefault();
-                try {
-                  const { error } = await supabase
-                    .from('leads')
-                    .insert([
-                      {
-                        full_name: formData.name,
-                        email: formData.email,
-                        phone: formData.phone,
-                        target_property: project.title,
-                        buyer_type: leadType
-                      }
-                    ]);
+             onSubmit={async (e) => {
+  e.preventDefault();
+  try {
+    // Step 1: Try to create a new account
+    const { data: authData, error: signUpError } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/directory/${id}`,
+        data: {
+          full_name: formData.name,
+          phone: formData.phone,
+          buyer_type: leadType
+        }
+      }
+    });
 
-                  if (error) throw error;
+    // Step 2: If already registered, sign them in instead
+    if (signUpError && signUpError.message.includes('already registered')) {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+      if (signInError) throw signInError;
+      setIsModalOpen(false);
+      setIsUnlocked(true);
+      return;
+    }
 
-                  setIsModalOpen(false);
-                  setIsUnlocked(true); 
-                  setFormData({ name: '', email: '', phone: '' });
+    if (signUpError) throw signUpError;
 
-                } catch (err: any) {
-                  console.error("Supabase Error:", err);
-                  alert(`[UPLINK_FAILED]: ${err.message || err}`);
-                }
-              }}
+    // Step 3: Insert lead row
+    const { error: leadError } = await supabase.from('leads').insert([{
+      full_name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      target_property: project.title,
+      buyer_type: leadType
+    }]);
+
+    if (leadError) throw leadError;
+
+    // Step 4: If email confirmation needed, tell them to check inbox
+    if (authData.user && !authData.user.confirmed_at) {
+      setIsModalOpen(false);
+      alert('✓ CHECK YOUR EMAIL — click the confirmation link and you will be brought right back to this property, fully unlocked.');
+      return;
+    }
+
+    // Step 5: If email confirm is disabled in Supabase, unlock immediately
+    setIsModalOpen(false);
+    setIsUnlocked(true);
+    setFormData({ name: '', email: '', phone: '', password: '' });
+
+  } catch (err: any) {
+    console.error('Auth/Lead Error:', err);
+    alert(`[UPLINK_FAILED]: ${err.message || err}`);
+  }
+}}
               className="space-y-4 text-xs"
             >
               <div>
@@ -406,6 +466,21 @@ export default function ProjectDetailPage({ params }: PageProps) {
                   className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white outline-none focus:border-indigo-500 tracking-wider"
                 />
               </div>
+
+              <div>
+  <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-1">
+    CREATE PASSKEY
+  </label>
+  <input
+    type="password"
+    required
+    minLength={6}
+    placeholder="MIN 6 CHARACTERS"
+    value={formData.password}
+    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white outline-none focus:border-indigo-500 tracking-wider"
+  />
+</div>
 
               <button
                 type="submit"

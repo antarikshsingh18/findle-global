@@ -1,7 +1,50 @@
-import { mockProperties } from '../data/mockProperties';
 import Link from 'next/link';
+import { supabase } from '../lib/supabase';
 
-export default function Home() {
+export default async function Home() {
+  const totalProperties = 758;
+  let liveProperties: any[] = [];
+  
+  // Fetch real-time data directly from both database tables in parallel on the server
+  try {
+    const [projectsResponse, c21Response] = await Promise.all([
+      supabase.from('projects').select('*'),
+      supabase.from('c21_portal_listings').select('*')
+    ]);
+
+    const projectData = projectsResponse.data || [];
+    const c21Data = c21Response.data || [];
+
+    const normalizedProjects = projectData.map((item: any) => ({
+      ...item,
+      is_c21: false
+    }));
+
+    const normalizedC21 = c21Data.map((item: any) => ({
+      id: `c21-${item.id}`,
+      title: item.title,
+      price_text: item.price_text || "CONTACT FOR PRICING",
+      beds_text: item.beds_text || "See Specs",
+      sqft_text: item.sqft_text || "Spacious",
+      image_url: item.image_url || "/fallback-estate.jpg",
+      city: item.city,
+      developer: item.developer || "Century 21 Partner",
+      selling_status: item.selling_status || "ACTIVE",
+      is_featured: item.is_featured || false,
+      neighborhood: item.neighborhood || "",
+      is_c21: true,
+      completionYear: item.completionYear || ""
+    }));
+
+    // Combine streams identical to the directory pipeline engine
+    liveProperties = [...normalizedProjects, ...normalizedC21];
+  } catch (error) {
+    console.error("Error loading home matrix clusters:", error);
+  }
+
+  // Extract exactly the top 3 items to show in the featured grid
+  const featuredCluster = liveProperties.slice(0, 3);
+
   return (
     <main className="min-h-screen bg-[#030305] text-slate-100 selection:bg-indigo-500 selection:text-white antialiased relative overflow-x-hidden">
 
@@ -50,7 +93,7 @@ export default function Home() {
             <span className="text-indigo-400 cursor-pointer flex items-center gap-1 hover:text-indigo-300 transition">
               <span className="text-[9px]">&gt;</span> Browse
             </span>
-           <Link href="/directory" className="hover:text-white cursor-pointer transition duration-300">
+            <Link href="/directory" className="hover:text-white cursor-pointer transition duration-300">
               Listings
             </Link>
             <Link href="/portal" className="hover:text-white cursor-pointer transition duration-300">
@@ -72,7 +115,7 @@ export default function Home() {
           <div className="absolute -left-4 top-1/3 w-1 h-24 bg-gradient-to-b from-indigo-500/0 via-indigo-500/50 to-indigo-500/0 rounded-full blur-sm" />
           
           <header className="mb-12 max-w-5xl">
-          <div className="inline-flex items-center gap-2 rounded-lg border border-indigo-500/30 bg-indigo-950/20 px-4 py-2 text-[10px] font-mono tracking-widest text-indigo-300 mb-8 uppercase backdrop-blur-md hover:border-indigo-400/50 transition">
+            <div className="inline-flex items-center gap-2 rounded-lg border border-indigo-500/30 bg-indigo-950/20 px-4 py-2 text-[10px] font-mono tracking-widest text-indigo-300 mb-8 uppercase backdrop-blur-md hover:border-indigo-400/50 transition">
               [ ✓ PROPERTY DISCOVERY ENGINE ACTIVE ]
             </div>
             
@@ -91,7 +134,7 @@ export default function Home() {
           {/* Advanced Stats Bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 mb-12">
             {[
-              { label: 'PROPERTIES_LISTED', value: mockProperties.length, unit: '' },
+              { label: 'PROPERTIES_LISTED', value: totalProperties, unit: '' },
               { label: 'MATCH_ACCURACY', value: '99.9', unit: '%' },
               { label: 'MARKET_COVERAGE', value: '24/7', unit: '' },
               { label: 'USER_SATISFACTION', value: '98.5', unit: '%' }
@@ -129,13 +172,12 @@ export default function Home() {
                 </button>
               </div>
               <div className="text-[11px] text-slate-400 px-4 py-2 border-l border-slate-700/40">
-                LISTINGS: <span className="text-indigo-400 font-bold ml-1">{mockProperties.length} AVAILABLE</span>
+                LISTINGS: <span className="text-indigo-400 font-bold ml-1">{totalProperties} AVAILABLE</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ===== Features Section ===== */}
         {/* ===== Features Section ===== */}
         <section className="py-16 mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
@@ -155,7 +197,6 @@ export default function Home() {
               desc: 'All structural specifications locked, authenticated, and backed by expert broker nodes.' 
             }
           ].map((feature, idx) => {
-            // 1. Maintain identical visual elements across all items
             const cardInnerContent = (
               <>
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-purple-600/5 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition duration-500" />
@@ -164,7 +205,6 @@ export default function Home() {
                   
                   {/* Tech Card Image Header */}
                   <div className="h-32 w-full relative overflow-hidden opacity-40 group-hover:opacity-70 transition duration-500 border-b border-slate-800">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={feature.imgUrl} alt={feature.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent" />
                   </div>
@@ -183,7 +223,6 @@ export default function Home() {
               </>
             );
 
-            // 2. Wrap ONLY the middle item (Market Insights, index 1) with an active route path link
             if (idx === 1) {
               return (
                 <Link href="/marketInsights" key={idx} className="group relative overflow-hidden rounded-xl block cursor-pointer">
@@ -192,7 +231,6 @@ export default function Home() {
               );
             }
 
-            // 3. Fallback wrapper to keep the remaining nodes static, unclickable divs
             return (
               <div key={idx} className="group relative overflow-hidden rounded-xl">
                 {cardInnerContent}
@@ -200,7 +238,8 @@ export default function Home() {
             );
           })}
         </section>
-        {/* ===== Enhanced Futuristic Card Grid ===== */}
+
+        {/* ===== Enhanced Futuristic Card Grid (LIVE DATABASE SYNCED) ===== */}
         <section className="mb-20">
           <div className="flex items-center justify-between mb-12">
             <div>
@@ -209,91 +248,110 @@ export default function Home() {
               </h2>
               <p className="text-slate-400 font-mono text-sm">Curated premium listings from our network</p>
             </div>
-            <button className="hidden sm:inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-slate-700/50 hover:border-indigo-500/60 bg-slate-900/20 hover:bg-indigo-600/15 text-slate-300 hover:text-white transition duration-300 font-mono text-sm uppercase tracking-wider backdrop-blur-md">
-              View All <span>→</span>
-            </button>
+            <Link href="/directory">
+              <button className="hidden sm:inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-slate-700/50 hover:border-indigo-500/60 bg-slate-900/20 hover:bg-indigo-600/15 text-slate-300 hover:text-white transition duration-300 font-mono text-sm uppercase tracking-wider backdrop-blur-md">
+                View All <span>→</span>
+              </button>
+            </Link>
           </div>
           
           <div className="grid grid-cols-1 gap-y-12 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
-            {mockProperties.map((property) => (
-              <div 
-                key={property.id} 
-                className="group flex flex-col bg-slate-900/20 border border-slate-700/40 rounded-xl overflow-hidden transition-all duration-500 hover:border-indigo-500/60 hover:bg-slate-900/35 hover:shadow-[0_0_50px_rgba(99,102,241,0.2)] relative backdrop-blur-sm"
-              >
-                {/* Corner tech accents */}
-                <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-slate-600 group-hover:border-indigo-400 transition-colors z-20" />
-                <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-slate-600 group-hover:border-indigo-400 transition-colors z-20" />
-                
-                {/* Holographic Media Container */}
-                <div className="aspect-[16/10] w-full bg-slate-950 relative overflow-hidden border-b border-slate-700/40">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={property.imageUrl}
-                    alt={property.name}
-                    className="h-full w-full object-cover object-center grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-90 transition-all duration-700 group-hover:scale-105"
-                  />
-                  
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
-                  
-                  {/* Neon Status Badge */}
-                  <div className="absolute top-4 left-4">
-                    <span className={`inline-flex items-center rounded-lg px-3 py-1 text-[9px] font-mono tracking-widest uppercase font-bold bg-black/80 border backdrop-blur-sm text-slate-300 ${
-                      property.status === 'Registration' ? 'border-purple-500/50 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.3)]' :
-                      property.status === 'Selling' ? 'border-emerald-500/50 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 
-                      'border-amber-500/50 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.3)]'
-                    }`}>
-                      ● {property.status}
-                    </span>
-                  </div>
-                </div>
+            {featuredCluster.map((property) => {
+              const cleanStatus = (property.selling_status || 'SELLING').toUpperCase();
+              
+              // Safe completion calculation handling fallback logic cleanly
+              const completionText = property.completionYear 
+                ? `Q${Math.ceil((property.completionYear % 12 || 12) / 3)}_${property.completionYear}`
+                : "Q4_2027";
 
-                {/* Metadata Cluster */}
-                <div className="flex flex-1 flex-col p-6">
-                  <div className="flex-1">
-                    {/* System Tags */}
-                    <div className="flex items-center justify-between text-[9px] font-mono tracking-widest text-slate-500 uppercase">
-                      <span className="hover:text-slate-400 transition">LISTED_BY // {property.developer}</span>
-                      <span className="text-slate-600">ID: #{property.id}</span>
-                    </div>
-                    
-                    {/* Property Asset Title */}
-                    <h3 className="mt-3 text-lg font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors font-mono uppercase">
-                      {property.name}
-                    </h3>
-                    
-                    {/* Digital Grid Specs */}
-                    <div className="mt-6 grid grid-cols-2 gap-4 border-t border-slate-700/40 pt-4 text-xs font-mono">
-                      <div className="group/info hover:bg-slate-800/30 p-2 rounded transition">
-                        <span className="block text-[8px] text-slate-500 uppercase tracking-widest">LOCATION</span>
-                        <span className="font-medium text-slate-300 uppercase mt-1 block tracking-wider text-sm">{property.neighborhood}</span>
-                      </div>
-                      <div className="group/info hover:bg-slate-800/30 p-2 rounded transition">
-                        <span className="block text-[8px] text-slate-500 uppercase tracking-widest">AVAILABLE</span>
-                        <span className="font-medium text-slate-300 mt-1 block tracking-wider text-sm">Q{Math.ceil(property.completionYear % 12 / 3)}_{property.completionYear}</span>
-                      </div>
-                    </div>
-                  </div>
+              // Dynamically resolve naming fields depending on structural schema context
+              const displayTitle = property.title || property.name || "UNNAMED ASSET node";
+              const displayImage = property.image_url || property.imageUrl || "/fallback-estate.jpg";
+              const displayPrice = property.price_text || (property.startingPrice ? `$${property.startingPrice.toLocaleString()}` : "CONTACT AGENT");
 
-                  {/* Transaction Footer */}
-                  <div className="mt-8 pt-4 border-t border-slate-700/40 flex items-center justify-between">
-                    <div>
-                      <span className="block text-[8px] font-mono text-slate-500 uppercase tracking-widest">ASKING_PRICE</span>
-                      <span className="text-2xl font-black text-white tracking-tight font-mono">
-                        ${property.startingPrice.toLocaleString()}
+              return (
+                <div 
+                  key={property.id} 
+                  className="group flex flex-col bg-slate-900/20 border border-slate-700/40 rounded-xl overflow-hidden transition-all duration-500 hover:border-indigo-500/60 hover:bg-slate-900/35 hover:shadow-[0_0_50px_rgba(99,102,241,0.2)] relative backdrop-blur-sm"
+                >
+                  {/* Corner tech accents */}
+                  <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-slate-600 group-hover:border-indigo-400 transition-colors z-20" />
+                  <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-slate-600 group-hover:border-indigo-400 transition-colors z-20" />
+                  
+                  {/* Holographic Media Container */}
+                  <div className="aspect-[16/10] w-full bg-slate-950 relative overflow-hidden border-b border-slate-700/40">
+                    <img
+                      src={displayImage}
+                      alt={displayTitle}
+                      className="h-full w-full object-cover object-center grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-90 transition-all duration-700 group-hover:scale-105"
+                    />
+                    
+                    {/* Overlay gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                    
+                    {/* Neon Status Badge */}
+                    <div className="absolute top-4 left-4">
+                      <span className={`inline-flex items-center rounded-lg px-3 py-1 text-[9px] font-mono tracking-widest uppercase font-bold bg-black/80 border backdrop-blur-sm ${
+                        cleanStatus === 'REGISTRATION' ? 'border-purple-500/50 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.3)]' :
+                        cleanStatus === 'SELLING' || cleanStatus === 'ACTIVE' ? 'border-emerald-500/50 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 
+                        'border-amber-500/50 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.3)]'
+                      }`}>
+                        ● {cleanStatus}
                       </span>
                     </div>
-                    
-                    {/* Enhanced CTA Button */}
-                    <button className="relative group/btn inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 hover:from-indigo-600/30 hover:to-indigo-600/15 text-indigo-300 hover:text-indigo-100 font-mono text-[10px] tracking-widest uppercase px-4 py-3 transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.15)] hover:shadow-[0_0_30px_rgba(99,102,241,0.25)]">
-                      <span>VIEW DETAILS</span>
-                      <span className="ml-1 group-hover/btn:translate-x-0.5 transition">→</span>
-                    </button>
                   </div>
-                </div>
 
-              </div>
-            ))}
+                  {/* Metadata Cluster */}
+                  <div className="flex flex-1 flex-col p-6">
+                    <div className="flex-1">
+                      {/* System Tags */}
+                      <div className="flex items-center justify-between text-[9px] font-mono tracking-widest text-slate-500 uppercase">
+                        <span className="hover:text-slate-400 transition">LISTED_BY // {property.developer || 'INDEPENDENT BUILDER'}</span>
+                        <span className="text-slate-600">ID: #{property.id}</span>
+                      </div>
+                      
+                      {/* Property Asset Title */}
+                      <h3 className="mt-3 text-lg font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors font-mono uppercase line-clamp-1">
+                        {displayTitle}
+                      </h3>
+                      
+                      {/* Digital Grid Specs */}
+                      <div className="mt-6 grid grid-cols-2 gap-4 border-t border-slate-700/40 pt-4 text-xs font-mono">
+                        <div className="group/info hover:bg-slate-800/30 p-2 rounded transition">
+                          <span className="block text-[8px] text-slate-500 uppercase tracking-widest">LOCATION</span>
+                          <span className="font-medium text-slate-300 uppercase mt-1 block tracking-wider text-sm truncate">
+                            {property.neighborhood || property.city || 'ONTARIO'}
+                          </span>
+                        </div>
+                        <div className="group/info hover:bg-slate-800/30 p-2 rounded transition">
+                          <span className="block text-[8px] text-slate-500 uppercase tracking-widest">AVAILABLE</span>
+                          <span className="font-medium text-slate-300 mt-1 block tracking-wider text-sm">{completionText}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Transaction Footer */}
+                    <div className="mt-8 pt-4 border-t border-slate-700/40 flex items-center justify-between">
+                      <div>
+                        <span className="block text-[8px] font-mono text-slate-500 uppercase tracking-widest">ASKING_PRICE</span>
+                        <span className="text-2xl font-black text-white tracking-tight font-mono">
+                          {displayPrice}
+                        </span>
+                      </div>
+                      
+                      {/* Enhanced CTA Button Linked to Dynamic Route Matrix */}
+                      <Link href={`/directory/${property.id}`}>
+                        <button className="relative group/btn inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 hover:from-indigo-600/30 hover:to-indigo-600/15 text-indigo-300 hover:text-indigo-100 font-mono text-[10px] tracking-widest uppercase px-4 py-3 transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.15)] hover:shadow-[0_0_30px_rgba(99,102,241,0.25)]">
+                          <span>VIEW DETAILS</span>
+                          <span className="ml-1 group-hover/btn:translate-x-0.5 transition">→</span>
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+
+                </div>
+              );
+            })}
           </div>
         </section>
 
@@ -306,7 +364,6 @@ export default function Home() {
               Explore thousands of premium properties with intelligent matching and expert insights from Findle.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              {/* Linked directly to your new route path */}
               <Link href="/directory" className="px-8 py-4 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_0_30px_rgba(99,102,241,0.3)] hover:shadow-[0_0_40px_rgba(99,102,241,0.4)] text-center">
                 Browse Properties
               </Link>

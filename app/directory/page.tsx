@@ -17,6 +17,9 @@ interface Project {
   is_featured?: boolean;
   neighborhood?: string;
   completionYear?: string;
+  is_c21?: boolean;
+  highlights?: string[];
+  document_links?: string[];
 }
 
 export default function DirectoryPage() {
@@ -24,25 +27,62 @@ export default function DirectoryPage() {
   const [properties, setProperties] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch Live Items from Supabase on Mount
-  useEffect(() => {
-    async function fetchCloudData() {
-      try {
-        setLoading(true);
-        const { data, error } = await supabase
-          .from('projects')
-          .select('*');
+  // Fetch Live Items from BOTH Supabase tables on Mount
+useEffect(() => {
+  async function fetchCloudData() {
+    try {
+      setLoading(true);
 
-        if (error) throw error;
-        setProperties(data || []);
-      } catch (err) {
-        console.error('Error fetching database nodes:', err);
-      } finally {
-        setLoading(false);
-      }
+      // 🚀 Fetch from both tables in parallel
+      const [projectsResponse, c21Response] = await Promise.all([
+        supabase.from('projects').select('*'),
+        supabase.from('c21_portal_listings').select('*')
+      ]);
+
+      if (projectsResponse.error) throw projectsResponse.error;
+      if (c21Response.error) throw c21Response.error;
+
+      const projectData = projectsResponse.data || [];
+      const c21Data = c21Response.data || [];
+
+      // 1. Keep your original table listings exactly as they were
+      const normalizedProjects = projectData.map((item: any) => ({
+        ...item,
+        is_c21: false
+      }));
+
+      // 2. Map your new C21 listing columns into your frontend Project shape
+      const normalizedC21 = c21Data.map((item: any) => ({
+        id: `c21-${item.id}`, // Add a prefix prefix to prevent key clashing
+        title: item.title,
+        price_text: item.price_text || "CONTACT FOR PRICING",
+        beds_text: item.beds_text || "See Specs",
+        sqft_text: item.sqft_text || "Spacious",
+        image_url: item.image_url || "/fallback-estate.jpg",
+        city: item.city,
+        developer: item.developer || "Century 21 Partner",
+        selling_status: item.selling_status || "ACTIVE",
+        is_featured: item.is_featured || false,
+        neighborhood: item.neighborhood || "",
+        is_c21: true,
+        highlights: item.highlights || [],          //Pass down your new array layers
+        document_links: item.document_links || []
+      }));
+      const ids = [...normalizedProjects, ...normalizedC21].map(p => p.id);
+const duplicates = ids.filter((id, i) => ids.indexOf(id) !== i);
+console.log('Duplicate IDs:', duplicates);
+      // 🔄 Combine them together into your unified feed state
+      setProperties([...normalizedProjects, ...normalizedC21]);
+
+    } catch (err) {
+      console.error('Error fetching database nodes:', err);
+    } finally {
+      setLoading(false);
     }
-    fetchCloudData();
-  }, []);
+  }
+  
+  fetchCloudData();
+}, []);
   
   // --- Filtering Engine States ---
   const [searchQuery, setSearchQuery] = useState('');
@@ -195,7 +235,7 @@ export default function DirectoryPage() {
           </div>
 
           <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-1.5 flex gap-1 items-center overflow-x-auto">
-            {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE'].map((city) => (
+            {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON','WHITBY','BARRIE','VAUGHAN','BURLINGTON','OSHAWA','PICKERING','RICHMOND HILL','MARKHAM'].map((city) => (
               <button
                 key={city}
                 type="button"
@@ -206,7 +246,7 @@ export default function DirectoryPage() {
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
                 }`}
               >
-                {city.slice(0, 4)}
+               {city === 'MISSISSAUGA' ? 'MISS' : city === 'TORONTO' ? 'TORO' : city === 'BRAMPTON' ? 'BRAM' : city === 'WHITBY' ? 'WHIT' : city === 'BARRIE' ? 'BARR' : city === 'VAUGHAN' ? 'VAUG' : city === 'BURLINGTON' ? 'BURL' : city === 'OSHAWA' ? 'OSHA' : city === 'PICKERING' ? 'PICK' : city === 'RICHMOND HILL' ? 'RICH' : city === 'MARKHAM' ? 'MARK' : city}
               </button>
             ))}
           </div>
