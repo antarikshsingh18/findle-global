@@ -131,9 +131,9 @@ export default async function Home() {
             </div>
             
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-tight mb-6">
-              Find You <br />
+              discover <br />
               <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
-                Perfect Property
+                tomorrow today
               </span>
             </h1>
             
