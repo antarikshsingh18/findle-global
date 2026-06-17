@@ -123,14 +123,30 @@ console.log('Duplicate IDs:', duplicates);
       {/* Abstract Background Tech Grids */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] bg-gradient-to-b from-indigo-950/10 via-transparent to-transparent pointer-events-none z-0" />
 
-      {/* Top Navigation Bar */}
-      <div className="border-b border-slate-800/40 bg-[#030305]/30 backdrop-blur-3xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-end">
-          <Link href="/portal" className="text-[11px] font-mono tracking-widest uppercase text-slate-400 hover:text-white cursor-pointer transition duration-300">
-            Login
-          </Link>
-        </div>
+    {/* Top Navigation Bar */}
+<div className="border-b border-slate-800/40 bg-[#030305]/30 backdrop-blur-3xl">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+    
+    {/* Logo + Pulse */}
+    <div className="flex items-center gap-3">
+      <div className="relative flex h-4 w-4">
+        <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-60"></span>
+        <span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.7)]"></span>
       </div>
+      <Link href="/" className="flex items-center group">
+        <img
+          src="/findle.png"
+          alt="Findle"
+          className="h-31 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-300"
+        />
+      </Link>
+    </div>
+
+    <Link href="/portal" className="text-[11px] font-mono tracking-widest uppercase text-slate-400 hover:text-white cursor-pointer transition duration-300">
+      Login
+    </Link>
+  </div>
+</div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
         
@@ -235,7 +251,7 @@ console.log('Duplicate IDs:', duplicates);
           </div>
 
           <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-1.5 flex gap-1 items-center overflow-x-auto">
-            {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON','WHITBY','BARRIE','VAUGHAN','BURLINGTON','OSHAWA','PICKERING','RICHMOND HILL','MARKHAM'].map((city) => (
+            {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON','WHITBY','BARRIE','VAUGHAN','BURLINGTON','OSHAWA','PICKERING','RICHMOND HILL','MARKHAM', 'CALEDON', 'NEWMARKET', 'GUELPH', 'MILTON', 'CAMBRIDGE', 'KITCHENER'].map((city) => (
               <button
                 key={city}
                 type="button"
@@ -246,7 +262,7 @@ console.log('Duplicate IDs:', duplicates);
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
                 }`}
               >
-               {city === 'MISSISSAUGA' ? 'MISS' : city === 'TORONTO' ? 'TORO' : city === 'BRAMPTON' ? 'BRAM' : city === 'WHITBY' ? 'WHIT' : city === 'BARRIE' ? 'BARR' : city === 'VAUGHAN' ? 'VAUG' : city === 'BURLINGTON' ? 'BURL' : city === 'OSHAWA' ? 'OSHA' : city === 'PICKERING' ? 'PICK' : city === 'RICHMOND HILL' ? 'RICH' : city === 'MARKHAM' ? 'MARK' : city}
+               {city === 'MISSISSAUGA' ? 'MISS' : city === 'TORONTO' ? 'TORO' : city === 'BRAMPTON' ? 'BRAM' : city === 'WHITBY' ? 'WHIT' : city === 'BARRIE' ? 'BARR' : city === 'VAUGHAN' ? 'VAUG' : city === 'BURLINGTON' ? 'BURL' : city === 'OSHAWA' ? 'OSHA' : city === 'PICKERING' ? 'PICK' : city === 'RICHMOND HILL' ? 'RICH' : city === 'MARKHAM' ? 'MARK' : city === 'CALEDON' ? 'CALED' : city === 'NEWMARKET' ? 'NEWM' : city === 'GUELPH' ? 'GUEL' : city === 'MILTON' ? 'MILT' : city === 'CAMBRIDGE' ? 'CAMB' : city === 'KITCHENER' ? 'KITCH' : city}
               </button>
             ))}
           </div>

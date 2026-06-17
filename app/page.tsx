@@ -77,17 +77,28 @@ export default async function Home() {
       <div className="absolute top-[30vh] right-[-20%] w-[45vw] h-[45vw] rounded-full bg-gradient-radial from-emerald-600/8 via-transparent to-transparent blur-3xl pointer-events-none z-0" />
       
       {/* Cybernetic Navigation Bar */}
-      <nav className="border-b border-slate-800/40 sticky top-0 bg-[#030305]/30 backdrop-blur-3xl z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative flex h-4 w-4">
-              <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-60"></span>
-              <span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.7)]"></span>
-            </div>
-            <span className="font-mono tracking-[0.15em] text-sm uppercase font-black bg-gradient-to-r from-indigo-300 via-white to-purple-300 bg-clip-text text-transparent">
-              FINDLE
-            </span>
-          </div>
+<nav className="border-b border-slate-800/40 sticky top-0 bg-[#030305]/30 backdrop-blur-3xl z-50">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    
+    {/* Left Top Brand Container */}
+    <div className="flex items-center gap-3">
+      {/* Pulse Status Light Indicator */}
+      <div className="relative flex h-4 w-4">
+        <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-60"></span>
+        <span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.7)]"></span>
+      </div>
+      
+      {/* NEW GRAPHIC LOGO NODE */}
+      <Link href="/" className="flex items-center group">
+        <img 
+          src="/findle.png" // Replace with your actual filename (e.g., logo.png, logo.svg)
+          alt="Findle" 
+          className="h-31 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-300"
+        />
+      </Link>
+    </div>
+    
+   
           
           <div className="hidden md:flex items-center gap-8 text-[11px] font-mono tracking-widest uppercase text-slate-400">
             <span className="text-indigo-400 cursor-pointer flex items-center gap-1 hover:text-indigo-300 transition">
@@ -120,7 +131,7 @@ export default async function Home() {
             </div>
             
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-tight mb-6">
-              Find Your <br />
+              Find You <br />
               <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
                 Perfect Property
               </span>
@@ -355,25 +366,77 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ===== CTA Section ===== */}
-        <section className="py-20 mb-12 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-2xl blur-xl" />
-          <div className="relative border border-slate-700/40 bg-slate-900/25 backdrop-blur-2xl rounded-2xl p-12 text-center">
-            <h2 className="text-4xl font-black text-white mb-4 uppercase">Start Finding Today</h2>
-            <p className="text-lg text-slate-300 mb-8 max-w-2xl mx-auto font-mono">
-              Explore thousands of premium properties with intelligent matching and expert insights from Findle.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/directory" className="px-8 py-4 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_0_30px_rgba(99,102,241,0.3)] hover:shadow-[0_0_40px_rgba(99,102,241,0.4)] text-center">
-                Browse Properties
-              </Link>
-              <button className="px-8 py-4 rounded-lg border-2 border-slate-600 hover:border-indigo-500 text-slate-300 hover:text-white font-bold uppercase tracking-wider transition-all duration-300">
-                Create Profile
-              </button>
-            </div>
-          </div>
-        </section>
+       {/* ===== CTA Section ===== */}
+<section className="py-20 mb-12 relative">
+  <div className="relative border border-slate-800/50 bg-slate-900/20 backdrop-blur-2xl rounded-2xl overflow-hidden">
 
+    {/* Top accent line */}
+    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/60 to-transparent" />
+
+    {/* Corner accents */}
+    <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-indigo-500/40" />
+    <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-indigo-500/40" />
+    <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-indigo-500/40" />
+    <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-indigo-500/40" />
+
+    <div className="px-8 py-16 text-center">
+
+      {/* System tag */}
+      <div className="inline-flex items-center gap-2 border border-purple-500/30 bg-purple-950/20 px-4 py-1.5 rounded-lg text-[10px] font-mono tracking-[0.2em] text-purple-400 uppercase mb-8">
+        <span className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse" />
+        DISCOVERY_ENGINE // READY
+      </div>
+
+      {/* Main heading */}
+      <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-white leading-none mb-4">
+        Your Next
+        <br />
+        <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          Property Awaits
+        </span>
+      </h2>
+
+      {/* Subtext */}
+      <p className="font-mono text-sm text-slate-500 tracking-widest uppercase mt-6 mb-10 max-w-lg mx-auto leading-relaxed">
+        // Ontario&apos;s most comprehensive pre-construction pipeline — updated in real time
+      </p>
+
+      {/* Stats row */}
+      <div className="flex flex-wrap justify-center gap-12 mb-10 font-mono">
+        {[
+          { label: 'LIVE NODES', value: '758+' },
+          { label: 'CITIES COVERED', value: '19' },
+          { label: 'PLATFORM STATUS', value: 'ONLINE' },
+        ].map((stat, idx) => (
+          <div key={idx} className="text-center">
+            <div className="text-3xl font-black text-white tracking-tight">{stat.value}</div>
+            <div className="text-[9px] text-slate-500 tracking-widest mt-1">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Divider */}
+      <div className="w-24 h-[1px] bg-slate-800 mx-auto mb-10" />
+
+      {/* CTAs */}
+     <div className="flex flex-col sm:flex-row gap-3 sm:gap-8 justify-center">
+        <Link
+          href="/directory"
+          className="px-8 py-3.5 rounded-xl bg-white text-black font-black text-xs uppercase tracking-widest hover:bg-slate-100 transition-all duration-300 shadow-[0_4px_20px_rgba(255,255,255,0.15)]"
+        >
+          Browse All Properties →
+        </Link>
+        <Link
+          href="/portal"
+          className="px-8 py-3.5 rounded-xl border border-slate-700 text-slate-400 hover:border-indigo-500/60 hover:text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 font-mono"
+        >
+          Agent Login
+        </Link>
+      </div>
+
+    </div>
+  </div>
+</section>
       </div>
     </main>
   );
