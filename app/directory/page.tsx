@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../lib/supabase';
+import AdminNavLink from '../components/AdminNavLink';
 
 interface Project {
   id: string;
@@ -141,6 +142,8 @@ console.log('Duplicate IDs:', duplicates);
         />
       </Link>
     </div>
+
+    <AdminNavLink />
 
     <Link href="/portal" className="text-[11px] font-mono tracking-widest uppercase text-slate-400 hover:text-white cursor-pointer transition duration-300">
       Login

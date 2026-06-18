@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../../lib/supabase';
 
-const ONTARIO_CITIES = ['TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON', 'WHITBY'];
+const ONTARIO_CITIES = ['TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON', 'WHITBY','BARRIE','VAUGHAN','BURLINGTON','OSHAWA','PICKERING','RICHMOND HILL','MARKHAM', 'CALEDON', 'NEWMARKET', 'GUELPH', 'MILTON', 'CAMBRIDGE', 'KITCHENER'];
 const STATUS_OPTIONS = ['ACTIVE', 'REGISTRATION', 'CONSTRUCTION', 'SOLD OUT'];
 
 interface FormState {
@@ -20,6 +20,8 @@ interface FormState {
   is_featured: boolean;
   highlights: string; // raw input, comma-separated -> array on submit
   document_links: string; // raw input, one per line -> array on submit
+  incentives_list: string; 
+  deposit_list: string;
 }
 
 const EMPTY_FORM: FormState = {
@@ -35,6 +37,8 @@ const EMPTY_FORM: FormState = {
   is_featured: false,
   highlights: '',
   document_links: '',
+  incentives_list: '',
+  deposit_list: '',
 };
 
 export default function AdminAddListingPage() {
@@ -43,6 +47,53 @@ export default function AdminAddListingPage() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [listings, setListings] = useState<any[]>([]);
+const [activeTab, setActiveTab] = useState<'ADD' | 'MANAGE'>('ADD');
+const [deleting, setDeleting] = useState<string | null>(null);
+
+useEffect(() => {
+  async function checkAdminAuth() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      router.push('/admin/login');
+      return;
+    }
+    const role = user.user_metadata?.role;
+    if (role !== 'admin') {
+      router.push('/admin/login');
+    }
+  }
+  checkAdminAuth();
+}, []);
+
+    useEffect(() => {
+    async function fetchListings() {
+      const { data } = await supabase
+        .from('c21_portal_listings')
+        .select('id, title, city, selling_status, created_at')
+        .order('created_at', { ascending: false });
+      if (data) setListings(data);
+    }
+    fetchListings();
+  }, [successMsg]);
+
+  const handleDelete = async (id: string, title: string) => {
+  if (!confirm(`DELETE "${title}"? This cannot be undone.`)) return;
+  setDeleting(id);
+  try {
+    const { error } = await supabase
+      .from('c21_portal_listings')
+      .delete()
+      .eq('id', id);
+    if (error) throw error;
+    setListings((prev) => prev.filter((l) => l.id !== id));
+  } catch (err: any) {
+    alert(`DELETE FAILED: ${err.message}`);
+  } finally {
+    setDeleting(null);
+  }
+};
+
 
   const updateField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -86,6 +137,8 @@ export default function AdminAddListingPage() {
         is_featured: form.is_featured,
         highlights: highlightsArray,
         document_links: documentLinksArray,
+        incentives_list: form.incentives_list.split('\n').map(i => i.trim()).filter(i => i.length > 0),
+        deposit_list: form.deposit_list.split('\n').map(d => d.trim()).filter(d => d.length > 0),
       });
 
       if (error) throw error;
@@ -106,8 +159,8 @@ export default function AdminAddListingPage() {
         {/* Header */}
         <header className="mb-8 border-b border-slate-800/60 pb-6 flex items-center justify-between">
           <div>
-            <span className="text-[10px] tracking-widest text-purple-400 font-bold uppercase">// ADMIN_NODE_WRITE</span>
-            <h1 className="text-2xl font-black text-white uppercase mt-1 tracking-wider">Add C21 Listing</h1>
+            <span className="text-[10px] tracking-widest text-purple-400 font-bold uppercase">// ADMIN_PANEL</span>
+            <h1 className="text-2xl font-black text-white uppercase mt-1 tracking-wider">Add Pre-con Listing</h1>
             <p className="text-[11px] text-slate-500 mt-2">MANUAL ENTRY → c21_portal_listings</p>
           </div>
           <button
@@ -118,6 +171,27 @@ export default function AdminAddListingPage() {
             ← Back to Portal
           </button>
         </header>
+
+        <div className="bg-slate-950 border border-slate-900 p-1 rounded-xl flex gap-1 mb-8 font-mono text-[10px] tracking-widest">
+  <button
+    type="button"
+    onClick={() => setActiveTab('ADD')}
+    className={`flex-1 py-2 rounded-lg font-bold transition-all ${
+      activeTab === 'ADD' ? 'bg-purple-600 text-white' : 'text-slate-500 hover:text-white'
+    }`}
+  >
+    + ADD LISTING
+  </button>
+  <button
+    type="button"
+    onClick={() => setActiveTab('MANAGE')}
+    className={`flex-1 py-2 rounded-lg font-bold transition-all ${
+      activeTab === 'MANAGE' ? 'bg-red-900/60 text-red-300 border border-red-500/30' : 'text-slate-500 hover:text-white'
+    }`}
+  >
+    MANAGE / REMOVE
+  </button>
+</div>
 
         {/* Status messages */}
         {errorMsg && (
@@ -130,6 +204,44 @@ export default function AdminAddListingPage() {
             ✓ {successMsg}
           </div>
         )}
+
+        {activeTab === 'ADD' ? (
+  // your existing <form> goes here
+  <form onSubmit={handleSubmit} className="space-y-6">
+    {/* ... all existing form fields ... */}
+  </form>
+) : (
+  <div className="space-y-3">
+    <div className="text-[9px] tracking-widest text-slate-500 uppercase mb-4">
+      // {listings.length} LISTINGS IN C21_PORTAL_LISTINGS
+    </div>
+    {listings.length === 0 ? (
+      <div className="text-center text-slate-600 font-mono text-xs py-12">NO LISTINGS FOUND</div>
+    ) : (
+      listings.map((listing) => (
+        <div
+          key={listing.id}
+          className="flex items-center justify-between bg-slate-950 border border-slate-800 rounded-xl px-5 py-4"
+        >
+          <div>
+            <div className="text-sm font-bold text-white uppercase tracking-wide">{listing.title}</div>
+            <div className="text-[10px] text-slate-500 font-mono mt-0.5 uppercase">
+              {listing.city} · {listing.selling_status} · ID: {listing.id.slice(0, 8)}
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => handleDelete(listing.id, listing.title)}
+            disabled={deleting === listing.id}
+            className="ml-4 px-4 py-2 rounded-lg border border-red-500/40 bg-red-950/20 text-red-400 hover:bg-red-500 hover:text-white font-mono text-[10px] tracking-widest uppercase transition-all disabled:opacity-40"
+          >
+            {deleting === listing.id ? 'DELETING...' : 'DELETE →'}
+          </button>
+        </div>
+      ))
+    )}
+  </div>
+)}
 
         <form onSubmit={handleSubmit} className="space-y-6">
 
@@ -288,6 +400,28 @@ export default function AdminAddListingPage() {
               />
               <p className="text-[10px] text-slate-600 mt-1.5 pl-1">Saved as a text array — paste each link on its own line, no brackets or quotes needed.</p>
             </Field>
+
+            <Field label="Incentives (one per line)">
+  <textarea
+    rows={4}
+    value={form.incentives_list}
+    onChange={(e) => updateField('incentives_list', e.target.value)}
+    placeholder={"Only $55,000 Deposit Until Occupancy\n6-piece Appliance Package\n1-car Underground Parking Spot"}
+    className={`${inputClass} resize-none`}
+  />
+  <p className="text-[10px] text-slate-600 mt-1.5 pl-1">Each line becomes one incentive item on the listing page.</p>
+</Field>
+
+<Field label="Deposit Structure (one per line)">
+  <textarea
+    rows={4}
+    value={form.deposit_list}
+    onChange={(e) => updateField('deposit_list', e.target.value)}
+    placeholder={"$10,000.00 On Signing\n$7,500.00 - 30 days\n$7,500.00 - 60 days"}
+    className={`${inputClass} resize-none`}
+  />
+  <p className="text-[10px] text-slate-600 mt-1.5 pl-1">Each line becomes one deposit item on the listing page.</p>
+</Field>
           </div>
 
           <button

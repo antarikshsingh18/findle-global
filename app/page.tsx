@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { supabase } from '../lib/supabase';
+import AdminNavLink from './components/AdminNavLink';
 
 export default async function Home() {
-  const totalProperties = 758;
+  const totalProperties = 10;
   let liveProperties: any[] = [];
   
   // Fetch real-time data directly from both database tables in parallel on the server
@@ -107,6 +108,7 @@ export default async function Home() {
             <Link href="/directory" className="hover:text-white cursor-pointer transition duration-300">
               Listings
             </Link>
+            <AdminNavLink />
             <Link href="/portal" className="hover:text-white cursor-pointer transition duration-300">
               Login
             </Link>
