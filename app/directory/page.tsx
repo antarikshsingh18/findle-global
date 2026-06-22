@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../lib/supabase';
 import AdminNavLink from '../components/AdminNavLink';
+import {useSearchParams} from 'next/navigation';
+import {Suspense} from 'react';
 
 interface Project {
   id: string;
@@ -23,10 +25,12 @@ interface Project {
   document_links?: string[];
 }
 
-export default function DirectoryPage() {
+ function DirectoryPage() {
   // --- Live Database States ---
   const [properties, setProperties] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const searchInputRef=useRef<HTMLInputElement>(null);
 
   // Fetch Live Items from BOTH Supabase tables on Mount
 useEffect(() => {
@@ -84,6 +88,15 @@ console.log('Duplicate IDs:', duplicates);
   
   fetchCloudData();
 }, []);
+
+useEffect(() => {
+  if (searchParams.get('focus') === 'search') {
+    setTimeout(() => {
+      searchInputRef.current?.focus();
+      searchInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
+  }
+}, [searchParams]);
   
   // --- Filtering Engine States ---
   const [searchQuery, setSearchQuery] = useState('');
@@ -244,6 +257,7 @@ console.log('Duplicate IDs:', duplicates);
           
           <div className="lg:col-span-2 relative">
             <input
+              ref={searchInputRef}
               type="text"
               placeholder="SEARCH BY PROJECT, DEVELOPER, OR REGION..."
               value={searchQuery}
@@ -459,5 +473,16 @@ console.log('Duplicate IDs:', duplicates);
 
       </div>
     </main>
+  );
+}
+export default function DirectoryPageWrapper() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#030305] flex items-center justify-center font-mono text-xs text-slate-500 tracking-widest">
+        LOADING...
+      </div>
+    }>
+      <DirectoryPage />
+    </Suspense>
   );
 }

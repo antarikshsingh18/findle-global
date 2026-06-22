@@ -244,11 +244,13 @@ export default async function Home() {
               );
             }
 
-            return (
-              <div key={idx} className="group relative overflow-hidden rounded-xl">
-                {cardInnerContent}
-              </div>
-            );
+            if (idx === 0) {
+  return (
+    <Link href="/directory?focus=search" key={idx} className="group relative overflow-hidden rounded-xl block cursor-pointer">
+      {cardInnerContent}
+    </Link>
+  );
+}
           })}
         </section>
 
