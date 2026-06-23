@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../lib/supabase';
 import AdminNavLink from '../components/AdminNavLink';
+import LogoutButton from '../components/LogoutButton';  
 import {useSearchParams} from 'next/navigation';
 import {Suspense} from 'react';
 
@@ -157,6 +158,7 @@ useEffect(() => {
     </div>
 
     <AdminNavLink />
+    <LogoutButton />
 
     <Link href="/portal" className="text-[11px] font-mono tracking-widest uppercase text-slate-400 hover:text-white cursor-pointer transition duration-300">
       Login

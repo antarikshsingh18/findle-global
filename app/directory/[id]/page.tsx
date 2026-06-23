@@ -53,6 +53,149 @@ function AccordionSection({ title, children, defaultOpen = false }: { title: str
   );
 }
 
+function MortgageCalculator({ priceText }: { priceText: string }) {
+  // Try to extract a number from price_text like "Starting From The High $600's"
+ const extractPrice = (text: string) => {
+  const match = text.match(/\$[\d,]+/);
+  if (match) {
+    const num = parseInt(match[0].replace(/[$,]/g, ''));
+    // If number is already in full form (e.g. 600000), use as-is
+    // If it's a short form (e.g. 600 meaning $600k), multiply by 1000
+    return num < 10000 ? num * 1000 : num;
+  }
+  return 600000;
+};
+
+  const [price, setPrice] = useState(extractPrice(priceText));
+  const [downPayment, setDownPayment] = useState(20);
+  const [interestRate, setInterestRate] = useState(4.99);
+  const [amortization, setAmortization] = useState(25);
+
+  const downPaymentAmount = (price * downPayment) / 100;
+  const principal = price - downPaymentAmount;
+  const monthlyRate = interestRate / 100 / 12;
+  const numPayments = amortization * 12;
+  const monthlyPayment = monthlyRate === 0 ? principal / numPayments :
+    (principal * monthlyRate * Math.pow(1 + monthlyRate, numPayments)) /
+    (Math.pow(1 + monthlyRate, numPayments) - 1);
+
+  const formatCurrency = (val: number) =>
+    val.toLocaleString('en-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 });
+
+  return (
+    <div className="border border-slate-800 bg-slate-900/10 rounded-xl overflow-hidden mb-4">
+      <div className="w-full flex items-center justify-between px-5 py-4 font-mono font-bold text-sm text-slate-200">
+        <span>// MORTGAGE CALCULATOR</span>
+        <span className="text-xs text-emerald-400 font-mono tracking-widest">ESTIMATE</span>
+      </div>
+
+      <div className="px-5 pb-5 border-t border-slate-800/40 pt-4 bg-slate-950/20">
+
+        {/* Monthly Payment Display */}
+        <div className="bg-slate-950/60 border border-indigo-500/20 rounded-xl p-4 mb-5 text-center">
+          <div className="text-[9px] font-mono tracking-widest text-slate-500 uppercase mb-1">ESTIMATED MONTHLY PAYMENT</div>
+          <div className="text-3xl font-black text-indigo-400 tracking-tight font-mono">
+            {formatCurrency(monthlyPayment)}
+          </div>
+          <div className="text-[9px] text-slate-600 font-mono mt-1 uppercase">
+            Principal: {formatCurrency(principal)} · Rate: {interestRate}% · {amortization}yr
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
+
+          {/* Purchase Price */}
+          <div>
+            <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-2">
+              Purchase Price: <span className="text-white">{formatCurrency(price)}</span>
+            </label>
+            <input
+              type="range"
+              min={300000}
+              max={2000000}
+              step={10000}
+              value={price}
+              onChange={(e) => setPrice(Number(e.target.value))}
+              className="w-full accent-indigo-500"
+            />
+            <div className="flex justify-between text-[8px] text-slate-600 mt-1">
+              <span>$300K</span><span>$2M</span>
+            </div>
+          </div>
+
+          {/* Down Payment */}
+          <div>
+            <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-2">
+              Down Payment: <span className="text-white">{downPayment}% ({formatCurrency(downPaymentAmount)})</span>
+            </label>
+            <input
+              type="range"
+              min={5}
+              max={50}
+              step={1}
+              value={downPayment}
+              onChange={(e) => setDownPayment(Number(e.target.value))}
+              className="w-full accent-indigo-500"
+            />
+            <div className="flex justify-between text-[8px] text-slate-600 mt-1">
+              <span>5%</span><span>50%</span>
+            </div>
+          </div>
+
+          {/* Interest Rate */}
+          <div>
+            <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-2">
+              Interest Rate: <span className="text-white">{interestRate}%</span>
+            </label>
+            <input
+              type="range"
+              min={1}
+              max={10}
+              step={0.05}
+              value={interestRate}
+              onChange={(e) => setInterestRate(Number(e.target.value))}
+              className="w-full accent-purple-500"
+            />
+            <div className="flex justify-between text-[8px] text-slate-600 mt-1">
+              <span>1%</span><span>10%</span>
+            </div>
+          </div>
+
+          {/* Amortization */}
+          <div>
+            <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-2">
+              Amortization: <span className="text-white">{amortization} years</span>
+            </label>
+            <div className="flex gap-2 mt-1">
+              {[15, 20, 25, 30].map((yr) => (
+                <button
+                  key={yr}
+                  type="button"
+                  onClick={() => setAmortization(yr)}
+                  className={`flex-1 py-2 rounded-lg text-[9px] font-bold tracking-widest transition-all ${
+                    amortization === yr
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-slate-900 border border-slate-800 text-slate-500 hover:text-white'
+                  }`}
+                >
+                  {yr}yr
+                </button>
+              ))}
+            </div>
+          </div>
+
+        </div>
+
+        {/* Disclaimer */}
+        <p className="text-[9px] text-slate-600 font-sans mt-4 leading-relaxed">
+          * This is an estimate only. Actual payments may vary based on lender, credit score, and applicable taxes. Consult a mortgage broker for accurate figures.
+        </p>
+
+      </div>
+    </div>
+  );
+}
+
 export default function ProjectDetailPage({ params }: PageProps) {
   const { id } = use(params) as { id: string }  ;
 
@@ -165,14 +308,14 @@ export default function ProjectDetailPage({ params }: PageProps) {
               <div className="w-full h-full flex items-center justify-center text-[10px] text-slate-700">NO_VISUAL_DATA</div>
             )}
             <span className="absolute top-4 left-4 bg-indigo-600/90 text-white text-[9px] font-bold tracking-widest px-3 py-1 rounded border border-indigo-400/40 uppercase">
-              STATUS // {project.selling_status || 'ACTIVE'}
+              STATUS : {project.selling_status || 'ACTIVE'}
             </span>
           </div>
 
           <div className="flex flex-col justify-between py-1">
             <div>
               <div className="text-[10px] tracking-widest text-indigo-400 uppercase">
-                DEVELOPER // {project.developer || 'UNSPECIFIED'}
+                DEVELOPER : {project.developer || 'UNSPECIFIED'}
               </div>
               <h1 className="text-2xl font-black text-white uppercase tracking-tight mt-1 mb-4">
                 {project.title}
@@ -276,12 +419,13 @@ export default function ProjectDetailPage({ params }: PageProps) {
               ))}
             </div>
           </AccordionSection>
+          <MortgageCalculator priceText={project.price_text} />
         </section>
 
         {/* GATED BLUEPRINT DOWNLINK MODULE */}
         <section className="border border-slate-800 bg-[#09090e] rounded-2xl p-6 relative overflow-hidden">
           <h2 className="text-xs font-bold text-white tracking-widest uppercase border-b border-slate-800 pb-3 mb-4">
-            [ GATED_ASSET_PAYLOAD // DOCUMENT_VAULT ]
+            [ DOCUMENT VAULT ]
           </h2>
 
           {isUnlocked ? (

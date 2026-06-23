@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { supabase } from '../lib/supabase';
 import AdminNavLink from './components/AdminNavLink';
+import LogoutButton from './components/LogoutButton';
 
 export default async function Home() {
   const totalProperties = 10;
@@ -109,6 +110,7 @@ export default async function Home() {
               Listings
             </Link>
             <AdminNavLink />
+            <LogoutButton />
             <Link href="/portal" className="hover:text-white cursor-pointer transition duration-300">
               Login
             </Link>
