@@ -270,7 +270,7 @@ useEffect(() => {
           </div>
 
           <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-1.5 flex gap-1 items-center overflow-x-auto">
-            {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON','WHITBY','BARRIE','VAUGHAN','BURLINGTON','OSHAWA','PICKERING','RICHMOND HILL','MARKHAM', 'CALEDON', 'NEWMARKET', 'GUELPH', 'MILTON', 'CAMBRIDGE', 'KITCHENER'].map((city) => (
+            {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON','WHITBY','BARRIE','VAUGHAN','BURLINGTON','OSHAWA','PICKERING','RICHMOND HILL','MARKHAM', 'CALEDON', 'NEWMARKET', 'GUELPH', 'MILTON', 'CAMBRIDGE', 'KITCHENER', 'ADJALA-TOSORONTIO'].map((city) => (
               <button
                 key={city}
                 type="button"
@@ -281,7 +281,7 @@ useEffect(() => {
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
                 }`}
               >
-               {city === 'MISSISSAUGA' ? 'MISS' : city === 'TORONTO' ? 'TORO' : city === 'BRAMPTON' ? 'BRAM' : city === 'WHITBY' ? 'WHIT' : city === 'BARRIE' ? 'BARR' : city === 'VAUGHAN' ? 'VAUG' : city === 'BURLINGTON' ? 'BURL' : city === 'OSHAWA' ? 'OSHA' : city === 'PICKERING' ? 'PICK' : city === 'RICHMOND HILL' ? 'RICH' : city === 'MARKHAM' ? 'MARK' : city === 'CALEDON' ? 'CALED' : city === 'NEWMARKET' ? 'NEWM' : city === 'GUELPH' ? 'GUEL' : city === 'MILTON' ? 'MILT' : city === 'CAMBRIDGE' ? 'CAMB' : city === 'KITCHENER' ? 'KITCH' : city}
+               {city === 'MISSISSAUGA' ? 'MISS' : city === 'TORONTO' ? 'TORO' : city === 'BRAMPTON' ? 'BRAM' : city === 'WHITBY' ? 'WHIT' : city === 'BARRIE' ? 'BARR' : city === 'VAUGHAN' ? 'VAUG' : city === 'BURLINGTON' ? 'BURL' : city === 'OSHAWA' ? 'OSHA' : city === 'PICKERING' ? 'PICK' : city === 'RICHMOND HILL' ? 'RICH' : city === 'MARKHAM' ? 'MARK' : city === 'CALEDON' ? 'CALED' : city === 'NEWMARKET' ? 'NEWM' : city === 'GUELPH' ? 'GUEL' : city === 'MILTON' ? 'MILT' : city === 'CAMBRIDGE' ? 'CAMB' : city === 'KITCHENER' ? 'KITCH' : city === 'ADJALA-TOSORONTIO' ? 'ADJALA' : city}
               </button>
             ))}
           </div>
