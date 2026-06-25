@@ -53,6 +53,111 @@ function AccordionSection({ title, children, defaultOpen = false }: { title: str
   );
 }
 
+// Utility helper to safely parse numbers from messy price text (Add this if not already there)
+const extractPrice = (text: string) => {
+  const match = text.match(/\$[\d,]+/);
+  if (match) {
+    const num = parseInt(match[0].replace(/[$,]/g, ''));
+    return num < 10000 ? num * 1000 : num;
+  }
+  return 600000;
+};
+
+function HstRebateCalculator({ priceText }: { priceText: string }) {
+  const [price, setPrice] = useState(extractPrice(priceText));
+  const [intent, setIntent] = useState<'END_USER' | 'INVESTOR'>('END_USER');
+
+  // --- 2026 Expanded Pre-Construction HST Rebate Logic Matrix ---
+  const totalHstPaid = price * 0.13;
+  let totalRebateAmount = 0;
+
+  if (price <= 1000000) {
+    // Full 13% HST relief up to $1M (Max $130,000)
+    totalRebateAmount = totalHstPaid;
+  } else if (price <= 1500000) {
+    // Flat $130,000 cap for units between $1M and $1.5M
+    totalRebateAmount = 130000;
+  } else if (price <= 1850000) {
+    // Linear sliding scale down to the base cap
+    const reductionFactor = (1850000 - price) / 350000;
+    totalRebateAmount = 24000 + (106000 * reductionFactor);
+  } else {
+    // Over $1.85M defaults to standard $24,000 base credit
+    totalRebateAmount = 24000;
+  }
+
+  // Investors apply post-closing, primary residents get it baked into the net contract upfront
+  const displayRebate = intent === 'END_USER' ? totalRebateAmount : Math.min(totalRebateAmount, 30000); 
+
+  const formatCurrency = (val: number) =>
+    val.toLocaleString('en-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 });
+
+  return (
+    <div className="border border-slate-800 bg-slate-900/10 rounded-xl overflow-hidden mb-4">
+      <div className="w-full flex items-center justify-between px-5 py-4 font-mono font-bold text-sm text-slate-200">
+        <span>// HST NEW HOUSING REBATE CALCULATOR</span>
+        <span className="text-xs text-indigo-400 font-mono tracking-widest">TAX_MATRIX</span>
+      </div>
+
+      <div className="px-5 pb-5 border-t border-slate-800/40 pt-4 bg-slate-950/20 font-mono text-xs">
+        {/* Toggle Intent */}
+        <div className="bg-slate-950 border border-slate-800 p-1 rounded-xl flex gap-1 mb-4 text-[10px] font-bold">
+          <button
+            type="button"
+            onClick={() => setIntent('END_USER')}
+            className={`flex-1 py-1.5 rounded-lg transition-all ${intent === 'END_USER' ? 'bg-indigo-600 text-white' : 'text-slate-500'}`}
+          >
+            PRIMARY RESIDENCE
+          </button>
+          <button
+            type="button"
+            onClick={() => setIntent('INVESTOR')}
+            className={`flex-1 py-1.5 rounded-lg transition-all ${intent === 'INVESTOR' ? 'bg-purple-600 text-white' : 'text-slate-500'}`}
+          >
+            INVESTOR (NRRP)
+          </button>
+        </div>
+
+        {/* Breakdown Output */}
+        <div className="bg-slate-950/60 border border-purple-500/20 rounded-xl p-4 mb-4 space-y-2.5">
+          <div className="flex justify-between items-center text-slate-400">
+            <span>STATED PURCHASE PRICE:</span>
+            <span className="text-white font-bold">{formatCurrency(price)}</span>
+          </div>
+          <div className="flex justify-between items-center text-slate-400">
+            <span>ESTIMATED TOTAL HST (13%):</span>
+            <span className="text-slate-300">{formatCurrency(totalHstPaid)}</span>
+          </div>
+          <div className="flex justify-between items-center text-emerald-400 font-bold border-t border-slate-800/60 pt-2">
+            <span>TOTAL ESTIMATED REBATE:</span>
+            <span>+ {formatCurrency(displayRebate)}</span>
+          </div>
+        </div>
+
+        {/* Price Slider Control */}
+        <div className="mt-2">
+          <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-1">
+            ADJUST MODEL PRICE: <span className="text-white">{formatCurrency(price)}</span>
+          </label>
+          <input
+            type="range"
+            min={300000}
+            max={2000000}
+            step={25000}
+            value={price}
+            onChange={(e) => setPrice(Number(e.target.value))}
+            className="w-full accent-purple-500"
+          />
+        </div>
+
+        <p className="text-[9px] text-slate-600 font-sans mt-3 leading-relaxed">
+          * Calculates based on 2026 Ontario enhanced pre-construction layout frameworks. Individual investor rebates clear via secondary NRRP filing modules post-occupancy.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function MortgageCalculator({ priceText }: { priceText: string }) {
   // Try to extract a number from price_text like "Starting From The High $600's"
  const extractPrice = (text: string) => {
@@ -419,7 +524,11 @@ export default function ProjectDetailPage({ params }: PageProps) {
               ))}
             </div>
           </AccordionSection>
-          <MortgageCalculator priceText={project.price_text} />
+          {/* Financial Utilities Panel */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+  <MortgageCalculator priceText={project.price_text} />
+  <HstRebateCalculator priceText={project.price_text} />
+</div>
         </section>
 
         {/* GATED BLUEPRINT DOWNLINK MODULE */}
