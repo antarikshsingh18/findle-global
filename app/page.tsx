@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { supabase } from '../lib/supabase';
 import AdminNavLink from './components/AdminNavLink';
 import LogoutButton from './components/LogoutButton';
+import Footer from './components/Footer';
 
 export default async function Home() {
   const totalProperties = 10;
@@ -444,6 +445,8 @@ export default async function Home() {
   </div>
 </section>
       </div>
+      <div className="relative z-10 h-4 bg-[#030305]" />
+      <Footer />
     </main>
   );
 }

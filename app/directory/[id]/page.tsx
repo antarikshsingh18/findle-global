@@ -746,6 +746,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
           </div>
         </div>
       )}
+      
     </main>
   );
 }

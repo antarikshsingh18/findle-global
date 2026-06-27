@@ -7,6 +7,7 @@ import AdminNavLink from '../components/AdminNavLink';
 import LogoutButton from '../components/LogoutButton';  
 import {useSearchParams} from 'next/navigation';
 import {Suspense} from 'react';
+import Footer from '../components/Footer';
 
 interface Project {
   id: string;
@@ -474,6 +475,7 @@ useEffect(() => {
         )}
 
       </div>
+        <Footer />
     </main>
   );
 }
