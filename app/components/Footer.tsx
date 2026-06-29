@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import {AiFillInstagram, AiFillLinkedin, AiFillYoutube, AiFillFacebook, AiOutlineTwitter} from 'react-icons/ai';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -225,14 +226,14 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-slate-800/40">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="space-y-3">
-              <div className="text-[9px] tracking-widest uppercase text-slate-500">// Follow Us</div>
+              <div className="text-[9px] tracking-widest uppercase text-slate-500">Follow Us</div>
               <div className="flex items-center gap-3">
                 {[
-                  { label: 'IG', icon: '📸', href: '#' },
-                  { label: 'LI', icon: '💼', href: '#' },
-                  { label: 'YT', icon: '▶️', href: '#' },
-                  { label: 'FB', icon: '📘', href: '#' },
-                  { label: 'TK', icon: '🎵', href: '#' },
+                  { label: 'IG', icon: <AiFillInstagram size={18}/>, href: 'https://www.instagram.com/findle.global?igsh=MTBwYmxhaHlwNmFoYw==' },
+                  { label: 'LI', icon: <AiFillLinkedin size={18}/>, href: 'https://www.linkedin.com/company/findle-global/?viewAsMember=true' },
+                  { label: 'YT', icon: <AiFillYoutube size={18}/>, href: 'https://www.youtube.com/@FindleGlobal' },
+                  { label: 'FB', icon: <AiFillFacebook size={18}/>, href: 'https://www.facebook.com/profile.php?id=61579885229639' },
+                  // { label: 'TK', icon: '🎵', href: '#' },
                   { label: 'X', icon: '✖', href: '#' },
                 ].map((social) => (
                   <a

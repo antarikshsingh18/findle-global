@@ -405,7 +405,7 @@ export default async function Home() {
 
       {/* Subtext */}
       <p className="font-mono text-sm text-slate-500 tracking-widest uppercase mt-6 mb-10 max-w-lg mx-auto leading-relaxed">
-        // Ontario&apos;s most comprehensive pre-construction pipeline — updated in real time
+        Canada&apos;s most comprehensive pre-construction pipeline — updated in real time
       </p>
 
       {/* Stats row */}
