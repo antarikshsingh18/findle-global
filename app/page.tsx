@@ -5,7 +5,7 @@ import LogoutButton from './components/LogoutButton';
 import Footer from './components/Footer';
 
 export default async function Home() {
-  const totalProperties = 10;
+  const totalProperties = 110;
   let liveProperties: any[] = [];
   
   // Fetch real-time data directly from both database tables in parallel on the server
