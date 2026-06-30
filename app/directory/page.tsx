@@ -8,6 +8,7 @@ import LogoutButton from '../components/LogoutButton';
 import {useSearchParams} from 'next/navigation';
 import {Suspense} from 'react';
 import Footer from '../components/Footer';
+import ShareButton from '../components/ShareButton';
 
 interface Project {
   id: string;
@@ -381,23 +382,30 @@ useEffect(() => {
                       </div>
                     </div>
 
-                    <div className="mt-8 pt-4 border-t border-slate-700/40 flex items-center justify-between">
-                      <div>
-                        <span className="block text-[8px] font-mono text-slate-500 uppercase tracking-widest">START_PRICE</span>
-                        <span className="text-xl font-black text-white tracking-tight font-mono">
-                          {property.price_text}
-                        </span>
-                      </div>
-                      
-                      <Link href={`/directory/${property.id}`}>
-                        <button 
-                          type="button"
-                          className="relative inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 text-indigo-300 font-mono text-[10px] tracking-widest uppercase px-4 py-2.5 transition-all hover:bg-indigo-600/30 hover:text-white"
-                        >
-                          OPEN_NODE →
-                        </button>
-                      </Link>
-                    </div>
+                   <div className="mt-8 pt-4 border-t border-slate-700/40 flex items-center justify-between">
+  <div>
+    <span className="block text-[8px] font-mono text-slate-500 uppercase tracking-widest">START_PRICE</span>
+    <span className="text-xl font-black text-white tracking-tight font-mono">
+      {property.price_text}
+    </span>
+  </div>
+  
+  <div className="flex items-center gap-2">
+    <ShareButton
+      title={property.title}
+      url={`https://www.findle.global/directory/${property.id}`}
+      compact={true}
+    />
+    <Link href={`/directory/${property.id}`}>
+      <button 
+        type="button"
+        className="relative inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 text-indigo-300 font-mono text-[10px] tracking-widest uppercase px-4 py-2.5 transition-all hover:bg-indigo-600/30 hover:text-white"
+      >
+        OPEN_NODE →
+      </button>
+    </Link>
+  </div>
+</div>
                   </div>
                 </div>
               ))}
