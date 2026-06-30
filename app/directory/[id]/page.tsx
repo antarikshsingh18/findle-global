@@ -435,7 +435,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
                   <span className="text-slate-200 uppercase">{project.city}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">START_PRICING:</span>
+                  <span className="text-slate-500">STARTING PRICE:</span>
                   <span className="text-emerald-400 font-bold">{project.price_text}</span>
                 </div>
                 <div className="flex justify-between">
@@ -502,7 +502,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
           </AccordionSection>
 
           {/* 3. Incentives */}
-          <AccordionSection title="Incentives" defaultOpen={true}>
+          {/* <AccordionSection title="Incentives" defaultOpen={true}>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {displayIncentives.map((incentive, idx) => (
                 <div key={idx} className="flex items-start gap-2 text-slate-300 font-sans text-xs bg-slate-950/30 p-2.5 rounded-lg border border-slate-900">
@@ -511,10 +511,10 @@ export default function ProjectDetailPage({ params }: PageProps) {
                 </div>
               ))}
             </div>
-          </AccordionSection>
+          </AccordionSection> */}
 
           {/* 4. Deposit Structure */}
-          <AccordionSection title="Deposit Structure" defaultOpen={true}>
+          {/* <AccordionSection title="Deposit Structure" defaultOpen={true}>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {displayDeposits.map((deposit, idx) => (
                 <div key={idx} className="flex items-start gap-2 text-slate-300 font-mono text-[11px] bg-slate-950/50 p-3 rounded-lg border border-slate-800/60">
@@ -523,7 +523,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
                 </div>
               ))}
             </div>
-          </AccordionSection>
+          </AccordionSection> */}
           {/* Financial Utilities Panel */}
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
   <MortgageCalculator priceText={project.price_text} />
