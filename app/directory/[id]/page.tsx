@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../../lib/supabase';
+import ShareButton from '../../components/ShareButton';
 
 interface Project {
   id: string;
@@ -394,9 +395,15 @@ export default function ProjectDetailPage({ params }: PageProps) {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
         {/* Back Navigation Links */}
-        <Link href="/directory" className="text-xs text-slate-500 hover:text-indigo-400 transition-colors flex items-center gap-2 mb-8">
-          ← [BACK_TO_INDEXER_FEED]
-        </Link>
+<div className="flex items-center justify-between mb-8">
+  <Link href="/directory" className="text-xs text-slate-500 hover:text-indigo-400 transition-colors flex items-center gap-2">
+    ← [BACK_TO_INDEXER_FEED]
+  </Link>
+  <ShareButton
+    title={project.title}
+    url={`https://www.findle.global/directory/${id}`}
+  />
+</div>
 
         {/* Master Project Overview Block */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border border-slate-800/80 bg-slate-900/20 rounded-2xl p-6 backdrop-blur-md mb-10">
