@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { FaWhatsapp } from 'react-icons/fa';
 
 interface ShareButtonProps {
   title: string;
@@ -45,7 +46,8 @@ export default function ShareButton({ title, url, compact = false }: ShareButton
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-2 px-4 py-2.5 text-[11px] font-mono uppercase tracking-wider text-slate-300 hover:bg-slate-800 hover:text-emerald-400 transition-colors border-b border-slate-800"
             >
-              <span>📱</span> WhatsApp
+                <FaWhatsapp size={16}/>
+              <span>WhatsApp</span> 
             </a>
             <button
               type="button"
@@ -75,7 +77,7 @@ export default function ShareButton({ title, url, compact = false }: ShareButton
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
           <div className="absolute top-full right-0 mt-2 bg-slate-950 border border-slate-800 rounded-xl overflow-hidden shadow-xl z-50 w-52">
             <div className="text-[8px] text-slate-600 tracking-widest uppercase px-4 pt-3 pb-1">
-              // SHARE_OPTIONS
+             SHARE OPTIONS
             </div>
             <a
               href={`https://wa.me/?text=${whatsappText}`}
@@ -84,7 +86,8 @@ export default function ShareButton({ title, url, compact = false }: ShareButton
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-3 px-4 py-3 text-[11px] font-mono uppercase tracking-wider text-slate-300 hover:bg-slate-800 hover:text-emerald-400 transition-colors border-t border-slate-800"
             >
-              <span>📱</span> Share on WhatsApp
+                <FaWhatsapp size={16}/>
+              <span>Share on WhatsApp</span> 
             </a>
             <button
               type="button"
