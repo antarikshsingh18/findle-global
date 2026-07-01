@@ -1,9 +1,45 @@
 "use client";
 
+import { useForm, ValidationError } from '@formspree/react';
 import Navbar from '@/app/components/AdminNavLink';
 import { AiFillInstagram, AiFillLinkedin, AiFillYoutube, AiFillFacebook, AiOutlineTikTok } from 'react-icons/ai';
+import {useRouter} from 'next/navigation';
 
 export default function ContactPage() {
+  // Formspree logic
+  const [state, handleSubmit] = useForm("mrewyrnn");
+  const router = useRouter();
+  if (state.succeeded) {
+    return (
+      <div className="min-h-screen bg-[#030305] flex items-center justify-center text-white text-center p-8 relative">
+        {/* The Cross Button */}
+        <button 
+          onClick={() => router.back()} 
+          className="absolute top-10 right-10 text-slate-500 hover:text-white transition-all text-2xl"
+          aria-label="Close"
+        >
+          ✕
+        </button>
+
+        <div>
+          <h2 className="text-3xl font-bold mb-4">MESSAGE RECEIVED</h2>
+          <p className="text-slate-400">Thank you for reaching out. We will be in touch shortly.</p>
+        </div>
+      </div>
+    );
+  }
+  // Success UI
+  if (state.succeeded) {
+    return (
+      <div className="min-h-screen bg-[#030305] flex items-center justify-center text-white text-center p-8">
+        <div>
+          <h2 className="text-3xl font-bold mb-4">MESSAGE RECEIVED</h2>
+          <p className="text-slate-400">Thank you for reaching out. We will be in touch shortly.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#030305] text-slate-300 font-sans">
       <div className="max-w-5xl mx-auto px-6 py-12">
@@ -25,7 +61,7 @@ export default function ContactPage() {
                 <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full" /> Get In Touch
               </h3>
               <div className="space-y-4 text-slate-400">
-                <p><strong>General:</strong> info@findle.global</p>
+                <p><strong>General:</strong> admin@findle.global</p>
                 <p><strong>Partnerships:</strong> connect@findle.global</p>
                 <p><strong>Support:</strong> +1 (437) 432-0003</p>
                 <p className="text-xs text-slate-600 italic">Mon – Fri, 9AM – 6PM EST</p>
@@ -39,46 +75,36 @@ export default function ContactPage() {
           </div>
 
           {/* Form */}
-          <form className="bg-slate-900/20 border border-slate-800 p-8 rounded-2xl space-y-6">
+          <form onSubmit={handleSubmit} className="bg-slate-900/20 border border-slate-800 p-8 rounded-2xl space-y-6">
             <div className="grid grid-cols-1 gap-4">
-              <input type="text" placeholder="Full Name" className="bg-transparent border border-slate-700 p-3 rounded-lg focus:border-indigo-500 outline-none transition" />
-              <input type="email" placeholder="Email Address" className="bg-transparent border border-slate-700 p-3 rounded-lg focus:border-indigo-500 outline-none transition" />
-              <input type="tel" placeholder="Phone (Optional)" className="bg-transparent border border-slate-700 p-3 rounded-lg focus:border-indigo-500 outline-none transition" />
-              <select className="bg-transparent border border-slate-700 p-3 rounded-lg focus:border-indigo-500 outline-none text-slate-400">
+              <input type="text" name="name" placeholder="Full Name" required className="bg-transparent border border-slate-700 p-3 rounded-lg focus:border-indigo-500 outline-none transition" />
+              <input type="email" name="email" placeholder="Email Address" required className="bg-transparent border border-slate-700 p-3 rounded-lg focus:border-indigo-500 outline-none transition" />
+              <ValidationError prefix="Email" field="email" errors={state.errors} />
+              
+              <input type="tel" name="phone" placeholder="Phone (Optional)" className="bg-transparent border border-slate-700 p-3 rounded-lg focus:border-indigo-500 outline-none transition" />
+              
+              <select name="role" className="bg-transparent border border-slate-700 p-3 rounded-lg focus:border-indigo-500 outline-none text-slate-400">
                 <option>I am a...</option>
-                <option>Buyer</option>
-                <option>Investor</option>
-                <option>Agent</option>
-                <option>Builder</option>
+                <option value="Buyer">Buyer</option>
+                <option value="Investor">Investor</option>
+                <option value="Agent">Agent</option>
+                <option value="Builder">Builder</option>
               </select>
-              <textarea placeholder="How can we help?" rows={4} className="bg-transparent border border-slate-700 p-3 rounded-lg focus:border-indigo-500 outline-none transition" />
+              
+              <textarea name="message" placeholder="How can we help?" rows={4} required className="bg-transparent border border-slate-700 p-3 rounded-lg focus:border-indigo-500 outline-none transition" />
+              <ValidationError prefix="Message" field="message" errors={state.errors} />
             </div>
-            <button className="w-full bg-white text-black font-bold py-4 rounded-lg hover:bg-indigo-500 hover:text-white transition-all">
-              Send Message
+            
+            <button 
+              type="submit" 
+              disabled={state.submitting}
+              className="w-full bg-white text-black font-bold py-4 rounded-lg hover:bg-indigo-500 hover:text-white transition-all disabled:opacity-50"
+            >
+              {state.submitting ? 'SENDING...' : 'Send Message'}
             </button>
             <p className="text-[10px] text-center text-slate-600">We typically respond within 1 business day.</p>
           </form>
         </div>
-
-        {/* Footer CTA */}
-        <footer className="mt-24 pt-12 border-t border-slate-900 text-center">
-          <h4 className="text-white font-bold mb-6">Follow Us</h4>
-          <div className="flex justify-center gap-6 text-2xl text-slate-500 mb-12">
-            <AiFillInstagram className="hover:text-indigo-400 cursor-pointer" />
-            <AiFillLinkedin className="hover:text-indigo-400 cursor-pointer" />
-            <AiFillYoutube className="hover:text-indigo-400 cursor-pointer" />
-            <AiFillFacebook className="hover:text-indigo-400 cursor-pointer" />
-            <AiOutlineTikTok className="hover:text-indigo-400 cursor-pointer" />
-          </div>
-          
-          <div className="flex flex-wrap justify-center gap-4">
-            {['Explore Projects', 'Get VIP Access', 'About Findle Global'].map((link) => (
-              <button key={link} className="px-6 py-2 border border-slate-800 rounded-full text-xs hover:border-indigo-500 transition">
-                {link}
-              </button>
-            ))}
-          </div>
-        </footer>
       </div>
     </div>
   );
