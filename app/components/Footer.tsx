@@ -233,6 +233,7 @@ export default function Footer() {
                   { label: 'LI', icon: <AiFillLinkedin size={18}/>, href: 'https://www.linkedin.com/company/findle-global/?viewAsMember=true' },
                   { label: 'YT', icon: <AiFillYoutube size={18}/>, href: 'https://www.youtube.com/@FindleGlobal' },
                   { label: 'FB', icon: <AiFillFacebook size={18}/>, href: 'https://www.facebook.com/profile.php?id=61579885229639' },
+                  { label: 'TW', icon: <AiOutlineTwitter size={18}/>, href: 'https://twitter.com/FindleGlobal' },
                   // { label: 'TK', icon: '🎵', href: '#' },
                   { label: 'X', icon: '✖', href: '#' },
                 ].map((social) => (

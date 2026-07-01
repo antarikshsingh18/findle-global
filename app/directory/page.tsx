@@ -174,14 +174,14 @@ useEffect(() => {
         <header className="mb-10 border-b border-slate-800/60 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <div className="text-[10px] font-mono tracking-[0.2em] text-indigo-400 uppercase mb-2">
-              SYSTEM_MODULE // ONTARIO_PIPELINE_DIRECTORY
+              CANADA PIPELINE DIRECTORY
             </div>
             <h1 className="text-3xl font-black tracking-tight text-white uppercase font-mono">
-              Project Indexer
+              Pre-Construction Listings
             </h1>
           </div>
           <div className="font-mono text-xs text-slate-400 bg-slate-900/40 border border-slate-800 px-4 py-2 rounded-lg">
-            FILTER_MATCHES: <span className="text-emerald-400 font-bold">{filteredProperties.length} ACTIVE NODES</span>
+            TOTAL LISTINGS: <span className="text-emerald-400 font-bold">{filteredProperties.length} ACTIVE PROPERTIES</span>
           </div>
         </header>
 
@@ -189,7 +189,7 @@ useEffect(() => {
         <section className="mb-12">
           <div className="text-[10px] font-mono tracking-[0.25em] text-amber-400 uppercase mb-4 flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-ping" />
-            [ SPONSORED_NODES // ADVERTISING_PLACEMENT_ACTIVE ]
+            [ PREMIUM LISTING ]
           </div>
           
           <div className="grid grid-cols-1 gap-6">
@@ -271,22 +271,17 @@ useEffect(() => {
             <span className="absolute right-4 top-4 text-slate-600">⌨</span>
           </div>
 
-          <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-1.5 flex gap-1 items-center overflow-x-auto">
-            {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON','WHITBY','BARRIE','VAUGHAN','BURLINGTON','OSHAWA','PICKERING','RICHMOND HILL','MARKHAM', 'CALEDON', 'NEWMARKET', 'GUELPH', 'MILTON', 'CAMBRIDGE', 'KITCHENER', 'ADJALA-TOSORONTIO'].map((city) => (
-              <button
-                key={city}
-                type="button"
-                onClick={() => setSelectedCity(city)}
-                className={`flex-1 px-3 py-2 rounded-lg text-[10px] tracking-wider uppercase transition-all duration-200 ${
-                  selectedCity === city 
-                    ? 'bg-indigo-600 text-white font-bold shadow-[0_0_10px_rgba(99,102,241,0.3)]' 
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
-                }`}
-              >
-               {city === 'MISSISSAUGA' ? 'MISS' : city === 'TORONTO' ? 'TORO' : city === 'BRAMPTON' ? 'BRAM' : city === 'WHITBY' ? 'WHIT' : city === 'BARRIE' ? 'BARR' : city === 'VAUGHAN' ? 'VAUG' : city === 'BURLINGTON' ? 'BURL' : city === 'OSHAWA' ? 'OSHA' : city === 'PICKERING' ? 'PICK' : city === 'RICHMOND HILL' ? 'RICH' : city === 'MARKHAM' ? 'MARK' : city === 'CALEDON' ? 'CALED' : city === 'NEWMARKET' ? 'NEWM' : city === 'GUELPH' ? 'GUEL' : city === 'MILTON' ? 'MILT' : city === 'CAMBRIDGE' ? 'CAMB' : city === 'KITCHENER' ? 'KITCH' : city === 'ADJALA-TOSORONTIO' ? 'ADJALA' : city}
-              </button>
-            ))}
-          </div>
+          <select
+  value={selectedCity}
+  onChange={(e) => setSelectedCity(e.target.value)}
+  className="bg-slate-900/40 border border-slate-700/60 rounded-xl px-4 py-3.5 text-white font-mono text-[10px] tracking-wider uppercase outline-none focus:border-indigo-500/80 transition duration-300 w-full cursor-pointer"
+>
+  {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON', 'WHITBY', 'BARRIE', 'VAUGHAN', 'BURLINGTON', 'OSHAWA', 'PICKERING', 'RICHMOND HILL', 'MARKHAM', 'CALEDON', 'NEWMARKET', 'GUELPH', 'MILTON', 'CAMBRIDGE', 'KITCHENER', 'ADJALA-TOSORONTIO'].map((city) => (
+    <option key={city} value={city} className="bg-slate-950 text-white">
+      {city === 'ALL' ? 'ALL CITIES' : city}
+    </option>
+  ))}
+</select>
 
           <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-1.5 flex gap-1 items-center">
             {['ALL', 'REGISTRATION', 'SELLING', 'CONSTRUCTION'].map((stage) => (
