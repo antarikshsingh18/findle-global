@@ -103,7 +103,17 @@ useEffect(() => {
   
   // --- Filtering Engine States ---
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCity, setSelectedCity] = useState<string>('ALL');
+  const cityFromUrl = searchParams.get('city');
+  const [selectedCity, setSelectedCity] = useState<string>(
+    cityFromUrl ? cityFromUrl.toUpperCase() : 'ALL'
+  );
+  useEffect(() => {
+    if (cityFromUrl) {
+      setSelectedCity(cityFromUrl.toUpperCase());
+    } else {
+      setSelectedCity('ALL');
+    }
+  }, [cityFromUrl]);
   const [selectedStage, setSelectedStage] = useState<string>('ALL');
   const [viewMode, setViewMode] = useState<'GRID' | 'MAP'>('GRID');
 

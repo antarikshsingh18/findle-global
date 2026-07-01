@@ -180,7 +180,7 @@ export default function Footer() {
                   { label: "Buyer's Guide", href: '#' },
                   { label: "Investor's Guide", href: '#' },
                   { label: 'Pre-Construction 101', href: '#' },
-                  { label: 'Mortgage Calculator', href: '/directory' },
+                  // { label: 'Mortgage Calculator', href: '/directory' },
                   { label: 'Market Insights', href: '/marketInsights' },
                   { label: 'Neighbourhood Guides', href: '#' },
                   { label: 'VIP Registration', href: '/directory' },
@@ -202,13 +202,13 @@ export default function Footer() {
               <ul className="space-y-2.5">
                 {[
                   { label: 'About Findle Global', href: '#' },
-                  { label: 'How It Works', href: '#' },
+                  // { label: 'How It Works', href: '#' },
                   { label: 'For Developers', href: '#' },
                   { label: 'For Agents & Brokers', href: '/portal' },
                   { label: 'Partner With Us', href: '#' },
-                  { label: 'Careers', href: '#' },
-                  { label: 'Press & Media', href: '#' },
-                  { label: 'Contact Us', href: '#' },
+                  // { label: 'Careers', href: '#' },
+                  // { label: 'Press & Media', href: '#' },
+                  { label: 'Contact Us', href: '/contact' },
                 ].map((item) => (
                   <li key={item.label}>
                     <Link href={item.href} className="text-slate-500 hover:text-indigo-400 transition-colors tracking-wider uppercase text-[10px]">
@@ -265,22 +265,31 @@ export default function Footer() {
       <div className="border-t border-slate-800/40 bg-slate-900/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
 
-          {/* Legal Links */}
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="text-[10px] text-slate-600 tracking-wider">
-              © 2025 Findle Global Inc. All Rights Reserved.
-            </div>
-            <div className="flex flex-wrap gap-4 text-[10px] text-slate-600">
-              {['Privacy Policy', 'Terms of Use', 'Cookie Policy', 'Accessibility', 'Sitemap'].map((item, idx, arr) => (
-                <span key={item} className="flex items-center gap-4">
-                  <Link href="#" className="hover:text-indigo-400 transition-colors tracking-wider uppercase">
-                    {item}
-                  </Link>
-                  {idx < arr.length - 1 && <span className="text-slate-800">·</span>}
-                </span>
-              ))}
-            </div>
-          </div>
+        {/* Legal Links */}
+<div className="flex flex-wrap items-center justify-between gap-4">
+  <div className="text-[10px] text-slate-600 tracking-wider">
+    © 2025 Findle Global Inc. All Rights Reserved.
+  </div>
+  <div className="flex flex-wrap gap-4 text-[10px] text-slate-600">
+    {[
+      { name: 'Privacy Policy', path: '/privacy' },
+      { name: 'Terms of Use', path: '/terms' },
+      { name: 'Cookie Policy', path: '/cookies' },
+      { name: 'Accessibility', path: '/accessibility' },
+      { name: 'Sitemap', path: '/sitemap' },
+    ].map((item, idx, arr) => (
+      <span key={item.name} className="flex items-center gap-4">
+        <Link 
+          href={item.path} 
+          className="hover:text-indigo-400 transition-colors tracking-wider uppercase"
+        >
+          {item.name}
+        </Link>
+        {idx < arr.length - 1 && <span className="text-slate-800">·</span>}
+      </span>
+    ))}
+  </div>
+</div>
 
           {/* Regulatory Disclaimer */}
           <div className="border border-slate-800/40 bg-slate-950/40 rounded-lg p-4">
