@@ -397,7 +397,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
         {/* Back Navigation Links */}
 <div className="flex items-center justify-between mb-8">
   <Link href="/directory" className="text-xs text-slate-500 hover:text-indigo-400 transition-colors flex items-center gap-2">
-    ← [BACK_TO_INDEXER_FEED]
+    ← [BACK]
   </Link>
   <ShareButton
     title={project.title}

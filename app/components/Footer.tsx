@@ -177,8 +177,8 @@ export default function Footer() {
               </h4>
               <ul className="space-y-2.5">
                 {[
-                  { label: "Buyer's Guide", href: '#' },
-                  { label: "Investor's Guide", href: '#' },
+                  { label: "Findle Buyer's Guide", href: '/guide' },
+                  //{ label: "Investor's Guide", href: '#' },
                   { label: 'Pre-Construction 101', href: '#' },
                   // { label: 'Mortgage Calculator', href: '/directory' },
                   { label: 'Market Insights', href: '/marketInsights' },

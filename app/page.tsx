@@ -115,11 +115,12 @@ export default async function Home() {
             <Link href="/portal" className="hover:text-white cursor-pointer transition duration-300">
               Login
             </Link>
+            <Link href="/FindleFinance" className="hover:text-white cursor-pointer transition duration-300">
+            Finance
+          </Link>
           </div>
           
-          <div className="font-mono text-[10px] text-slate-400 border border-slate-600/30 px-3 py-1.5 bg-slate-900/20 rounded-md hover:border-indigo-400/50 backdrop-blur-sm transition">
-            PLATFORM: <span className="text-indigo-300 font-semibold">LIVE</span>
-          </div>
+          
         </div>
       </nav>
 
@@ -208,9 +209,9 @@ export default async function Home() {
               desc: 'Real-time structural pricing trends and predictive valuation algorithms running continuously.' 
             },
             { 
-              imgUrl: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80', 
-              title: 'Verified Listings', 
-              desc: 'All structural specifications locked, authenticated, and backed by expert broker nodes.' 
+              imgUrl: '/findlefinance2.png', 
+              title: 'Findle Finance', 
+              desc: 'Integrated mortgage services — licensed agents, pre-approval, rate shopping, and preconstruction financing.' 
             }
           ].map((feature, idx) => {
             const cardInnerContent = (
@@ -254,6 +255,19 @@ export default async function Home() {
     </Link>
   );
 }
+            if (idx === 2) {
+              return (
+                <Link href="/FindleFinance" key={idx} className="group relative overflow-hidden rounded-xl block cursor-pointer">
+                  {cardInnerContent}
+                </Link>
+              );
+            }
+            // default card for other indexes (e.g., Findle Finance)
+            return (
+              <div key={idx} className="group relative overflow-hidden rounded-xl block cursor-pointer">
+                {cardInnerContent}
+              </div>
+            );
           })}
         </section>
 
