@@ -59,8 +59,8 @@ export default function FindleFinance() {
 				{/* Primary CTAs */}
 				<div className="flex gap-4 mb-12">
 					<Link href="/contact" className="px-6 py-3 rounded-xl bg-white text-black font-black text-xs uppercase tracking-widest hover:bg-slate-100 transition-all duration-300">Book a Free Consultation →</Link>
-					<Link href="/inquire" className="px-6 py-3 rounded-xl border border-slate-700 text-slate-400 hover:border-indigo-500/60 hover:text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 font-mono">Get Pre-Approved</Link>
-					<a href="mailto:finance@findle.global" className="px-6 py-3 rounded-xl border border-slate-700 text-slate-400 hover:border-indigo-500/60 hover:text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 font-mono">Email Us</a>
+					{/* <Link href="/inquire" className="px-6 py-3 rounded-xl border border-slate-700 text-slate-400 hover:border-indigo-500/60 hover:text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 font-mono">Get Pre-Approved</Link> */}
+					{/* <a href="mailto:finance@findle.global" className="px-6 py-3 rounded-xl border border-slate-700 text-slate-400 hover:border-indigo-500/60 hover:text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 font-mono">Email Us</a> */}
 				</div>
 
 				{/* Content Sections */}
@@ -219,7 +219,7 @@ export default function FindleFinance() {
 					<p className="text-slate-400 mb-6">Talk to a Findle Finance mortgage agent today. No obligation. No pressure. Just clarity on what you qualify for and what your options look like.</p>
 					<div className="flex gap-4">
 						<a href="tel:+14374320003" className="px-6 py-3 rounded-xl bg-white text-black font-black text-xs uppercase tracking-widest">Call +1 (437) 432-0003</a>
-						<a href="mailto:admin@findle.global" className="px-6 py-3 rounded-xl border border-slate-700 text-slate-400 hover:border-indigo-500/60 hover:text-white font-bold text-xs uppercase tracking-widest">Email Connect</a>
+						{/* <a href="mailto:admin@findle.global" className="px-6 py-3 rounded-xl border border-slate-700 text-slate-400 hover:border-indigo-500/60 hover:text-white font-bold text-xs uppercase tracking-widest">Email Connect</a> */}
 						<Link href="/contact" className="px-6 py-3 rounded-xl border border-indigo-500/60 text-indigo-300 uppercase tracking-widest font-bold">Book a Free Consultation</Link>
 					</div>
 				</div>

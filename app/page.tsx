@@ -144,7 +144,7 @@ export default async function Home() {
             </h1>
             
             <p className="text-lg sm:text-xl font-mono text-slate-400 max-w-3xl leading-relaxed">
-              <span className="text-indigo-400">// </span>Discover premium real estate opportunities with AI-powered insights and real-time market intelligence.
+              <span className="text-indigo-400">// </span>AI-powered platform to discover, compare, and analyze new construction projects across Canada and worldwide.
             </p>
           </header>
 

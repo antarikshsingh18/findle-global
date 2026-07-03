@@ -47,9 +47,9 @@ export default function Footer() {
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.7)]"></span>
                 </div> */}
                 <img
-                  src="/findle7.png"
+                  src="/findle23.png"
                   alt="Findle Global"
-                  className="h-40 w-auto object-contain opacity-90"
+                  className="h-80 w-auto object-contain opacity-90"
                   style={{ mixBlendMode: 'screen' }}    
                 />
               </div>
