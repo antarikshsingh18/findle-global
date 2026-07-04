@@ -62,7 +62,7 @@ export default function Footer() {
             </div>
 
             {/* Email Subscribe */}
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               <div className="text-[12px] tracking-widest uppercase text-slate-400 flex items-center gap-2">
                 <span>📩</span> Get VIP Access
               </div>
@@ -94,7 +94,7 @@ export default function Footer() {
               <p className="text-[9px] text-slate-700 font-sans leading-relaxed">
                 By subscribing, you agree to our Privacy Policy and consent to receive property updates from Findle Global.
               </p>
-            </div>
+            </div> */}
 
             {/* Available In */}
             <div>
@@ -203,7 +203,7 @@ export default function Footer() {
                 {[
                   { label: 'About Findle Global', href: '#' },
                   // { label: 'How It Works', href: '#' },
-                  { label: 'For Developers', href: '#' },
+                 // { label: 'For Developers', href: '#' },
                   { label: 'For Agents & Brokers', href: '/portal' },
                   { label: 'Partner With Us', href: '#' },
                   // { label: 'Careers', href: '#' },

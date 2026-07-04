@@ -113,7 +113,7 @@ async function runProductionPipeline() {
     console.log(`\n📊 Aggregation layout complete. Compiled ${allFormattedProjects.length} data rows.`);
     console.log("📡 Shipping data payload matrix up to Supabase tables...");
 
-    const { error: insertError } = await supabase
+    const { error: insertError } = await  supabase
       .from('projects')
       .insert(allFormattedProjects);
 

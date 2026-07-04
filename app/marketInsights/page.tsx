@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
+import Link from "next/link";
+import Footer from '../components/Footer';
 
 const ONTARIO_CITIES = [
   "Toronto", "Ottawa", "Mississauga", "Brampton", "Hamilton",
@@ -136,9 +138,13 @@ export default function MarketInsights() {
               <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-60"></span>
               <span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.7)]"></span>
             </div>
-            <span className="font-mono tracking-[0.15em] text-sm uppercase font-black bg-gradient-to-r from-indigo-300 via-white to-purple-300 bg-clip-text text-transparent">
-              FINDLE
-            </span>
+             <Link href="/" className="flex items-center group">
+        <img 
+          src="/findle.png" // Replace with your actual filename (e.g., logo.png, logo.svg)
+          alt="Findle" 
+          className="h-31 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-300"
+        />
+      </Link>
           </div>
           <div className="font-mono text-[10px] text-slate-400 border border-slate-600/30 px-3 py-1.5 bg-slate-900/20 rounded-md hover:border-indigo-400/50 backdrop-blur-sm transition">
             MARKET INSIGHTS <span className="text-indigo-300 font-semibold">ACTIVE</span>
@@ -293,6 +299,8 @@ export default function MarketInsights() {
           </div>
         </div>
       </div>
+      <Footer />
     </main>
+
   );
 }
