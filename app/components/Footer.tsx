@@ -182,7 +182,7 @@ export default function Footer() {
                  // { label: 'Pre-Construction 101', href: '#' },
                   // { label: 'Mortgage Calculator', href: '/directory' },
                   { label: 'Market Insights', href: '/marketInsights' },
-                  { label: 'Neighbourhood Guides', href: '#' },
+                 // { label: 'Neighbourhood Guides', href: '#' },
                   { label: 'VIP Registration', href: '/directory' },
                   { label: 'FAQ', href: '/faq' },
                 ].map((item) => (
@@ -201,7 +201,7 @@ export default function Footer() {
               </h4>
               <ul className="space-y-2.5">
                 {[
-                  { label: 'About Findle Global', href: '#' },
+                  { label: 'About Findle Global', href: '/about' },
                   // { label: 'How It Works', href: '#' },
                  // { label: 'For Developers', href: '#' },
                   { label: 'For Agents & Brokers', href: '/portal' },
