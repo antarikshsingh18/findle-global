@@ -286,7 +286,7 @@ useEffect(() => {
   onChange={(e) => setSelectedCity(e.target.value)}
   className="bg-slate-900/40 border border-slate-700/60 rounded-xl px-4 py-3.5 text-white font-mono text-[10px] tracking-wider uppercase outline-none focus:border-indigo-500/80 transition duration-300 w-full cursor-pointer"
 >
-  {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON', 'WHITBY', 'BARRIE', 'VAUGHAN', 'BURLINGTON', 'OSHAWA', 'PICKERING', 'RICHMOND HILL', 'MARKHAM', 'CALEDON', 'NEWMARKET', 'GUELPH', 'MILTON', 'CAMBRIDGE', 'KITCHENER', 'ADJALA-TOSORONTIO', 'STOUFFVILLE', 'BOWMANVILLE', 'WOODSTOCK', 'ORANGEVILLE'].map((city) => (
+  {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON', 'WHITBY', 'BARRIE', 'VAUGHAN', 'BURLINGTON', 'OSHAWA', 'PICKERING', 'RICHMOND HILL', 'MARKHAM', 'CALEDON', 'NEWMARKET', 'GUELPH', 'MILTON', 'CAMBRIDGE', 'KITCHENER', 'ADJALA-TOSORONTIO', 'STOUFFVILLE', 'BOWMANVILLE', 'WOODSTOCK', 'ORANGEVILLE', 'ALLISTON'].map((city) => (
     <option key={city} value={city} className="bg-slate-950 text-white">
       {city === 'ALL' ? 'ALL CITIES' : city}
     </option>

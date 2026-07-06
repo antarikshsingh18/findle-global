@@ -179,12 +179,12 @@ export default function Footer() {
                 {[
                   { label: "Findle Buyer's Guide", href: '/guide' },
                   //{ label: "Investor's Guide", href: '#' },
-                  { label: 'Pre-Construction 101', href: '#' },
+                 // { label: 'Pre-Construction 101', href: '#' },
                   // { label: 'Mortgage Calculator', href: '/directory' },
                   { label: 'Market Insights', href: '/marketInsights' },
                   { label: 'Neighbourhood Guides', href: '#' },
                   { label: 'VIP Registration', href: '/directory' },
-                  { label: 'FAQ', href: '#' },
+                  { label: 'FAQ', href: '/faq' },
                 ].map((item) => (
                   <li key={item.label}>
                     <Link href={item.href} className="text-slate-500 hover:text-indigo-400 transition-colors tracking-wider uppercase text-[10px]">
@@ -205,7 +205,7 @@ export default function Footer() {
                   // { label: 'How It Works', href: '#' },
                  // { label: 'For Developers', href: '#' },
                   { label: 'For Agents & Brokers', href: '/portal' },
-                  { label: 'Partner With Us', href: '#' },
+                  { label: 'Partner With Us', href: '/partner' },
                   // { label: 'Careers', href: '#' },
                   // { label: 'Press & Media', href: '#' },
                   { label: 'Contact Us', href: '/contact' },
