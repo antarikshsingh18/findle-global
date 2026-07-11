@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
-import Link from "next/link";
 import Footer from '../components/Footer';
+import SiteNavbar from '../components/SiteNavbar';
 
 const ONTARIO_CITIES = [
   "Toronto", "Ottawa", "Mississauga", "Brampton", "Hamilton",
@@ -130,27 +130,7 @@ export default function MarketInsights() {
       <div className="absolute top-[15vh] left-[-15%] w-[50vw] h-[50vw] rounded-full bg-gradient-radial from-indigo-600/10 via-transparent to-transparent blur-3xl pointer-events-none z-0" />
       <div className="absolute top-[30vh] right-[-20%] w-[45vw] h-[45vw] rounded-full bg-gradient-radial from-emerald-600/8 via-transparent to-transparent blur-3xl pointer-events-none z-0" />
 
-      {/* Navigation Bar */}
-      <nav className="border-b border-slate-800/40 sticky top-0 bg-[#030305]/30 backdrop-blur-3xl z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative flex h-4 w-4">
-              <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-60"></span>
-              <span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.7)]"></span>
-            </div>
-             <Link href="/" className="flex items-center group">
-        <img 
-          src="/findle.png" // Replace with your actual filename (e.g., logo.png, logo.svg)
-          alt="Findle" 
-          className="h-31 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-300"
-        />
-      </Link>
-          </div>
-          <div className="font-mono text-[10px] text-slate-400 border border-slate-600/30 px-3 py-1.5 bg-slate-900/20 rounded-md hover:border-indigo-400/50 backdrop-blur-sm transition">
-            MARKET INSIGHTS <span className="text-indigo-300 font-semibold">ACTIVE</span>
-          </div>
-        </div>
-      </nav>
+      <SiteNavbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16">
         

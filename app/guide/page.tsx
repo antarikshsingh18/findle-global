@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import Navbar from '@/app/components/AdminNavLink';
+import SiteNavbar from '@/app/components/SiteNavbar';
 
 export default function GuidePage() {
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function GuidePage() {
             </span>
             <span className="text-xs uppercase tracking-widest font-bold">Back</span>
           </button>
-          <Navbar />
+          <SiteNavbar />
         </div>
 
         {/* Hero Section */}

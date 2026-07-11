@@ -1,6 +1,6 @@
 "use client";
 
-import Navbar from '@/app/components/AdminNavLink';
+import SiteNavbar from '@/app/components/SiteNavbar';
 import { AiOutlineClose } from 'react-icons/ai';
 
 export default function PrivacyPolicy() {
@@ -17,7 +17,7 @@ export default function PrivacyPolicy() {
           <AiOutlineClose size={28} />
         </button>
 
-        <Navbar />
+        <SiteNavbar />
         
         {/* Header */}
         <header className="mb-12 mt-8">

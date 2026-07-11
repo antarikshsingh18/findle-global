@@ -1,41 +1,12 @@
 import Link from 'next/link';
-import AdminNavLink from '../components/AdminNavLink';
-import LogoutButton from '../components/LogoutButton';
 import Footer from '../components/Footer';
+import SiteNavbar from '../components/SiteNavbar';
 
 export default function FindleFinance() {
 	return (
 		<main className="min-h-screen bg-[#030305] text-slate-100 selection:bg-indigo-500 selection:text-white antialiased relative overflow-x-hidden">
 
-			{/* Header / Nav (copied from homepage for consistency) */}
-			<nav className="border-b border-slate-800/40 sticky top-0 bg-[#030305]/30 backdrop-blur-3xl z-50">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-					<div className="flex items-center gap-3">
-						<div className="relative flex h-4 w-4">
-							<span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-60"></span>
-							<span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.7)]"></span>
-						</div>
-
-						<Link href="/" className="flex items-center group">
-							<img src="/findle.png" alt="Findle" className="h-32 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-300" />
-						</Link>
-					</div>
-
-					<div className="hidden md:flex items-center gap-8 text-[11px] font-mono tracking-widest uppercase text-slate-400">
-						<span className="text-indigo-400 cursor-pointer flex items-center gap-1 hover:text-indigo-300 transition">
-							<span className="text-[9px]">&gt;</span> Browse
-						</span>
-						<Link href="/directory" className="hover:text-white cursor-pointer transition duration-300">Listings</Link>
-						<AdminNavLink />
-						<LogoutButton />
-						<Link href="/portal" className="hover:text-white cursor-pointer transition duration-300">Login</Link>
-					</div>
-
-					{/* <div className="font-mono text-[10px] text-slate-400 border border-slate-600/30 px-3 py-1.5 bg-slate-900/20 rounded-md hover:border-indigo-400/50 backdrop-blur-sm transition">
-						PLATFORM: <span className="text-indigo-300 font-semibold">LIVE</span>
-					</div> */}
-				</div>
-			</nav>
+			<SiteNavbar />
 
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-12">
 				{/* Right-aligned findle7 logo for large screens */}

@@ -1,9 +1,9 @@
 "use client";
 
 import { useForm, ValidationError } from '@formspree/react';
-import Navbar from '@/app/components/AdminNavLink';
 import { AiFillInstagram, AiFillLinkedin, AiFillYoutube, AiFillFacebook, AiOutlineTikTok } from 'react-icons/ai';
 import {useRouter} from 'next/navigation';
+import SiteNavbar from '@/app/components/SiteNavbar';
 
 export default function ContactPage() {
   // Formspree logic
@@ -43,7 +43,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-[#030305] text-slate-300 font-sans">
       <div className="max-w-5xl mx-auto px-6 py-12">
-        <Navbar />
+        <SiteNavbar />
 
         {/* Hero Section */}
         <header className="py-20 text-center">

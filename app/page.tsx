@@ -5,7 +5,7 @@ import LogoutButton from './components/LogoutButton';
 import Footer from './components/Footer';
 
 export default async function Home() {
-  const totalProperties = 110;
+  const totalProperties = 858;
   let liveProperties: any[] = [];
   
   // Fetch real-time data directly from both database tables in parallel on the server
@@ -151,10 +151,10 @@ export default async function Home() {
           {/* Advanced Stats Bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 mb-12">
             {[
-              { label: 'PROPERTIES_LISTED', value: totalProperties, unit: '' },
-              { label: 'MATCH_ACCURACY', value: '99.9', unit: '%' },
-              { label: 'MARKET_COVERAGE', value: '24/7', unit: '' },
-              { label: 'USER_SATISFACTION', value: '98.5', unit: '%' }
+              { label: 'PROPERTIES LISTED', value: totalProperties, unit: '' },
+              { label: 'MATCH ACCURACY', value: '99.9', unit: '%' },
+              { label: 'MARKET COVERAGE', value: '24/7', unit: '' },
+              { label: 'USER SATISFACTION', value: '98.5', unit: '%' }
             ].map((stat, idx) => (
               <div key={idx} className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300" />

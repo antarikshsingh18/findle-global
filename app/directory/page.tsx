@@ -3,12 +3,11 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../lib/supabase';
-import AdminNavLink from '../components/AdminNavLink';
-import LogoutButton from '../components/LogoutButton';  
 import {useSearchParams} from 'next/navigation';
 import {Suspense} from 'react';
 import Footer from '../components/Footer';
 import ShareButton from '../components/ShareButton';
+import SiteNavbar from '../components/SiteNavbar';
 
 interface Project {
   id: string;
@@ -103,6 +102,7 @@ useEffect(() => {
   
   // --- Filtering Engine States ---
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const cityFromUrl = searchParams.get('city');
   const [selectedCity, setSelectedCity] = useState<string>(
     cityFromUrl ? cityFromUrl.toUpperCase() : 'ALL'
@@ -137,10 +137,14 @@ useEffect(() => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#030305] flex flex-col items-center justify-center font-mono text-xs text-slate-500 tracking-widest gap-3">
-        <div className="w-6 h-6 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-        SYNCHRONIZING SECURE NODE PLATFORM FEED...
-      </div>
+      <main className="min-h-screen bg-[#030305] text-slate-100 selection:bg-indigo-500 selection:text-white antialiased relative overflow-x-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] bg-gradient-to-b from-indigo-950/10 via-transparent to-transparent pointer-events-none z-0" />
+        <SiteNavbar />
+        <div className="relative z-10 flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-3 font-mono text-xs tracking-widest text-slate-500">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-500/20 border-t-indigo-500" />
+          SYNCHRONIZING SECURE NODE PLATFORM FEED...
+        </div>
+      </main>
     );
   }
 
@@ -150,33 +154,7 @@ useEffect(() => {
       {/* Abstract Background Tech Grids */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] bg-gradient-to-b from-indigo-950/10 via-transparent to-transparent pointer-events-none z-0" />
 
-    {/* Top Navigation Bar */}
-<div className="border-b border-slate-800/40 bg-[#030305]/30 backdrop-blur-3xl">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-    
-    {/* Logo + Pulse */}
-    <div className="flex items-center gap-3">
-      <div className="relative flex h-4 w-4">
-        <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-60"></span>
-        <span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.7)]"></span>
-      </div>
-      <Link href="/" className="flex items-center group">
-        <img
-          src="/findle.png"
-          alt="Findle"
-          className="h-31 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-300"
-        />
-      </Link>
-    </div>
-
-    <AdminNavLink />
-    <LogoutButton />
-
-    <Link href="/portal" className="text-[11px] font-mono tracking-widest uppercase text-slate-400 hover:text-white cursor-pointer transition duration-300">
-      Login
-    </Link>
-  </div>
-</div>
+    <SiteNavbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
         
@@ -206,7 +184,9 @@ useEffect(() => {
             {(properties.some(p => p.is_featured) ? properties.filter(p => p.is_featured) : properties.slice(0, 1)).map((featured: any) => (
               <div 
                 key={`featured-${featured.id}`}
-                className="relative overflow-hidden rounded-xl border border-amber-500/30 bg-gradient-to-r from-amber-950/10 via-slate-900/40 to-slate-900/10 p-1 group hover:border-amber-500/60 transition-all duration-500 shadow-[0_0_25px_rgba(245,158,11,0.05)]"
+                onTouchStart={() => setActiveCardId(featured.id)}
+                onTouchEnd={() => setActiveCardId(null)}
+                className={`relative overflow-hidden rounded-xl border p-1 group transition-all duration-500 shadow-[0_0_25px_rgba(245,158,11,0.05)] ${activeCardId === featured.id ? 'border-amber-500/60 bg-gradient-to-r from-amber-950/20 via-slate-900/50 to-slate-900/20' : 'border-amber-500/30 bg-gradient-to-r from-amber-950/10 via-slate-900/40 to-slate-900/10 hover:border-amber-500/60'}`}
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-amber-500/20 transition duration-500" />
                 
@@ -217,7 +197,7 @@ useEffect(() => {
                     <img 
                       src={featured.image_url || "/fallback-estate.jpg"} 
                       alt={featured.title} 
-                      className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-90 transition duration-700 group-hover:scale-105"
+                      className={`h-full w-full object-cover transition duration-700 ${activeCardId === featured.id ? 'scale-105 grayscale-0 opacity-90' : 'grayscale opacity-60 group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-90'}`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
                     <span className="absolute bottom-3 left-3 bg-amber-500 text-slate-950 text-[8px] font-mono uppercase font-black tracking-widest px-2 py-0.5 rounded shadow-lg">
@@ -347,7 +327,9 @@ useEffect(() => {
               {filteredProperties.map((property) => (
                 <div 
                   key={property.id} 
-                  className="group flex flex-col bg-slate-900/40 border border-slate-700/60 rounded-xl overflow-hidden transition-all duration-500 hover:border-indigo-500/50 hover:bg-slate-900/60 hover:shadow-[0_0_40px_rgba(99,102,241,0.15)] relative"
+                  onTouchStart={() => setActiveCardId(property.id)}
+                  onTouchEnd={() => setActiveCardId(null)}
+                  className={`group relative flex flex-col overflow-hidden rounded-xl border transition-all duration-500 ${activeCardId === property.id ? 'border-indigo-500/50 bg-slate-900/60 shadow-[0_0_40px_rgba(99,102,241,0.15)]' : 'border-slate-700/60 bg-slate-900/40 hover:border-indigo-500/50 hover:bg-slate-900/60 hover:shadow-[0_0_40px_rgba(99,102,241,0.15)]'}`}
                 >
                   <div className="aspect-[16/10] w-full bg-slate-950 relative overflow-hidden border-b border-slate-700/40">
                     {property.image_url ? (
@@ -355,7 +337,7 @@ useEffect(() => {
                       <img
                         src={property.image_url}
                         alt={property.title}
-                        className="h-full w-full object-cover object-center grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-85 transition-all duration-700 group-hover:scale-110"
+                        className={`h-full w-full object-cover object-center transition-all duration-700 ${activeCardId === property.id ? 'scale-110 grayscale-0 opacity-85' : 'grayscale opacity-50 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-85'}`}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center font-mono text-[9px] text-slate-700">NO_IMG_MATRIX</div>
