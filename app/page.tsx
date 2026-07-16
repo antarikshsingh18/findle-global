@@ -132,9 +132,9 @@ export default async function Home() {
           <div className="absolute -left-4 top-1/3 w-1 h-24 bg-gradient-to-b from-indigo-500/0 via-indigo-500/50 to-indigo-500/0 rounded-full blur-sm" />
           
           <header className="mb-12 max-w-5xl">
-            <div className="inline-flex items-center gap-2 rounded-lg border border-indigo-500/30 bg-indigo-950/20 px-4 py-2 text-[10px] font-mono tracking-widest text-indigo-300 mb-8 uppercase backdrop-blur-md hover:border-indigo-400/50 transition">
+            {/* <div className="inline-flex items-center gap-2 rounded-lg border border-indigo-500/30 bg-indigo-950/20 px-4 py-2 text-[10px] font-mono tracking-widest text-indigo-300 mb-8 uppercase backdrop-blur-md hover:border-indigo-400/50 transition">
               [ ✓ PROPERTY DISCOVERY ENGINE ACTIVE ]
-            </div>
+            </div> */}
             
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-tight mb-6">
               discover <br />
@@ -152,7 +152,7 @@ export default async function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 mb-12">
             {[
               { label: 'PROPERTIES LISTED', value: totalProperties, unit: '' },
-              { label: 'MATCH ACCURACY', value: '99.9', unit: '%' },
+              { label: 'CITIES LISTED', value: '20+', unit: '' },
               { label: 'MARKET COVERAGE', value: '24/7', unit: '' },
               { label: 'USER SATISFACTION', value: '98.5', unit: '%' }
             ].map((stat, idx) => (
@@ -171,7 +171,7 @@ export default async function Home() {
         </section>
 
         {/* ===== Enhanced HUD Data Filter Strip ===== */}
-        <div className="relative mb-16">
+        {/* <div className="relative mb-16">
           <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/5 to-purple-600/5 rounded-xl blur" />
           <div className="relative border border-slate-700/40 bg-slate-900/20 backdrop-blur-xl rounded-xl p-4 hover:border-slate-600/60 transition">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
@@ -193,7 +193,7 @@ export default async function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* ===== Features Section ===== */}
         <section className="py-16 mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -403,10 +403,10 @@ export default async function Home() {
     <div className="px-8 py-16 text-center">
 
       {/* System tag */}
-      <div className="inline-flex items-center gap-2 border border-purple-500/30 bg-purple-950/20 px-4 py-1.5 rounded-lg text-[10px] font-mono tracking-[0.2em] text-purple-400 uppercase mb-8">
+      {/* <div className="inline-flex items-center gap-2 border border-purple-500/30 bg-purple-950/20 px-4 py-1.5 rounded-lg text-[10px] font-mono tracking-[0.2em] text-purple-400 uppercase mb-8">
         <span className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse" />
         DISCOVERY_ENGINE // READY
-      </div>
+      </div> */}
 
       {/* Main heading */}
       <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-white leading-none mb-4">
@@ -425,9 +425,9 @@ export default async function Home() {
       {/* Stats row */}
       <div className="flex flex-wrap justify-center gap-12 mb-10 font-mono">
         {[
-          { label: 'LIVE NODES', value: '758+' },
+          { label: 'PROPERTIES', value: '758+' },
           { label: 'CITIES COVERED', value: '19' },
-          { label: 'PLATFORM STATUS', value: 'ONLINE' },
+          // { label: 'PLATFORM STATUS', value: 'ONLINE' },
         ].map((stat, idx) => (
           <div key={idx} className="text-center">
             <div className="text-3xl font-black text-white tracking-tight">{stat.value}</div>

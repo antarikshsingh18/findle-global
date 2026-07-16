@@ -21,7 +21,7 @@ export default function GuidePage() {
             </span>
             <span className="text-xs uppercase tracking-widest font-bold">Back</span>
           </button>
-          <SiteNavbar />
+          {/* <SiteNavbar /> */}
         </div>
 
         {/* Hero Section */}
