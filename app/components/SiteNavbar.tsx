@@ -7,16 +7,16 @@ export default function SiteNavbar() {
     <nav className="sticky top-0 z-50 border-b border-slate-800/40 bg-[#030305]/30 backdrop-blur-3xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
-          <div className="relative flex h-4 w-4">
+          {/* <div className="relative flex h-4 w-4">
             <span className="absolute inline-flex h-full w-full animate-pulse rounded-full bg-indigo-400 opacity-60"></span>
             <span className="relative inline-flex h-4 w-4 rounded-full bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.7)]"></span>
-          </div>
+          </div> */}
 
           <Link href="/" className="group flex items-center">
             <img
               src="/findle.png"
               alt="Findle"
-              className="h-31 w-auto object-contain opacity-90 transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-100"
+              className="h-33 w-auto object-contain opacity-90 transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-100"
             />
           </Link>
         </div>

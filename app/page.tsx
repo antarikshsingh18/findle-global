@@ -86,17 +86,17 @@ export default async function Home() {
     {/* Left Top Brand Container */}
     <div className="flex items-center gap-3">
       {/* Pulse Status Light Indicator */}
-      <div className="relative flex h-4 w-4">
+      {/* <div className="relative flex h-4 w-4">
         <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-60"></span>
         <span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.7)]"></span>
-      </div>
+      </div> */}
       
       {/* NEW GRAPHIC LOGO NODE */}
       <Link href="/" className="flex items-center group">
         <img 
           src="/findle.png" // Replace with your actual filename (e.g., logo.png, logo.svg)
           alt="Findle" 
-          className="h-31 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-300"
+          className="h-33 w-auto object-contain opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-300"
         />
       </Link>
     </div>
