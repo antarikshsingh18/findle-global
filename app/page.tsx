@@ -143,9 +143,20 @@ export default async function Home() {
               </span>
             </h1>
             
-            <p className="text-lg sm:text-xl font-mono text-slate-400 max-w-3xl leading-relaxed">
-              <span className="text-indigo-400">// </span>AI-powered platform to discover, compare, and analyze new construction projects across Canada and worldwide.
-            </p>
+            <div className="flex flex-col sm:flex-row gap-3 mt-8">
+              <Link
+                href="/directory"
+                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_25px_rgba(129,140,248,0.35)] transition hover:brightness-110"
+              >
+                Explore Properties
+              </Link>
+              <Link
+                href="/FindleFinance"
+                className="inline-flex items-center justify-center rounded-xl border border-slate-700 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-slate-300 transition hover:border-indigo-500/60 hover:text-white"
+              >
+                Findle Finance
+              </Link>
+            </div>
           </header>
 
           {/* Advanced Stats Bar */}
