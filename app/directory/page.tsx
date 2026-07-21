@@ -151,6 +151,7 @@ useEffect(() => {
   return (
     <main className="min-h-screen bg-[#030305] text-slate-100 selection:bg-indigo-500 selection:text-white antialiased relative overflow-x-hidden">
       
+      
       {/* Abstract Background Tech Grids */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] bg-gradient-to-b from-indigo-950/10 via-transparent to-transparent pointer-events-none z-0" />
 
@@ -226,7 +227,7 @@ useEffect(() => {
 
                     <div className="lg:text-right flex lg:flex-col items-end justify-between lg:justify-center border-t lg:border-t-0 border-slate-800 pt-4 lg:pt-0">
                       <div>
-                        <span className="block text-[8px] text-slate-500 uppercase tracking-widest mb-0.5">PRICE_INDEX</span>
+                        <span className="block text-[8px] text-slate-500 uppercase tracking-widest mb-0.5">STARTING PRICE</span>
                         <span className="text-2xl font-black text-amber-400 tracking-tight">
                           {featured.price_text}
                         </span>
@@ -234,7 +235,7 @@ useEffect(() => {
                       
                       <Link href={`/directory/${featured.id}`} className="mt-3 w-full lg:w-auto block">
                         <button className="w-full lg:w-auto px-5 py-2.5 rounded-lg border border-amber-500/50 bg-amber-500/10 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold text-[10px] tracking-widest uppercase transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.1)] hover:shadow-[0_0_25px_rgba(245,158,11,0.3)]">
-                          OPEN_NODE →
+                          OPEN →
                         </button>
                       </Link>
                     </div>
@@ -359,7 +360,7 @@ useEffect(() => {
                       </h3>
                       <div className="mt-6 grid grid-cols-2 gap-4 border-t border-slate-700/40 pt-4 text-xs font-mono">
                         <div>
-                          <span className="block text-[8px] text-slate-500 uppercase tracking-widest">REGION_ZONE</span>
+                          <span className="block text-[8px] text-slate-500 uppercase tracking-widest">REGION</span>
                           <span className="font-medium text-slate-300 uppercase mt-1 block tracking-wider truncate">{property.city || 'Ontario'}</span>
                         </div>
                         <div>
@@ -371,7 +372,7 @@ useEffect(() => {
 
                    <div className="mt-8 pt-4 border-t border-slate-700/40 flex items-center justify-between">
   <div>
-    <span className="block text-[8px] font-mono text-slate-500 uppercase tracking-widest">START_PRICE</span>
+    <span className="block text-[8px] font-mono text-slate-500 uppercase tracking-widest">STARTING PRICE</span>
     <span className="text-xl font-black text-white tracking-tight font-mono">
       {property.price_text}
     </span>
@@ -388,7 +389,7 @@ useEffect(() => {
         type="button"
         className="relative inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 text-indigo-300 font-mono text-[10px] tracking-widest uppercase px-4 py-2.5 transition-all hover:bg-indigo-600/30 hover:text-white"
       >
-        OPEN_NODE →
+        OPEN →
       </button>
     </Link>
   </div>

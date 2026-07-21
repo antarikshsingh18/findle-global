@@ -40,7 +40,7 @@ function AccordionSection({ title, children, defaultOpen = false }: { title: str
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between px-5 py-4 text-left font-mono font-bold text-sm text-slate-200 hover:bg-slate-800/30 transition-all"
       >
-        <span>// {title.toUpperCase()}</span>
+        <span> {title.toUpperCase()}</span>
         <span className={`text-xs text-slate-500 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
           ▼
         </span>
@@ -96,7 +96,7 @@ function HstRebateCalculator({ priceText }: { priceText: string }) {
   return (
     <div className="border border-slate-800 bg-slate-900/10 rounded-xl overflow-hidden mb-4">
       <div className="w-full flex items-center justify-between px-5 py-4 font-mono font-bold text-sm text-slate-200">
-        <span>// HST NEW HOUSING REBATE CALCULATOR</span>
+        <span> HST NEW HOUSING REBATE CALCULATOR</span>
         <span className="text-xs text-indigo-400 font-mono tracking-widest">TAX_MATRIX</span>
       </div>
 
@@ -191,7 +191,7 @@ function MortgageCalculator({ priceText }: { priceText: string }) {
   return (
     <div className="border border-slate-800 bg-slate-900/10 rounded-xl overflow-hidden mb-4">
       <div className="w-full flex items-center justify-between px-5 py-4 font-mono font-bold text-sm text-slate-200">
-        <span>// MORTGAGE CALCULATOR</span>
+        <span> MORTGAGE CALCULATOR</span>
         <span className="text-xs text-emerald-400 font-mono tracking-widest">ESTIMATE</span>
       </div>
 
@@ -438,7 +438,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
 
               <div className="space-y-3.5 border-t border-slate-800/60 pt-5 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">ZONE:</span>
+                  <span className="text-slate-500">REGION:</span>
                   <span className="text-slate-200 uppercase">{project.city}</span>
                 </div>
                 <div className="flex justify-between">

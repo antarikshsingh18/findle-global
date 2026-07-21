@@ -164,8 +164,8 @@ export default async function Home() {
             {[
               { label: 'PROPERTIES LISTED', value: totalProperties, unit: '' },
               { label: 'CITIES LISTED', value: '20+', unit: '' },
-              { label: 'MARKET COVERAGE', value: '24/7', unit: '' },
-              { label: 'USER SATISFACTION', value: '98.5', unit: '%' }
+              { label: 'BUILDERS LISTED', value: '100+', unit: '' },
+              { label: 'MARKET COVERAGE', value: '24/7', unit: '%' }
             ].map((stat, idx) => (
               <div key={idx} className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300" />
@@ -212,17 +212,17 @@ export default async function Home() {
             { 
               imgUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80', 
               title: 'Smart Search', 
-              desc: 'AI-powered tactical search matrices to locate your ideal property nodes in seconds.' 
+              desc: 'Search the way you think. Find homes using natural language, filters, and location—all from one search bar.' 
             },
             { 
               imgUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80', 
               title: 'Market Insights', 
-              desc: 'Real-time structural pricing trends and predictive valuation algorithms running continuously.' 
+              desc: 'Know the market before you buy. Track prices, compare neighbourhoods, and follow trends with live data.' 
             },
             { 
               imgUrl: '/findlefinance2.png', 
               title: 'Findle Finance', 
-              desc: 'Integrated mortgage services — licensed agents, pre-approval, rate shopping, and preconstruction financing.' 
+              desc: 'Understand your budget in minutes. Estimate payments, compare financing options, and plan your next move with confidence.' 
             }
           ].map((feature, idx) => {
             const cardInnerContent = (
@@ -240,7 +240,7 @@ export default async function Home() {
                   {/* Card Content Text */}
                   <div className="p-6 flex-1 flex flex-col justify-center">
                     <h3 className="text-lg font-mono font-bold uppercase tracking-wider text-white mb-2 group-hover:text-indigo-400 transition">
-                      // {feature.title}
+                       {feature.title}
                     </h3>
                     <p className="text-xs font-mono leading-relaxed text-slate-400 group-hover:text-slate-300 transition">
                       {feature.desc}
