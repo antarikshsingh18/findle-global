@@ -148,7 +148,7 @@ export default function MarketInsights() {
           </h1>
           
           <p className="text-lg sm:text-xl font-mono text-slate-400 max-w-3xl leading-relaxed">
-            <span className="text-indigo-400">// </span>Real-time structural pricing trends and predictive valuation algorithms running continuously.
+            <span className="text-indigo-400"> </span>AI-powered insights into pricing, neighborhoods, and market trends for any city.
           </p>
         </section>
 
