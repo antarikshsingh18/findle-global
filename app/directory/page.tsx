@@ -60,7 +60,7 @@ useEffect(() => {
 
       // 2. Map your new C21 listing columns into your frontend Project shape
       const normalizedC21 = c21Data.map((item: any) => ({
-        id: `c21-${item.id}`, // Add a prefix prefix to prevent key clashing
+        id: `c21-${item.id}`, // Add a prefix to prevent key clashing
         title: item.title,
         price_text: item.price_text || "CONTACT FOR PRICING",
         beds_text: item.beds_text || "See Specs",
@@ -76,8 +76,9 @@ useEffect(() => {
         document_links: item.document_links || []
       }));
       const ids = [...normalizedProjects, ...normalizedC21].map(p => p.id);
-const duplicates = ids.filter((id, i) => ids.indexOf(id) !== i);
-console.log('Duplicate IDs:', duplicates);
+      const duplicates = ids.filter((id, i) => ids.indexOf(id) !== i);
+      console.log('Duplicate IDs:', duplicates);
+      
       // 🔄 Combine them together into your unified feed state
       setProperties([...normalizedProjects, ...normalizedC21]);
 
@@ -117,14 +118,46 @@ useEffect(() => {
   const [selectedStage, setSelectedStage] = useState<string>('ALL');
   const [viewMode, setViewMode] = useState<'GRID' | 'MAP'>('GRID');
 
-  // --- Filtering Engine Logic ---
+  // --- Natural Language & Standard Filtering Engine Logic ---
   const filteredProperties = properties.filter((property) => {
-    const titleMatch = property.title?.toLowerCase().includes(searchQuery.toLowerCase()) || false;
-    const developerMatch = property.developer?.toLowerCase().includes(searchQuery.toLowerCase()) || false;
-    const locationMatch = (property.neighborhood || property.city || '').toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesSearch = titleMatch || developerMatch || locationMatch;
+    const query = searchQuery.toLowerCase().trim();
+
+    // 1. Natural Language Intent Parsing
+    if (query) {
+      // Check for price intent (e.g., "under 900k" or "900,000")
+      const underMatch = query.match(/under\s*\$?([\d,]+)(k)?/i);
+      if (underMatch) {
+        let rawNum = parseInt(underMatch[1].replace(/,/g, ''));
+        if (underMatch[2]) rawNum *= 1000; // handles 'k' shorthand
+        
+        const propPriceNum = parseInt((property.price_text || '').replace(/[^0-9]/g, '')) || 0;
+        if (propPriceNum > 0 && propPriceNum > rawNum) return false;
+      }
+
+      // Check for bedroom intent (e.g., "2-bed" or "2 bedroom")
+      const bedMatch = query.match(/(\d+)\s*(?:bed|bedroom)/i);
+      if (bedMatch) {
+        const requestedBeds = bedMatch[1];
+        const hasBedMatch = (property.beds_text || '').includes(requestedBeds);
+        if (!hasBedMatch) return false;
+      }
+
+      // Check for city intent if explicitly typed in sentence
+      const commonCities = ['toronto', 'mississauga', 'oakville', 'brampton', 'vaughan', 'markham', 'richmond hill', 'burlington', 'oshawa'];
+      const mentionedCity = commonCities.find(c => query.includes(c));
+      if (mentionedCity) {
+        const propCity = (property.city || '').toLowerCase();
+        if (!propCity.includes(mentionedCity)) return false;
+      }
+    }
+
+    // 2. Fallback to standard substring match across title, developer, location
+    const titleMatch = property.title?.toLowerCase().includes(query) || false;
+    const developerMatch = property.developer?.toLowerCase().includes(query) || false;
+    const locationMatch = (property.neighborhood || property.city || '').toLowerCase().includes(query);
+    const matchesSearch = !query || titleMatch || developerMatch || locationMatch || query.includes("under") || query.includes("bed");
       
+    // 3. Dropdown filters
     const matchesCity = selectedCity === 'ALL' || (property.city && property.city.toUpperCase() === selectedCity.toUpperCase());
     
     const currentStatus = property.selling_status || 'SELLING';
@@ -150,7 +183,6 @@ useEffect(() => {
 
   return (
     <main className="min-h-screen bg-[#030305] text-slate-100 selection:bg-indigo-500 selection:text-white antialiased relative overflow-x-hidden">
-      
       
       {/* Abstract Background Tech Grids */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] bg-gradient-to-b from-indigo-950/10 via-transparent to-transparent pointer-events-none z-0" />
@@ -254,25 +286,25 @@ useEffect(() => {
             <input
               ref={searchInputRef}
               type="text"
-              placeholder="SEARCH BY PROJECT, DEVELOPER, OR REGION..."
+              placeholder="SEARCH BY PROJECT, DEVELOPER, OR TRY '2-BED CONDO UNDER 900K'..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-900/40 border border-slate-700/60 rounded-xl px-4 py-3.5 text-white placeholder-slate-500 outline-none focus:border-indigo-500/80 focus:shadow-[0_0_15px_rgba(99,102,241,0.15)] transition duration-300 uppercase tracking-wider"
+              className="w-full bg-slate-900/40 border border-slate-700/60 rounded-xl px-4 py-3.5 text-white placeholder-slate-500 outline-none focus:border-indigo-500/80 focus:shadow-[0_0_15px_rgba(99,102,241,0.15)] transition duration-300 uppercase tracking-wider text-[11px]"
             />
             <span className="absolute right-4 top-4 text-slate-600">⌨</span>
           </div>
 
           <select
-  value={selectedCity}
-  onChange={(e) => setSelectedCity(e.target.value)}
-  className="bg-slate-900/40 border border-slate-700/60 rounded-xl px-4 py-3.5 text-white font-mono text-[10px] tracking-wider uppercase outline-none focus:border-indigo-500/80 transition duration-300 w-full cursor-pointer"
->
-  {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON', 'WHITBY', 'BARRIE', 'VAUGHAN', 'BURLINGTON', 'OSHAWA', 'PICKERING', 'RICHMOND HILL', 'MARKHAM', 'CALEDON', 'NEWMARKET', 'GUELPH', 'MILTON', 'CAMBRIDGE', 'KITCHENER', 'ADJALA-TOSORONTIO', 'STOUFFVILLE', 'BOWMANVILLE', 'WOODSTOCK', 'ORANGEVILLE', 'ALLISTON', 'WELLAND'].map((city) => (
-    <option key={city} value={city} className="bg-slate-950 text-white">
-      {city === 'ALL' ? 'ALL CITIES' : city}
-    </option>
-  ))}
-</select>
+            value={selectedCity}
+            onChange={(e) => setSelectedCity(e.target.value)}
+            className="bg-slate-900/40 border border-slate-700/60 rounded-xl px-4 py-3.5 text-white font-mono text-[10px] tracking-wider uppercase outline-none focus:border-indigo-500/80 transition duration-300 w-full cursor-pointer"
+          >
+            {['ALL', 'TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON', 'WHITBY', 'BARRIE', 'VAUGHAN', 'BURLINGTON', 'OSHAWA', 'PICKERING', 'RICHMOND HILL', 'MARKHAM', 'CALEDON', 'NEWMARKET', 'GUELPH', 'MILTON', 'CAMBRIDGE', 'KITCHENER', 'ADJALA-TOSORONTIO', 'STOUFFVILLE', 'BOWMANVILLE', 'WOODSTOCK', 'ORANGEVILLE', 'ALLISTON', 'WELLAND'].map((city) => (
+              <option key={city} value={city} className="bg-slate-950 text-white">
+                {city === 'ALL' ? 'ALL CITIES' : city}
+              </option>
+            ))}
+          </select>
 
           <div className="bg-slate-900/40 border border-slate-700/60 rounded-xl p-1.5 flex gap-1 items-center">
             {['ALL', 'REGISTRATION', 'SELLING', 'CONSTRUCTION'].map((stage) => (
@@ -370,30 +402,31 @@ useEffect(() => {
                       </div>
                     </div>
 
-                   <div className="mt-8 pt-4 border-t border-slate-700/40 flex items-center justify-between">
-  <div>
-    <span className="block text-[8px] font-mono text-slate-500 uppercase tracking-widest">STARTING PRICE</span>
-    <span className="text-xl font-black text-white tracking-tight font-mono">
-      {property.price_text}
-    </span>
-  </div>
-  
-  <div className="flex items-center gap-2">
-    <ShareButton
-      title={property.title}
-      url={`https://www.findle.global/directory/${property.id}`}
-      compact={true}
-    />
-    <Link href={`/directory/${property.id}`}>
-      <button 
-        type="button"
-        className="relative inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 text-indigo-300 font-mono text-[10px] tracking-widest uppercase px-4 py-2.5 transition-all hover:bg-indigo-600/30 hover:text-white"
-      >
-        OPEN →
-      </button>
-    </Link>
-  </div>
-</div>
+                    <div className="mt-8 pt-4 border-t border-slate-700/40 flex items-center justify-between">
+                      <div>
+                        <span className="block text-[8px] font-mono text-slate-500 uppercase tracking-widest">STARTING PRICE</span>
+                        <span className="text-xl font-black text-white tracking-tight font-mono">
+                          {property.price_text}
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center gap-2">
+                        <ShareButton
+                          title={property.title}
+                          url={`https://www.findle.global/directory/${property.id}`}
+                          compact={true}
+                        />
+                        <Link href={`/directory/${property.id}`}>
+                          <button 
+                            type="button"
+                            className="relative inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 text-indigo-300 font-mono text-[10px] tracking-widest uppercase px-4 py-2.5 transition-all hover:bg-indigo-600/30 hover:text-white"
+                          >
+                            OPEN →
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               ))}
@@ -475,6 +508,7 @@ useEffect(() => {
     </main>
   );
 }
+
 export default function DirectoryPageWrapper() {
   return (
     <Suspense fallback={
