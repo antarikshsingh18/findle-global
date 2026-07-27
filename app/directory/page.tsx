@@ -103,11 +103,20 @@ useEffect(() => {
   
   // --- Filtering Engine States ---
   const [searchQuery, setSearchQuery] = useState('');
+  const [aiFilters, setAiFilters] = useState<{
+    city: string | null;
+    maxPrice: number | null;
+    bedrooms: number | null;
+    sellingStatus: string[] | null;
+    developer: string | null;
+  } | null>(null);
+
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const cityFromUrl = searchParams.get('city');
   const [selectedCity, setSelectedCity] = useState<string>(
     cityFromUrl ? cityFromUrl.toUpperCase() : 'ALL'
   );
+
   useEffect(() => {
     if (cityFromUrl) {
       setSelectedCity(cityFromUrl.toUpperCase());
@@ -115,49 +124,76 @@ useEffect(() => {
       setSelectedCity('ALL');
     }
   }, [cityFromUrl]);
+
   const [selectedStage, setSelectedStage] = useState<string>('ALL');
   const [viewMode, setViewMode] = useState<'GRID' | 'MAP'>('GRID');
+
+  // Trigger LLM parsing with a debounce when search query changes
+  useEffect(() => {
+    const query = searchQuery.trim();
+    if (!query) {
+      setAiFilters(null);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch('/api/parse-search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query }),
+        });
+        const data = await res.json();
+        if (data.filters) {
+          setAiFilters(data.filters);
+        }
+      } catch (err) {
+        console.error("Failed to parse search via AI:", err);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   // --- Natural Language & Standard Filtering Engine Logic ---
   const filteredProperties = properties.filter((property) => {
     const query = searchQuery.toLowerCase().trim();
 
-    // 1. Natural Language Intent Parsing
-    if (query) {
-      // Check for price intent (e.g., "under 900k" or "900,000")
-      const underMatch = query.match(/under\s*\$?([\d,]+)(k)?/i);
-      if (underMatch) {
-        let rawNum = parseInt(underMatch[1].replace(/,/g, ''));
-        if (underMatch[2]) rawNum *= 1000; // handles 'k' shorthand
-        
-        const propPriceNum = parseInt((property.price_text || '').replace(/[^0-9]/g, '')) || 0;
-        if (propPriceNum > 0 && propPriceNum > rawNum) return false;
+    // 1. If AI parsed structured filters, evaluate them cleanly against properties
+    if (aiFilters) {
+      if (aiFilters.city && property.city) {
+        if (!property.city.toLowerCase().includes(aiFilters.city.toLowerCase())) return false;
       }
 
-      // Check for bedroom intent (e.g., "2-bed" or "2 bedroom")
-      const bedMatch = query.match(/(\d+)\s*(?:bed|bedroom)/i);
-      if (bedMatch) {
-        const requestedBeds = bedMatch[1];
-        const hasBedMatch = (property.beds_text || '').includes(requestedBeds);
+      if (aiFilters.maxPrice !== null && property.price_text) {
+        const propPriceNum = parseInt(property.price_text.replace(/[^0-9]/g, '')) || 0;
+        if (propPriceNum > 0 && propPriceNum > aiFilters.maxPrice) return false;
+      }
+
+     if (aiFilters.bedrooms !== null && aiFilters.bedrooms !== undefined && property.beds_text) {
+        const hasBedMatch = property.beds_text.includes(String(aiFilters.bedrooms));
         if (!hasBedMatch) return false;
       }
 
-      // Check for city intent if explicitly typed in sentence
-      const commonCities = ['toronto', 'mississauga', 'oakville', 'brampton', 'vaughan', 'markham', 'richmond hill', 'burlington', 'oshawa'];
-      const mentionedCity = commonCities.find(c => query.includes(c));
-      if (mentionedCity) {
-        const propCity = (property.city || '').toLowerCase();
-        if (!propCity.includes(mentionedCity)) return false;
+      if (aiFilters.developer && property.developer) {
+        if (!property.developer.toLowerCase().includes(aiFilters.developer.toLowerCase())) return false;
       }
-    }
 
-    // 2. Fallback to standard substring match across title, developer, location
-    const titleMatch = property.title?.toLowerCase().includes(query) || false;
-    const developerMatch = property.developer?.toLowerCase().includes(query) || false;
-    const locationMatch = (property.neighborhood || property.city || '').toLowerCase().includes(query);
-    const matchesSearch = !query || titleMatch || developerMatch || locationMatch || query.includes("under") || query.includes("bed");
+      if (aiFilters.sellingStatus && aiFilters.sellingStatus.length > 0) {
+        const matchesStatus = aiFilters.sellingStatus.some(status => 
+          (property.selling_status || '').toLowerCase().includes(status.toLowerCase())
+        );
+        if (!matchesStatus) return false;
+      }
+    } else if (query) {
+      // 2. Fallback text match if AI hasn't returned yet or query is simple text
+      const titleMatch = property.title?.toLowerCase().includes(query) || false;
+      const developerMatch = property.developer?.toLowerCase().includes(query) || false;
+      const locationMatch = (property.neighborhood || property.city || '').toLowerCase().includes(query);
+      if (!titleMatch && !developerMatch && !locationMatch) return false;
+    }
       
-    // 3. Dropdown filters
+    // 3. UI Dropdown filters (Dropdown overrides take priority)
     const matchesCity = selectedCity === 'ALL' || (property.city && property.city.toUpperCase() === selectedCity.toUpperCase());
     
     const currentStatus = property.selling_status || 'SELLING';
@@ -165,7 +201,7 @@ useEffect(() => {
       (selectedStage === 'SELLING' && currentStatus.toUpperCase() === 'ACTIVE') ||
       currentStatus.toUpperCase() === selectedStage.toUpperCase();
 
-    return matchesSearch && matchesCity && matchesStage;
+    return matchesCity && matchesStage;
   });
 
   if (loading) {
