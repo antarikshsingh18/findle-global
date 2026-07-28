@@ -23,7 +23,8 @@ export default function ShareButton({ title, url, compact = false }: ShareButton
   const twitterUrl = `https://twitter.com/intent/tweet?text=${twitterText}&url=${encodedUrl}`;
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(shareUrl);
+    const textToCopy = `Check out ${title} on Findle Global: ${shareUrl}`;
+    await navigator.clipboard.writeText(textToCopy);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
     setIsOpen(false);

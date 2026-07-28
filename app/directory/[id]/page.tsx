@@ -479,14 +479,14 @@ export default function ProjectDetailPage({ params }: PageProps) {
           {/* 1. About Developer */}
           <AccordionSection title="About Developer" defaultOpen={true}>
             <div className="flex flex-col sm:flex-row gap-5 items-start">
-              <div className="w-20 h-20 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-center shrink-0 p-2 text-[9px] text-slate-600 text-center uppercase">
+              {/* <div className="w-20 h-20 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-center shrink-0 p-2 text-[9px] text-slate-600 text-center uppercase">
                 {project.developer_logo_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={project.developer_logo_url} alt="logo" className="w-full h-full object-contain" />
                 ) : (
                   "DEV LOGO"
                 )}
-              </div>
+              </div> */}
               <div>
                 <h4 className="text-sm font-bold text-slate-200 font-mono mb-2 uppercase">{project.developer || 'Caivan Communities'}</h4>
                 {/* <p className="font-sans text-slate-400 leading-relaxed">
