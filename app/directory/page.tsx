@@ -211,17 +211,19 @@ useEffect(() => {
         <SiteNavbar />
         <div className="relative z-10 flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-3 font-mono text-xs tracking-widest text-slate-500">
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-500/20 border-t-indigo-500" />
-          SYNCHRONIZING SECURE NODE PLATFORM FEED...
+          LOADING...
         </div>
       </main>
     );
   }
 
   return (
+    
     <main className="min-h-screen bg-[#030305] text-slate-100 selection:bg-indigo-500 selection:text-white antialiased relative overflow-x-hidden">
       
       {/* Abstract Background Tech Grids */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] bg-gradient-to-b from-indigo-950/10 via-transparent to-transparent pointer-events-none z-0" />
+      
 
     <SiteNavbar />
 
@@ -251,11 +253,12 @@ useEffect(() => {
           
           <div className="grid grid-cols-1 gap-6">
             {(properties.some(p => p.is_featured) ? properties.filter(p => p.is_featured) : properties.slice(0, 1)).map((featured: any) => (
-              <div 
+              <Link 
                 key={`featured-${featured.id}`}
+                href={`/directory/${featured.id}`}
                 onTouchStart={() => setActiveCardId(featured.id)}
                 onTouchEnd={() => setActiveCardId(null)}
-                className={`relative overflow-hidden rounded-xl border p-1 group transition-all duration-500 shadow-[0_0_25px_rgba(245,158,11,0.05)] ${activeCardId === featured.id ? 'border-amber-500/60 bg-gradient-to-r from-amber-950/20 via-slate-900/50 to-slate-900/20' : 'border-amber-500/30 bg-gradient-to-r from-amber-950/10 via-slate-900/40 to-slate-900/10 hover:border-amber-500/60'}`}
+                className={`block relative overflow-hidden rounded-xl border p-1 group transition-all duration-500 shadow-[0_0_25px_rgba(245,158,11,0.05)] cursor-pointer ${activeCardId === featured.id ? 'border-amber-500/60 bg-gradient-to-r from-amber-950/20 via-slate-900/50 to-slate-900/20' : 'border-amber-500/30 bg-gradient-to-r from-amber-950/10 via-slate-900/40 to-slate-900/10 hover:border-amber-500/60'}`}
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-amber-500/20 transition duration-500" />
                 
@@ -266,7 +269,7 @@ useEffect(() => {
                     <img 
                       src={featured.image_url || "/fallback-estate.jpg"} 
                       alt={featured.title} 
-                      className={`h-full w-full object-cover transition duration-700 ${activeCardId === featured.id ? 'scale-105 grayscale-0 opacity-90' : 'grayscale opacity-60 group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-90'}`}
+                      className={`h-full w-full object-cover transition duration-700 ${activeCardId === featured.id ? 'scale-105 opacity-90' : 'opacity-80 group-hover:scale-105 group-hover:opacity-90'}`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
                     <span className="absolute bottom-3 left-3 bg-amber-500 text-slate-950 text-[8px] font-mono uppercase font-black tracking-widest px-2 py-0.5 rounded shadow-lg">
@@ -293,7 +296,7 @@ useEffect(() => {
                       </div>
                     </div>
 
-                    <div className="lg:text-right flex lg:flex-col items-end justify-between lg:justify-center border-t lg:border-t-0 border-slate-800 pt-4 lg:pt-0">
+                    <div className="lg:text-right flex lg:flex-col items-end justify-between lg:justify-center border-t lg:border-t-0 border-slate-800 pt-4 lg:pt-0 w-full lg:w-auto">
                       <div>
                         <span className="block text-[8px] text-slate-500 uppercase tracking-widest mb-0.5">STARTING PRICE</span>
                         <span className="text-2xl font-black text-amber-400 tracking-tight">
@@ -301,16 +304,12 @@ useEffect(() => {
                         </span>
                       </div>
                       
-                      <Link href={`/directory/${featured.id}`} className="mt-3 w-full lg:w-auto block">
-                        <button className="w-full lg:w-auto px-5 py-2.5 rounded-lg border border-amber-500/50 bg-amber-500/10 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold text-[10px] tracking-widest uppercase transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.1)] hover:shadow-[0_0_25px_rgba(245,158,11,0.3)]">
-                          OPEN →
-                        </button>
-                      </Link>
+                      
                     </div>
                   </div>
 
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
@@ -391,14 +390,15 @@ useEffect(() => {
 
         {/* Live filtered grid output */}
         {filteredProperties.length > 0 ? (
-          viewMode === 'GRID' ? (
+         viewMode === 'GRID' ? (
             <div className="grid grid-cols-1 gap-y-12 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
               {filteredProperties.map((property) => (
-                <div 
+                <Link 
                   key={property.id} 
+                  href={`/directory/${property.id}`}
                   onTouchStart={() => setActiveCardId(property.id)}
                   onTouchEnd={() => setActiveCardId(null)}
-                  className={`group relative flex flex-col overflow-hidden rounded-xl border transition-all duration-500 ${activeCardId === property.id ? 'border-indigo-500/50 bg-slate-900/60 shadow-[0_0_40px_rgba(99,102,241,0.15)]' : 'border-slate-700/60 bg-slate-900/40 hover:border-indigo-500/50 hover:bg-slate-900/60 hover:shadow-[0_0_40px_rgba(99,102,241,0.15)]'}`}
+                  className={`group relative flex flex-col overflow-hidden rounded-xl border transition-all duration-500 cursor-pointer ${activeCardId === property.id ? 'border-indigo-500/50 bg-slate-900/60 shadow-[0_0_40px_rgba(99,102,241,0.15)]' : 'border-slate-700/60 bg-slate-900/40 hover:border-indigo-500/50 hover:bg-slate-900/60 hover:shadow-[0_0_40px_rgba(99,102,241,0.15)]'}`}
                 >
                   <div className="aspect-[16/10] w-full bg-slate-950 relative overflow-hidden border-b border-slate-700/40">
                     {property.image_url ? (
@@ -406,7 +406,7 @@ useEffect(() => {
                       <img
                         src={property.image_url}
                         alt={property.title}
-                        className={`h-full w-full object-cover object-center transition-all duration-700 ${activeCardId === property.id ? 'scale-110 grayscale-0 opacity-85' : 'grayscale opacity-50 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-85'}`}
+                       className={`h-full w-full object-cover object-center transition-all duration-700 ${activeCardId === property.id ? 'scale-110 opacity-100' : 'opacity-85 group-hover:scale-110 group-hover:opacity-100'}`}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center font-mono text-[9px] text-slate-700">NO_IMG_MATRIX</div>
@@ -447,24 +447,23 @@ useEffect(() => {
                       </div>
                       
                       <div className="flex items-center gap-2">
-                        <ShareButton
-                          title={property.title}
-                          url={`https://www.findle.global/directory/${property.id}`}
-                          compact={true}
-                        />
-                        <Link href={`/directory/${property.id}`}>
-                          <button 
-                            type="button"
-                            className="relative inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 text-indigo-300 font-mono text-[10px] tracking-widest uppercase px-4 py-2.5 transition-all hover:bg-indigo-600/30 hover:text-white"
-                          >
-                            OPEN →
-                          </button>
-                        </Link>
+                        {/* Prevent share button clicks from opening the property page card link */}
+                        <div onClick={(e) => e.stopPropagation()}>
+                          <ShareButton
+                            title={property.title}
+                            url={`https://www.findle.global/directory/${property.id}`}
+                            compact={true}
+                          />
+                        </div>
+                        
+                        {/* <span className="inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 text-indigo-300 font-mono text-[10px] tracking-widest uppercase px-4 py-2.5 transition-all group-hover:bg-indigo-600/30 group-hover:text-white">
+                          OPEN →
+                        </span> */}
                       </div>
                     </div>
 
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           ) : (

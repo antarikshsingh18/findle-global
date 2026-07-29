@@ -233,7 +233,7 @@ export default async function Home() {
                   
                   {/* Tech Card Image Header */}
                   <div className="h-32 w-full relative overflow-hidden opacity-40 group-hover:opacity-70 transition duration-500 border-b border-slate-800">
-                    <img src={feature.imgUrl} alt={feature.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500" />
+                    <img src={feature.imgUrl} alt={feature.title} className="w-full h-full object-cover group-hover: transition duration-500" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent" />
                   </div>
 
@@ -313,10 +313,12 @@ export default async function Home() {
               const displayPrice = property.price_text || (property.startingPrice ? `$${property.startingPrice.toLocaleString()}` : "CONTACT AGENT");
 
               return (
-                <div 
+                <Link 
                   key={property.id} 
-                  className="group flex flex-col bg-slate-900/20 border border-slate-700/40 rounded-xl overflow-hidden transition-all duration-500 hover:border-indigo-500/60 hover:bg-slate-900/35 hover:shadow-[0_0_50px_rgba(99,102,241,0.2)] relative backdrop-blur-sm"
+                  href={`/directory/${property.id}`}
+                  className="group flex flex-col bg-slate-900/20 border border-slate-700/40 rounded-xl overflow-hidden transition-all duration-500 hover:border-indigo-500/60 hover:bg-slate-900/35 hover:shadow-[0_0_50px_rgba(99,102,241,0.2)] relative backdrop-blur-sm cursor-pointer"
                 >
+                <div className="flex flex-col h-full">
                   {/* Corner tech accents */}
                   <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-slate-600 group-hover:border-indigo-400 transition-colors z-20" />
                   <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-slate-600 group-hover:border-indigo-400 transition-colors z-20" />
@@ -326,7 +328,7 @@ export default async function Home() {
                     <img
                       src={displayImage}
                       alt={displayTitle}
-                      className="h-full w-full object-cover object-center grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-90 transition-all duration-700 group-hover:scale-105"
+                      className="h-full w-full object-cover object-center opacity-60 group-hover:opacity-90 transition-all duration-700 group-hover:scale-105"
                     />
                     
                     {/* Overlay gradient */}
@@ -349,8 +351,8 @@ export default async function Home() {
                     <div className="flex-1">
                       {/* System Tags */}
                       <div className="flex items-center justify-between text-[9px] font-mono tracking-widest text-slate-500 uppercase">
-                        <span className="hover:text-slate-400 transition">LISTED_BY // {property.developer || 'INDEPENDENT BUILDER'}</span>
-                        <span className="text-slate-600">ID: #{property.id}</span>
+                        <span className="hover:text-slate-400 transition">DEV // {property.developer || 'INDEPENDENT BUILDER'}</span>
+                        
                       </div>
                       
                       {/* Property Asset Title */}
@@ -361,7 +363,7 @@ export default async function Home() {
                       {/* Digital Grid Specs */}
                       <div className="mt-6 grid grid-cols-2 gap-4 border-t border-slate-700/40 pt-4 text-xs font-mono">
                         <div className="group/info hover:bg-slate-800/30 p-2 rounded transition">
-                          <span className="block text-[8px] text-slate-500 uppercase tracking-widest">LOCATION</span>
+                          <span className="block text-[8px] text-slate-500 uppercase tracking-widest">REGION</span>
                           <span className="font-medium text-slate-300 uppercase mt-1 block tracking-wider text-sm truncate">
                             {property.neighborhood || property.city || 'ONTARIO'}
                           </span>
@@ -383,16 +385,14 @@ export default async function Home() {
                       </div>
                       
                       {/* Enhanced CTA Button Linked to Dynamic Route Matrix */}
-                      <Link href={`/directory/${property.id}`}>
-                        <button className="relative group/btn inline-flex items-center justify-center rounded-lg border border-indigo-500/80 bg-gradient-to-r from-indigo-600/20 to-indigo-600/5 hover:from-indigo-600/30 hover:to-indigo-600/15 text-indigo-300 hover:text-indigo-100 font-mono text-[10px] tracking-widest uppercase px-4 py-3 transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.15)] hover:shadow-[0_0_30px_rgba(99,102,241,0.25)]">
-                          <span>VIEW DETAILS</span>
-                          <span className="ml-1 group-hover/btn:translate-x-0.5 transition">→</span>
-                        </button>
-                      </Link>
+                     
+                      
+                      
                     </div>
                   </div>
 
                 </div>
+                </Link>
               );
             })}
           </div>

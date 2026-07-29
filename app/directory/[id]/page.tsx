@@ -350,7 +350,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
     return (
       <div className="min-h-screen bg-[#030305] flex flex-col items-center justify-center font-mono text-xs text-slate-500 tracking-widest gap-3">
         <div className="w-6 h-6 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-        DECRYPTING SECURE NODE DATA LAYER...
+        LOADING...
       </div>
     );
   }
@@ -414,7 +414,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
               <img 
                 src={project.image_url} 
                 alt={project.title} 
-                className="w-full h-full object-cover opacity-75 grayscale hover:grayscale-0 transition-all duration-700"
+                className="w-full h-full object-cover opacity-75 transition-all duration-700"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-[10px] text-slate-700">NO_VISUAL_DATA</div>

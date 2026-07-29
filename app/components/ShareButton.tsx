@@ -48,7 +48,7 @@ export default function ShareButton({ title, url, compact = false }: ShareButton
           }}
           className="p-2 rounded-lg border border-slate-700/60 bg-slate-900/40 text-slate-400 hover:text-white hover:border-indigo-500/50 transition-all text-[10px] font-mono tracking-widest"
         >
-          ↗
+          SHARE ↗
         </button>
 
         {isOpen && (
