@@ -138,7 +138,7 @@ export default async function Home() {
             
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-tight mb-6">
               discover <br />
-              <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent animate-pulse">
                 tomorrow today
               </span>
             </h1>
@@ -146,7 +146,7 @@ export default async function Home() {
             <div className="flex flex-col sm:flex-row gap-3 mt-8">
               <Link
                 href="/directory"
-                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_25px_rgba(129,140,248,0.35)] transition hover:brightness-110"
+                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_25px_rgba(129,140,248,0.35)] transition hover:brightness-110"
               >
                 Explore Properties
               </Link>
@@ -423,7 +423,7 @@ export default async function Home() {
       <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-white leading-none mb-4">
         Your Next
         <br />
-        <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
           Property Awaits
         </span>
       </h2>
