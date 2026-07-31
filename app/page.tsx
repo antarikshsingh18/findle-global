@@ -165,7 +165,7 @@ export default async function Home() {
               { label: 'PROPERTIES LISTED', value: totalProperties, unit: '' },
               { label: 'CITIES LISTED', value: '20+', unit: '' },
               { label: 'BUILDERS LISTED', value: '100+', unit: '' },
-              { label: 'MARKET COVERAGE', value: '24/7', unit: '%' }
+              { label: 'MARKET COVERAGE', value: '24/7', unit: '' }
             ].map((stat, idx) => (
               <div key={idx} className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300" />
