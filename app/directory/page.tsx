@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../lib/supabase';
 import {useSearchParams} from 'next/navigation';
@@ -27,6 +27,78 @@ interface Project {
   document_links?: string[];
 }
 
+// Trimmed to match your ACTUAL Supabase schema for each table.
+// projects has no is_featured / neighborhood columns — c21_portal_listings does.
+const PROJECTS_SELECT =
+  'id, title, price_text, beds_text, sqft_text, image_url, city, developer, selling_status';
+const C21_SELECT =
+  'id, title, price_text, beds_text, sqft_text, image_url, city, developer, selling_status, is_featured, neighborhood, highlights, document_links';
+
+// Known cities the platform serves — used to detect a city mention in free text.
+// Keep this in sync with the city dropdown list further down.
+const KNOWN_CITIES = [
+  'TORONTO', 'MISSISSAUGA', 'OAKVILLE', 'BRAMPTON', 'WHITBY', 'BARRIE', 'VAUGHAN',
+  'BURLINGTON', 'OSHAWA', 'PICKERING', 'RICHMOND HILL', 'MARKHAM', 'CALEDON',
+  'NEWMARKET', 'GUELPH', 'MILTON', 'CAMBRIDGE', 'KITCHENER', 'ADJALA-TOSORONTIO',
+  'STOUFFVILLE', 'BOWMANVILLE', 'WOODSTOCK', 'ORANGEVILLE', 'ALLISTON', 'WELLAND',
+];
+
+const STATUS_KEYWORDS: Record<string, string> = {
+  'selling': 'SELLING',
+  'sale': 'SELLING',
+  'active': 'ACTIVE',
+  'registration': 'REGISTRATION',
+  'register': 'REGISTRATION',
+  'construction': 'CONSTRUCTION',
+  'sold out': 'SOLD OUT',
+  'sold': 'SOLD OUT',
+};
+
+type LocalFilters = {
+  city: string | null;
+  maxPrice: number | null;
+  bedrooms: number | null;
+  sellingStatus: string[] | null;
+};
+
+// Lightweight local parser — covers structured patterns real users type
+// ("2-bed condo under 900k in Brampton") with zero network latency, zero
+// AI cost. Anything not matched here (like a property title) is left to
+// the plain text fallback in filteredProperties, which ALWAYS runs
+// alongside this — so title searches never get silently overridden.
+function parseSearchQueryLocally(rawQuery: string): LocalFilters {
+  const query = rawQuery.toLowerCase();
+  const filters: LocalFilters = {
+    city: null,
+    maxPrice: null,
+    bedrooms: null,
+    sellingStatus: null,
+  };
+
+  const matchedCity = KNOWN_CITIES.find((city) => query.includes(city.toLowerCase()));
+  if (matchedCity) filters.city = matchedCity;
+
+  const priceMatch = query.match(/(?:under|below|max|up to)\s*\$?\s*([\d,.]+)\s*(k|m)?/);
+  if (priceMatch) {
+    let value = parseFloat(priceMatch[1].replace(/,/g, ''));
+    const unit = priceMatch[2];
+    if (unit === 'k') value *= 1_000;
+    if (unit === 'm') value *= 1_000_000;
+    if (!isNaN(value) && value > 0) filters.maxPrice = value;
+  }
+
+  const bedMatch = query.match(/(\d+)\s*[-\s]?(?:bed|br|bedroom)/);
+  if (bedMatch) {
+    const beds = parseInt(bedMatch[1], 10);
+    if (!isNaN(beds)) filters.bedrooms = beds;
+  }
+
+  const statusHit = Object.keys(STATUS_KEYWORDS).find((kw) => query.includes(kw));
+  if (statusHit) filters.sellingStatus = [STATUS_KEYWORDS[statusHit]];
+
+  return filters;
+}
+
  function DirectoryPage() {
   // --- Live Database States ---
   const [properties, setProperties] = useState<Project[]>([]);
@@ -40,10 +112,10 @@ useEffect(() => {
     try {
       setLoading(true);
 
-      // 🚀 Fetch from both tables in parallel
+      // 🚀 Fetch from both tables in parallel, trimmed to needed columns only
       const [projectsResponse, c21Response] = await Promise.all([
-        supabase.from('projects').select('*'),
-        supabase.from('c21_portal_listings').select('*')
+        supabase.from('projects').select(PROJECTS_SELECT),
+        supabase.from('c21_portal_listings').select(C21_SELECT)
       ]);
 
       if (projectsResponse.error) throw projectsResponse.error;
@@ -75,10 +147,7 @@ useEffect(() => {
         highlights: item.highlights || [],          //Pass down your new array layers
         document_links: item.document_links || []
       }));
-      const ids = [...normalizedProjects, ...normalizedC21].map(p => p.id);
-      const duplicates = ids.filter((id, i) => ids.indexOf(id) !== i);
-      console.log('Duplicate IDs:', duplicates);
-      
+
       // 🔄 Combine them together into your unified feed state
       setProperties([...normalizedProjects, ...normalizedC21]);
 
@@ -103,7 +172,12 @@ useEffect(() => {
   
   // --- Filtering Engine States ---
   const [searchQuery, setSearchQuery] = useState('');
+  // Debounced copy used for filtering, so we don't re-filter the whole array
+  // on every keystroke. The input itself still updates instantly via
+  // searchQuery / onChange below.
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [aiFilters, setAiFilters] = useState<{
+    title: string | null;
     city: string | null;
     maxPrice: number | null;
     bedrooms: number | null;
@@ -128,7 +202,17 @@ useEffect(() => {
   const [selectedStage, setSelectedStage] = useState<string>('ALL');
   const [viewMode, setViewMode] = useState<'GRID' | 'MAP'>('GRID');
 
-  // Trigger LLM parsing with a debounce when search query changes
+  // Debounce the raw search text before it drives filtering
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery.trim());
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Trigger LLM parsing with a debounce when search query changes.
+  // The local parser (below) still runs instantly in the meantime, so the
+  // UI isn't waiting on the network for basic filtering to work.
   useEffect(() => {
     const query = searchQuery.trim();
     if (!query) {
@@ -149,6 +233,7 @@ useEffect(() => {
         }
       } catch (err) {
         console.error("Failed to parse search via AI:", err);
+        setAiFilters(null); // fall back to local parser + text match on failure
       }
     }, 500);
 
@@ -156,53 +241,77 @@ useEffect(() => {
   }, [searchQuery]);
 
   // --- Natural Language & Standard Filtering Engine Logic ---
-  const filteredProperties = properties.filter((property) => {
-    const query = searchQuery.toLowerCase().trim();
+  const localFilters = useMemo(
+    () => parseSearchQueryLocally(debouncedSearchQuery),
+    [debouncedSearchQuery]
+  );
 
-    // 1. If AI parsed structured filters, evaluate them cleanly against properties
-    if (aiFilters) {
-      if (aiFilters.city && property.city) {
-        if (!property.city.toLowerCase().includes(aiFilters.city.toLowerCase())) return false;
-      }
+  // Memoized so this only recomputes when something that actually affects
+  // the result set changes — not on every unrelated re-render (e.g. card
+  // hover state, view mode toggle).
+  const filteredProperties = useMemo(() => {
+    const query = debouncedSearchQuery.toLowerCase().trim();
 
-      if (aiFilters.maxPrice !== null && property.price_text) {
+    // AI-extracted values win when present; local parser fills in anything
+    // the AI call hasn't returned yet (or failed on). Either way, structured
+    // filters and text matching are independent — never either/or.
+    const effectiveCity = aiFilters?.city ?? localFilters.city;
+    const effectiveMaxPrice = aiFilters?.maxPrice ?? localFilters.maxPrice;
+    const effectiveBedrooms = aiFilters?.bedrooms ?? localFilters.bedrooms;
+    const effectiveStatus = aiFilters?.sellingStatus ?? localFilters.sellingStatus;
+    const effectiveDeveloper = aiFilters?.developer ?? null;
+    const effectiveTitle = aiFilters?.title ?? null;
+
+    return properties.filter((property) => {
+      // 1. Structured filters — applied whenever detected, from AI or local parser
+      if (effectiveMaxPrice !== null && property.price_text) {
         const propPriceNum = parseInt(property.price_text.replace(/[^0-9]/g, '')) || 0;
-        if (propPriceNum > 0 && propPriceNum > aiFilters.maxPrice) return false;
+        if (propPriceNum > 0 && propPriceNum > effectiveMaxPrice) return false;
       }
 
-     if (aiFilters.bedrooms !== null && aiFilters.bedrooms !== undefined && property.beds_text) {
-        const hasBedMatch = property.beds_text.includes(String(aiFilters.bedrooms));
+      if (effectiveBedrooms !== null && effectiveBedrooms !== undefined && property.beds_text) {
+        const hasBedMatch = property.beds_text.includes(String(effectiveBedrooms));
         if (!hasBedMatch) return false;
       }
 
-      if (aiFilters.developer && property.developer) {
-        if (!property.developer.toLowerCase().includes(aiFilters.developer.toLowerCase())) return false;
-      }
-
-      if (aiFilters.sellingStatus && aiFilters.sellingStatus.length > 0) {
-        const matchesStatus = aiFilters.sellingStatus.some(status => 
+      if (effectiveStatus && effectiveStatus.length > 0) {
+        const matchesStatus = effectiveStatus.some(status =>
           (property.selling_status || '').toLowerCase().includes(status.toLowerCase())
         );
         if (!matchesStatus) return false;
       }
-    } else if (query) {
-      // 2. Fallback text match if AI hasn't returned yet or query is simple text
-      const titleMatch = property.title?.toLowerCase().includes(query) || false;
-      const developerMatch = property.developer?.toLowerCase().includes(query) || false;
-      const locationMatch = (property.neighborhood || property.city || '').toLowerCase().includes(query);
-      if (!titleMatch && !developerMatch && !locationMatch) return false;
-    }
-      
-    // 3. UI Dropdown filters (Dropdown overrides take priority)
-    const matchesCity = selectedCity === 'ALL' || (property.city && property.city.toUpperCase() === selectedCity.toUpperCase());
-    
-    const currentStatus = property.selling_status || 'SELLING';
-    const matchesStage = selectedStage === 'ALL' || 
-      (selectedStage === 'SELLING' && currentStatus.toUpperCase() === 'ACTIVE') ||
-      currentStatus.toUpperCase() === selectedStage.toUpperCase();
 
-    return matchesCity && matchesStage;
-  });
+      if (effectiveDeveloper && property.developer) {
+        if (!property.developer.toLowerCase().includes(effectiveDeveloper.toLowerCase())) return false;
+      }
+
+      // 2. Text match ALWAYS applies when there's a query — this is the fix.
+      // Previously this only ran when aiFilters was null, so a resolved AI
+      // response (even with every field null) silently disabled title search.
+      if (query) {
+        const titleMatch = property.title?.toLowerCase().includes(query) || false;
+        const developerMatch = property.developer?.toLowerCase().includes(query) || false;
+        const locationMatch = (property.neighborhood || property.city || '').toLowerCase().includes(query);
+        const cityMatch = effectiveCity
+          ? (property.city || '').toLowerCase().includes(effectiveCity.toLowerCase())
+          : false;
+        const aiTitleMatch = effectiveTitle
+          ? (property.title || '').toLowerCase().includes(effectiveTitle.toLowerCase())
+          : false;
+        if (!titleMatch && !developerMatch && !locationMatch && !cityMatch && !aiTitleMatch) return false;
+      }
+
+      // 3. UI Dropdown filters (Dropdown overrides take priority)
+      const matchesCity = selectedCity === 'ALL' || (property.city && property.city.toUpperCase() === selectedCity.toUpperCase());
+
+      const currentStatus = property.selling_status || 'SELLING';
+      const matchesStage = selectedStage === 'ALL' ||
+        (selectedStage === 'SELLING' && currentStatus.toUpperCase() === 'ACTIVE') ||
+        currentStatus.toUpperCase() === selectedStage.toUpperCase();
+
+      return matchesCity && matchesStage;
+    });
+  }, [properties, aiFilters, localFilters, debouncedSearchQuery, selectedCity, selectedStage]);
 
   if (loading) {
     return (
@@ -321,7 +430,7 @@ useEffect(() => {
             <input
               ref={searchInputRef}
               type="text"
-              placeholder=" TRY '2-BED' OR 'UNDER 900K'..."
+              placeholder="SEARCH BY PROJECT, DEVELOPER, OR TRY '2-BED CONDO UNDER 900K'..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-slate-900/40 border border-slate-700/60 rounded-xl px-4 py-3.5 text-white placeholder-slate-500 outline-none focus:border-indigo-500/80 focus:shadow-[0_0_15px_rgba(99,102,241,0.15)] transition duration-300 uppercase tracking-wider text-[11px]"
