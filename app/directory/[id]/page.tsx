@@ -312,7 +312,12 @@ export default function ProjectDetailPage({ params }: PageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [leadType, setLeadType] = useState<'BUYER' |'END_USER'| 'AGENT'>('BUYER');
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
+  const [emailError, setEmailError] = useState('');
+
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  };
 
  useEffect(() => {
   async function fetchProjectNode() {
@@ -332,9 +337,9 @@ export default function ProjectDetailPage({ params }: PageProps) {
 
       setProject(data);
 
-      // Auth check — inside the same try block, no need for a separate try
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) setIsUnlocked(true);
+      // Unlock check — no auth session anymore, just a local flag from a prior form submit
+      const unlocked = localStorage.getItem(`findle_unlocked_${id}`);
+      if (unlocked) setIsUnlocked(true);
 
     } catch (err) {
       console.error('Error fetching project node matrix:', err);
@@ -632,36 +637,15 @@ export default function ProjectDetailPage({ params }: PageProps) {
             <form 
              onSubmit={async (e) => {
   e.preventDefault();
+  setEmailError('');
+
+  if (!isValidEmail(formData.email)) {
+    setEmailError('INVALID_EMAIL_FORMAT — CHECK ADDRESS AND RETRY');
+    return;
+  }
+
   try {
-    // Step 1: Try to create a new account
-    const { data: authData, error: signUpError } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/directory/${id}`,
-        data: {
-          full_name: formData.name,
-          phone: formData.phone,
-          buyer_type: leadType
-        }
-      }
-    });
-
-    // Step 2: If already registered, sign them in instead
-    if (signUpError && signUpError.message.includes('already registered')) {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      });
-      if (signInError) throw signInError;
-      setIsModalOpen(false);
-      setIsUnlocked(true);
-      return;
-    }
-
-    if (signUpError) throw signUpError;
-
-    // Step 3: Insert lead row
+    // Insert lead row — no auth account is created, this is a straight lead capture
     const { error: leadError } = await supabase.from('leads').insert([{
       full_name: formData.name,
       email: formData.email,
@@ -672,20 +656,14 @@ export default function ProjectDetailPage({ params }: PageProps) {
 
     if (leadError) throw leadError;
 
-    // Step 4: If email confirmation needed, tell them to check inbox
-    if (authData.user && !authData.user.confirmed_at) {
-      setIsModalOpen(false);
-      alert('✓ CHECK YOUR EMAIL — click the confirmation link and you will be brought right back to this property, fully unlocked.');
-      return;
-    }
-
-    // Step 5: If email confirm is disabled in Supabase, unlock immediately
+    // Instant unlock — remember it locally so a return visit stays unlocked
+    localStorage.setItem(`findle_unlocked_${id}`, 'true');
     setIsModalOpen(false);
     setIsUnlocked(true);
-    setFormData({ name: '', email: '', phone: '', password: '' });
+    setFormData({ name: '', email: '', phone: '' });
 
   } catch (err: any) {
-    console.error('Auth/Lead Error:', err);
+    console.error('Lead Insert Error:', err);
     alert(`[UPLINK_FAILED]: ${err.message || err}`);
   }
 }}
@@ -710,9 +688,17 @@ export default function ProjectDetailPage({ params }: PageProps) {
                   required
                   placeholder="SECURE_EMAIL@DOMAIN.COM"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white outline-none focus:border-indigo-500 tracking-wider"
+                  onChange={(e) => {
+                    setFormData({ ...formData, email: e.target.value });
+                    if (emailError) setEmailError('');
+                  }}
+                  className={`w-full bg-slate-950 border rounded-lg px-3 py-2 text-white outline-none tracking-wider ${
+                    emailError ? 'border-rose-500 focus:border-rose-500' : 'border-slate-800 focus:border-indigo-500'
+                  }`}
                 />
+                {emailError && (
+                  <p className="text-[9px] text-rose-400 font-mono mt-1.5 tracking-wider">⚠ {emailError}</p>
+                )}
               </div>
 
               <div>
@@ -726,21 +712,6 @@ export default function ProjectDetailPage({ params }: PageProps) {
                   className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white outline-none focus:border-indigo-500 tracking-wider"
                 />
               </div>
-
-              <div>
-  <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-1">
-    CREATE PASSKEY
-  </label>
-  <input
-    type="password"
-    required
-    minLength={6}
-    placeholder="MIN 6 CHARACTERS"
-    value={formData.password}
-    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white outline-none focus:border-indigo-500 tracking-wider"
-  />
-</div>
 
               <button
                 type="submit"

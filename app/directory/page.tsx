@@ -430,7 +430,7 @@ useEffect(() => {
             <input
               ref={searchInputRef}
               type="text"
-              placeholder="SEARCH BY PROJECT, DEVELOPER, OR TRY '2-BED CONDO UNDER 900K'..."
+              placeholder="SEARCH BY PROJECT, DEVELOPER, OR CITY..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-slate-900/40 border border-slate-700/60 rounded-xl px-4 py-3.5 text-white placeholder-slate-500 outline-none focus:border-indigo-500/80 focus:shadow-[0_0_15px_rgba(99,102,241,0.15)] transition duration-300 uppercase tracking-wider text-[11px]"
