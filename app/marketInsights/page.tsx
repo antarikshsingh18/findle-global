@@ -124,15 +124,27 @@ export default function MarketInsights() {
   }
 
   return (
-    <main className="min-h-screen bg-[#030305] text-slate-100 selection:bg-indigo-500 selection:text-white antialiased relative overflow-x-hidden">
-      {/* Background Decorative Elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-gradient-to-b from-indigo-950/25 via-transparent to-transparent pointer-events-none z-0" />
-      <div className="absolute top-[15vh] left-[-15%] w-[50vw] h-[50vw] rounded-full bg-gradient-radial from-indigo-600/10 via-transparent to-transparent blur-3xl pointer-events-none z-0" />
-      <div className="absolute top-[30vh] right-[-20%] w-[45vw] h-[45vw] rounded-full bg-gradient-radial from-emerald-600/8 via-transparent to-transparent blur-3xl pointer-events-none z-0" />
+  <main
+    className="min-h-screen bg-[#030305] text-slate-100 selection:bg-indigo-500 selection:text-white antialiased relative overflow-x-hidden isolate"
+    style={{
+      backgroundImage:
+        "linear-gradient(135deg, rgba(2, 6, 23, 0.82), rgba(2, 6, 23, 0.72), rgba(2, 2, 8, 0.9)), url('/marketInsights.jpg')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      backgroundAttachment: "fixed",
+    }}
+  >
+    <div className="absolute inset-0 pointer-events-none z-0">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.18),transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.12),transparent_28%)]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-gradient-to-b from-indigo-950/25 via-transparent to-transparent" />
+      <div className="absolute top-[15vh] left-[-15%] w-[50vw] h-[50vw] rounded-full bg-gradient-radial from-indigo-600/10 via-transparent to-transparent blur-3xl" />
+      <div className="absolute top-[30vh] right-[-20%] w-[45vw] h-[45vw] rounded-full bg-gradient-radial from-emerald-600/8 via-transparent to-transparent blur-3xl" />
+    </div>
 
-      <SiteNavbar />
+    <SiteNavbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16">
         
         {/* Header Section */}
         <section className="mb-12">
@@ -142,7 +154,7 @@ export default function MarketInsights() {
           
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter text-white uppercase leading-tight mb-6">
             Market <br />
-            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Insights
             </span>
           </h1>

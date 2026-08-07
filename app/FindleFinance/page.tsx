@@ -30,6 +30,14 @@ export default function FindleFinance() {
 				{/* Primary CTAs */}
 				<div className="flex gap-4 mb-12">
 					<Link href="/contact" className="px-6 py-3 rounded-xl bg-white text-black font-black text-xs uppercase tracking-widest hover:bg-slate-100 transition-all duration-300">Book a Free Consultation →</Link>
+					<a 
+      				  href="https://findle-finance.vercel.app/" 
+       				 target="_blank" 
+        			rel="noopener noreferrer" 
+       				 className="px-6 py-3 rounded-xl border border-slate-700 text-slate-300 hover:border-sky-500 hover:text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 font-mono flex items-center gap-2"
+    					>
+       				 Visit Findle Finance ↗
+    				</a>
 					{/* <Link href="/inquire" className="px-6 py-3 rounded-xl border border-slate-700 text-slate-400 hover:border-indigo-500/60 hover:text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 font-mono">Get Pre-Approved</Link> */}
 					{/* <a href="mailto:finance@findle.global" className="px-6 py-3 rounded-xl border border-slate-700 text-slate-400 hover:border-indigo-500/60 hover:text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 font-mono">Email Us</a> */}
 				</div>
@@ -192,6 +200,14 @@ export default function FindleFinance() {
 						<a href="tel:+14374320003" className="px-6 py-3 rounded-xl bg-white text-black font-black text-xs uppercase tracking-widest">Call +1 (437) 432-0003</a>
 						{/* <a href="mailto:admin@findle.global" className="px-6 py-3 rounded-xl border border-slate-700 text-slate-400 hover:border-indigo-500/60 hover:text-white font-bold text-xs uppercase tracking-widest">Email Connect</a> */}
 						<Link href="/contact" className="px-6 py-3 rounded-xl border border-indigo-500/60 text-indigo-300 uppercase tracking-widest font-bold">Book a Free Consultation</Link>
+						<a 
+    href="https://findle-finance.vercel.app/" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    className="px-6 py-3 rounded-xl border border-slate-700 text-slate-300 hover:border-sky-500 hover:text-white uppercase tracking-widest font-bold text-xs flex items-center gap-2 transition-all"
+>
+    Visit Findle Finance ↗
+</a>
 					</div>
 				</div>
 			</div>
