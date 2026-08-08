@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import Footer from '../components/Footer';
 import SiteNavbar from '../components/SiteNavbar';
 
@@ -56,6 +56,10 @@ function parseReport(text: string): { title?: string; sections: Array<{ heading:
 }
 
 export default function MarketInsights() {
+  useEffect(() => {
+    document.title = "Market Insights | Findle Global";
+  }, []);
+
   const [form, setForm] = useState<FormState>({
     city: "", propertyType: "", sizeSqft: "", bedrooms: "", bathrooms: "2",
   });

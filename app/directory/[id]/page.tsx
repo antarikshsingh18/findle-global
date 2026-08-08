@@ -93,6 +93,8 @@ function HstRebateCalculator({ priceText }: { priceText: string }) {
   const formatCurrency = (val: number) =>
     val.toLocaleString('en-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 });
 
+  
+
   return (
     <div className="border border-slate-800 bg-slate-900/10 rounded-xl overflow-hidden mb-4">
       <div className="w-full flex items-center justify-between px-5 py-4 font-mono font-bold text-sm text-slate-200">

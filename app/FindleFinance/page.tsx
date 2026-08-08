@@ -1,8 +1,14 @@
+"use client";
 import Link from 'next/link';
 import Footer from '../components/Footer';
 import SiteNavbar from '../components/SiteNavbar';
+import { useEffect, ChangeEvent, useState } from 'react';
 
 export default function FindleFinance() {
+	useEffect(() => {
+		document.title = "Findle Finance | Findle Global";
+	}, []);
+
 	return (
 		<main className="min-h-screen bg-[#030305] text-slate-100 selection:bg-indigo-500 selection:text-white antialiased relative overflow-x-hidden">
 

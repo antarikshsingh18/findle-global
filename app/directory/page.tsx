@@ -100,6 +100,10 @@ function parseSearchQueryLocally(rawQuery: string): LocalFilters {
 }
 
  function DirectoryPage() {
+  useEffect(() => {
+    document.title = "Listings | Findle Global";
+  }, []);
+
   // --- Live Database States ---
   const [properties, setProperties] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -355,9 +359,9 @@ useEffect(() => {
 
         {/* Sponsored Rows */}
         <section className="mb-12">
-          <div className="text-[10px] font-mono tracking-[0.25em] text-amber-400 uppercase mb-4 flex items-center gap-2">
+          <div className="text-[15px] font-mono tracking-[0.25em] text-amber-400 uppercase mb-4 flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-ping" />
-            [ PREMIUM LISTING ]
+            [ Coming soon.. ]
           </div>
           
           <div className="grid grid-cols-1 gap-6">
