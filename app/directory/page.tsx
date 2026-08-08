@@ -399,7 +399,7 @@ useEffect(() => {
                         {featured.title}
                       </h2>
                       <p className="text-xs text-slate-400 mt-2 max-w-xl font-sans leading-relaxed">
-                        Exclusive allocation access open for platinum broker node structures. Unlock floorplans, inventory allocation layout schemes, and specialized incentive pricing matrices immediately below.
+                       An exclusive enclave of 59 executive two-car garage detached homes by award winning Hallett Homes. Coming very soon to South Brampton at Mississauga Road and Steeles.
                       </p>
                       
                       <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4 text-[11px]">
