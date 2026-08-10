@@ -16,6 +16,7 @@ interface Project {
   beds_text: string;
   sqft_text: string;
   image_url: string;
+  video_url?: string; // Optional — when present, cards render this instead of image_url
   city: string;
   developer: string;
   selling_status: string;
@@ -27,12 +28,51 @@ interface Project {
   document_links?: string[];
 }
 
+// Reusable media block — renders video when video_url is set, otherwise falls back to image.
+// Used by both the featured card and the grid cards so the behavior stays consistent.
+function PropertyMedia({
+  videoUrl,
+  imageUrl,
+  title,
+  className,
+}: {
+  videoUrl?: string;
+  imageUrl?: string;
+  title: string;
+  className: string;
+}) {
+  if (videoUrl) {
+    return (
+      <video
+        src={videoUrl}
+        className={className}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+      />
+    );
+  }
+
+  if (imageUrl) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={imageUrl} alt={title} className={className} />;
+  }
+
+  return (
+    <div className="w-full h-full flex items-center justify-center font-mono text-[9px] text-slate-700">
+      NO_IMG_MATRIX
+    </div>
+  );
+}
+
 // Trimmed to match your ACTUAL Supabase schema for each table.
 // projects has no is_featured / neighborhood columns — c21_portal_listings does.
 const PROJECTS_SELECT =
-  'id, title, price_text, beds_text, sqft_text, image_url, city, developer, selling_status';
+  'id, title, price_text, beds_text, sqft_text, image_url, video_url, city, developer, selling_status';
 const C21_SELECT =
-  'id, title, price_text, beds_text, sqft_text, image_url, city, developer, selling_status, is_featured, neighborhood, highlights, document_links';
+  'id, title, price_text, beds_text, sqft_text, image_url, video_url, city, developer, selling_status, is_featured, neighborhood, highlights, document_links';
 
 // Known cities the platform serves — used to detect a city mention in free text.
 // Keep this in sync with the city dropdown list further down.
@@ -142,6 +182,7 @@ useEffect(() => {
         beds_text: item.beds_text || "See Specs",
         sqft_text: item.sqft_text || "Spacious",
         image_url: item.image_url || "/fallback-estate.jpg",
+        video_url: item.video_url || undefined,
         city: item.city,
         developer: item.developer || "Century 21 Partner",
         selling_status: item.selling_status || "ACTIVE",
@@ -378,10 +419,10 @@ useEffect(() => {
                 <div className="flex flex-col lg:flex-row gap-6 items-center rounded-lg overflow-hidden bg-slate-950/60 backdrop-blur-md p-4 lg:p-6">
                   
                   <div className="w-full lg:w-1/3 aspect-[16/10] rounded-lg overflow-hidden relative border border-slate-800">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img 
-                      src={featured.image_url || "/fallback-estate.jpg"} 
-                      alt={featured.title} 
+                    <PropertyMedia
+                      videoUrl={featured.video_url}
+                      imageUrl={featured.image_url || "/fallback-estate.jpg"}
+                      title={featured.title}
                       className={`h-full w-full object-cover transition duration-700 ${activeCardId === featured.id ? 'scale-105 opacity-90' : 'opacity-80 group-hover:scale-105 group-hover:opacity-90'}`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
@@ -514,16 +555,12 @@ useEffect(() => {
                   className={`group relative flex flex-col overflow-hidden rounded-xl border transition-all duration-500 cursor-pointer ${activeCardId === property.id ? 'border-indigo-500/50 bg-slate-900/60 shadow-[0_0_40px_rgba(99,102,241,0.15)]' : 'border-slate-700/60 bg-slate-900/40 hover:border-indigo-500/50 hover:bg-slate-900/60 hover:shadow-[0_0_40px_rgba(99,102,241,0.15)]'}`}
                 >
                   <div className="aspect-[16/10] w-full bg-slate-950 relative overflow-hidden border-b border-slate-700/40">
-                    {property.image_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={property.image_url}
-                        alt={property.title}
-                       className={`h-full w-full object-cover object-center transition-all duration-700 ${activeCardId === property.id ? 'scale-110 opacity-100' : 'opacity-85 group-hover:scale-110 group-hover:opacity-100'}`}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center font-mono text-[9px] text-slate-700">NO_IMG_MATRIX</div>
-                    )}
+                    <PropertyMedia
+                      videoUrl={property.video_url}
+                      imageUrl={property.image_url}
+                      title={property.title}
+                      className={`h-full w-full object-cover object-center transition-all duration-700 ${activeCardId === property.id ? 'scale-110 opacity-100' : 'opacity-85 group-hover:scale-110 group-hover:opacity-100'}`}
+                    />
                     <div className="absolute top-4 left-4">
                       <span className="inline-flex items-center rounded-lg px-3 py-1 text-[9px] font-mono tracking-widest uppercase font-bold bg-black/80 border backdrop-blur-sm border-emerald-500/50 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                         ● {property.selling_status || 'Active'}
