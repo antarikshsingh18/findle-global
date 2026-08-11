@@ -148,7 +148,7 @@ export default async function Home() {
                 href="/directory"
                 className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_25px_rgba(129,140,248,0.35)] transition hover:brightness-110"
               >
-                Explore Properties
+                Featured Developments
               </Link>
               <Link
                 href="/FindleFinance"
