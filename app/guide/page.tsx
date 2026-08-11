@@ -2,8 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import SiteNavbar from '@/app/components/SiteNavbar';
+import { useEffect } from 'react';
 
 export default function GuidePage() {
+  useEffect(() => {
+    document.title = "Pre-Construction Buyer Guide | Findle Global";
+  }, []);
+
   const router = useRouter();
 
   return (

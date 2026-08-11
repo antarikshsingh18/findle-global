@@ -3,8 +3,12 @@
 import React from 'react';
 import Navbar from '@/app/components/AdminNavLink'; // Update path if needed
 import {useRouter} from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function PartnerPage() {
+  useEffect(() => {
+    document.title = "Partner With Us | Findle Global";
+  }, []);
     const router = useRouter();
   return (
     <div className="min-h-screen bg-[#030305] text-slate-300 font-sans selection:bg-indigo-500/30">

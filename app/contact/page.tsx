@@ -4,8 +4,12 @@ import { useForm, ValidationError } from '@formspree/react';
 import { AiFillInstagram, AiFillLinkedin, AiFillYoutube, AiFillFacebook, AiOutlineTikTok } from 'react-icons/ai';
 import {useRouter} from 'next/navigation';
 import SiteNavbar from '@/app/components/SiteNavbar';
+import { useEffect } from 'react';
 
 export default function ContactPage() {
+  useEffect(() => {
+    document.title = "Contact Findle Global | Findle Global";
+  }, []);
   // Formspree logic
   const [state, handleSubmit] = useForm("mrewyrnn");
   const router = useRouter();

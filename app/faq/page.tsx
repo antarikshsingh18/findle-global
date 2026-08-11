@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 const faqData = [
@@ -23,6 +23,9 @@ const faqData = [
 ];
 
 export default function FAQPage() {
+  useEffect(() => {
+    document.title = "FAQ | Findle Global";
+  }, []);
   const router = useRouter();
   const [openIndex, setOpenIndex] = useState<string | null>(null);
 
