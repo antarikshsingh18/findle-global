@@ -30,6 +30,25 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+const normalizeDeveloperName = (value: string = '') =>
+  value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+
+const getDeveloperPageRoute = (developerName?: string): string | null => {
+  const normalized = normalizeDeveloperName(developerName || '');
+
+  if (!normalized) return null;
+
+  if (normalized.includes('hallett') && normalized.includes('home')) {
+    return '/developers/hallett-homes';
+  }
+
+  if (normalized.includes('trinity') && normalized.includes('point')) {
+    return '/developers/trinity-point';
+  }
+
+  return null;
+};
+
 // Reusable Accordion HUD component to match image_cf83e2.png style
 function AccordionSection({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -397,6 +416,8 @@ export default function ProjectDetailPage({ params }: PageProps) {
     `Structural Footprint Layouts: ${project.beds_text || 'Multi-Unit Mode'}`
   ];
 
+  const developerPageRoute = getDeveloperPageRoute(project.developer);
+
   return (
     <main className="min-h-screen bg-[#030305] text-slate-100 antialiased font-mono relative overflow-x-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -434,7 +455,17 @@ export default function ProjectDetailPage({ params }: PageProps) {
           <div className="flex flex-col justify-between py-1">
             <div>
               <div className="text-[10px] tracking-widest text-indigo-400 uppercase">
-                DEVELOPER : {project.developer || 'UNSPECIFIED'}
+                DEVELOPER : {' '}
+                {developerPageRoute ? (
+                  <Link
+                    href={developerPageRoute}
+                    className="inline-flex items-center rounded-full border border-indigo-500/30 bg-indigo-500/8 px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.18em] text-indigo-200 transition-colors hover:border-indigo-400/60 hover:bg-indigo-500/12 hover:text-white"
+                  >
+                    {project.developer || 'UNSPECIFIED'}
+                  </Link>
+                ) : (
+                  <span className="text-slate-200">{project.developer || 'UNSPECIFIED'}</span>
+                )}
               </div>
               <h1 className="text-2xl font-black text-white uppercase tracking-tight mt-1 mb-4">
                 {project.title}
@@ -495,7 +526,18 @@ export default function ProjectDetailPage({ params }: PageProps) {
                 )}
               </div> */}
               <div>
-                <h4 className="text-sm font-bold text-slate-200 font-mono mb-2 uppercase">{project.developer || 'Caivan Communities'}</h4>
+                <h4 className="text-sm font-bold text-slate-200 font-mono mb-2 uppercase">
+                  {developerPageRoute ? (
+                    <Link
+                      href={developerPageRoute}
+                      className="inline-flex items-center rounded-full border border-indigo-500/25 bg-indigo-500/8 px-2.5 py-1 text-[9px] tracking-[0.18em] text-indigo-200 transition-colors hover:border-indigo-400/60 hover:bg-indigo-500/12 hover:text-white"
+                    >
+                      {project.developer || 'Caivan Communities'}
+                    </Link>
+                  ) : (
+                    <span>{project.developer || 'Caivan Communities'}</span>
+                  )}
+                </h4>
                 {/* <p className="font-sans text-slate-400 leading-relaxed">
                   {project.developer_description || 
                     `Based in Ottawa, Canada, ${project.developer || 'Caivan Communities'} is a homebuilder and real estate developer with ongoing projects throughout the city, the Greater Toronto Area (GTA), and other nearby areas. They build a range of housing alternatives in well-planned, master-planned communities.`}
@@ -648,13 +690,15 @@ export default function ProjectDetailPage({ params }: PageProps) {
 
   try {
     // Insert lead row — no auth account is created, this is a straight lead capture
-    const { error: leadError } = await supabase.from('leads').insert([{
+    const leadPayload: any = {
       full_name: formData.name,
       email: formData.email,
       phone: formData.phone,
       target_property: project.title,
-      buyer_type: leadType
-    }]);
+      buyer_type: leadType,
+    };
+
+    const { error: leadError } = await supabase.from('leads').insert([leadPayload] as any);
 
     if (leadError) throw leadError;
 
