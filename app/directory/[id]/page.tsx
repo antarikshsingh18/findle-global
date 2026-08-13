@@ -46,6 +46,23 @@ const getDeveloperPageRoute = (developerName?: string): string | null => {
     return '/developers/trinity-point';
   }
 
+  if (normalized.includes('caivan') && normalized.includes('communities')) {
+    return '/developers/caivan-communities';
+  }
+  if (normalized.includes('mattamy') && normalized.includes('homes')) {
+    return '/developers/mattamy-homes';
+  }
+  if (normalized.includes('fernbrook') && normalized.includes('homes')) {
+    return '/developers/fernbrook-homes';
+  }
+  if (normalized.includes('countrywide') && normalized.includes('homes')) {
+    return '/developers/countrywide-homes';
+  }
+  if (normalized.includes('minto') && normalized.includes('homes')) {
+    return '/developers/minto-homes';
+  }
+  if (normalized.includes)
+
   return null;
 };
 
