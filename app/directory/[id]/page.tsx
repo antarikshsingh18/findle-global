@@ -58,10 +58,10 @@ const getDeveloperPageRoute = (developerName?: string): string | null => {
   if (normalized.includes('countrywide') && normalized.includes('homes')) {
     return '/developers/countrywide-homes';
   }
-  if (normalized.includes('minto') && normalized.includes('homes')) {
+  if (normalized.includes('minto') && normalized.includes('communities')) {
     return '/developers/minto-homes';
   }
-  if (normalized.includes)
+  
 
   return null;
 };
