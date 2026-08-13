@@ -52,7 +52,7 @@ const getDeveloperPageRoute = (developerName?: string): string | null => {
   if (normalized.includes('mattamy') && normalized.includes('homes')) {
     return '/developers/mattamy-homes';
   }
-  if (normalized.includes('fernbrook') && normalized.includes('homes')) {
+  if (normalized.includes('fernbook') && normalized.includes('homes')) {
     return '/developers/fernbrook-homes';
   }
   if (normalized.includes('countrywide') && normalized.includes('homes')) {
