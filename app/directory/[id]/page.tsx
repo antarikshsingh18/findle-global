@@ -61,8 +61,21 @@ const getDeveloperPageRoute = (developerName?: string): string | null => {
   if (normalized.includes('minto') && normalized.includes('communities')) {
     return '/developers/minto-homes';
   }
-  
-
+  if (normalized.includes('castleridge') && normalized.includes('homes')) {
+    return '/developers/castleridge-homes';
+  }
+  if (normalized.includes('reids') && normalized.includes('heritage')) {
+    return '/developers/reids-heritage';
+  }
+  if (normalized.includes('primont') && normalized.includes('homes')) {
+    return '/developers/primont-homes';
+  }
+  if (normalized.includes('branthaven') && normalized.includes('homes')) {
+    return '/developers/branthaven';
+  }
+  if (normalized.includes('losani') && normalized.includes('homes')) {
+    return '/developers/losani-homes';
+  }
   return null;
 };
 

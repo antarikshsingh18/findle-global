@@ -5,11 +5,11 @@ import Footer from '../../components/Footer';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Hallett Homes | Pre-Construction & New Homes in GTA | Findle',
-  description: 'Explore Hallett Homes\' pre-construction homes and communities across Burlington, Oakville, Mississauga, Brampton, and the GTA on Findle.',
+  title: 'Castleridge Homes | Pre-Construction & New Communities in Ontario | Findle',
+  description: 'Explore Castleridge Homes\' pre-construction condominiums, townhomes, detached homes, and custom residences across Brampton, Oakville, Mississauga, and the GTA on Findle.',
 };
 
-export default async function HallettHomesPage() {
+export default async function CastleridgeHomesPage() {
   // 1. Fetch all listings from both Supabase tables
   const [projectsRes, c21Res] = await Promise.all([
     supabase.from('projects').select('*'),
@@ -25,15 +25,16 @@ export default async function HallettHomesPage() {
     })),
   ];
 
-  // 2. Filter properties specifically for Hallett Homes using clean normalization
+  // 2. Filter properties specifically for Castleridge Homes using clean normalization
   const cleanString = (str: string) => 
     str.toLowerCase().replace(/-(homes|developments|inc|ltd|corporation)|(homes|developments|inc|ltd|corporation)/g, '').replace(/[^a-z0-9]/g, '');
 
-  const targetSlug = cleanString('hallett homes');
+  const targetSlug = cleanString('castleridge homes');
 
   const developerProperties = allListings.filter((item) => {
     if (!item.developer) return false;
-    return cleanString(item.developer).includes(targetSlug) || targetSlug.includes(cleanString(item.developer));
+    const itemDev = cleanString(item.developer);
+    return itemDev.includes('castleridge') || targetSlug.includes(itemDev);
   });
 
   const totalProjects = developerProperties.length;
@@ -53,36 +54,36 @@ export default async function HallettHomesPage() {
           <div className="grid items-center gap-6 lg:grid-cols-[1.2fr_0.8fr]">
             <div>
               <div className="mb-3 text-[9px] uppercase tracking-[0.22em] text-indigo-400">
-                Verified Developer Profile // BILD GTA Developer Builder
+                Verified Developer Profile // Division of Fercap Properties // 35+ Years Experience
               </div>
 
               <h1 className="text-3xl font-black uppercase tracking-[-0.05em] text-white sm:text-4xl">
-                Hallett Homes
+                Castleridge Homes
               </h1>
 
               <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 font-sans">
-                Hallett Homes is an Ontario homebuilder and developer headquartered in Burlington, with a portfolio focused on low-rise residential communities across the Greater Toronto Area. The Canadian Home Builders' Association lists the company in the BILD Greater Toronto Area Developer Builder category. Its current markets span Burlington, Oakville, and Mississauga, with historical development documented in Brampton. The company places an emphasis on individualized home design, craftsmanship, and homeowner customization across detached, single-family, and townhome formats.
+                Castleridge Homes is an Ontario-based builder and developer recognized for delivering residential, condominium, and commercial developments throughout the Greater Toronto Area. Operating as a division of Fercap Properties, the company has built a reputation for creating homes with a custom-design approach, quality craftsmanship, and long-term community value.
               </p>
             </div>
 
             <div className="relative">
-              <div className="overflow-hidden rounded-xl border border-slate-700 bg-slate-950">
+              <div className="overflow-hidden rounded-xl border border-slate-700 bg-slate-950 flex items-center justify-center p-6">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw_y3usqrFIAEqhum9aYx4e6iHnkBXPMWhBHySo_HGzw&s"
-                  alt="Hallett Homes logo"
-                  className="h-[260px] w-full object-contain object-center bg-slate-950 p-4"
+                  src="https://www.castleridgehomes.ca/wp-content/uploads/CASTLERIDGE_logo_v1.png"
+                  alt="Castleridge Homes logo"
+                  className="h-[120px] w-full object-contain object-center rounded-lg bg-slate-950 p-2"
                 />
               </div>
 
               <div className="mt-3 grid grid-cols-2 gap-3">
                 <div className="rounded-lg border border-slate-800 bg-slate-950/80 p-3">
                   <span className="block text-[8px] uppercase tracking-[0.2em] text-slate-500">Featured Developments</span>
-                  <span className="mt-1 block text-xl font-bold text-emerald-400">{totalProjects}</span>
+                  <span className="mt-1 block text-xl font-bold text-emerald-400">{totalProjects > 0 ? totalProjects : 2}</span>
                 </div>
                 <div className="rounded-lg border border-slate-800 bg-slate-950/80 p-3">
-                  <span className="block text-[8px] uppercase tracking-[0.2em] text-slate-500">Cities</span>
-                  <span className="mt-1 block text-xl font-bold text-indigo-400">{activeCities.length > 0 ? activeCities.length : 4}</span>
+                  <span className="block text-[8px] uppercase tracking-[0.2em] text-slate-500">Active Markets</span>
+                  <span className="mt-1 block text-xl font-bold text-indigo-400">{activeCities.length > 0 ? activeCities.length : 5}</span>
                 </div>
               </div>
             </div>
@@ -96,15 +97,11 @@ export default async function HallettHomesPage() {
               Developer Snapshot
             </h2>
             <ul className="space-y-3 text-sm text-slate-300 font-sans">
-              <li><strong className="text-slate-100 font-mono text-xs uppercase">Developer:</strong> Hallett Homes</li>
-              {/* <li><strong className="text-slate-100 font-mono text-xs uppercase">Founded:</strong> Not publicly verified</li> */}
-              <li><strong className="text-slate-100 font-mono text-xs uppercase">Headquarters:</strong> Burlington, Ontario</li>
-              <li><strong className="text-slate-100 font-mono text-xs uppercase">Primary Market:</strong> Greater Toronto Area</li>
-              <li><strong className="text-slate-100 font-mono text-xs uppercase">Current Markets:</strong> Burlington, Oakville, Mississauga</li>
-              <li><strong className="text-slate-100 font-mono text-xs uppercase">Historical Market:</strong> Brampton</li>
-              <li><strong className="text-slate-100 font-mono text-xs uppercase">Property Types:</strong> Detached homes, single-family homes and townhomes</li>
-              <li><strong className="text-slate-100 font-mono text-xs uppercase">Current Selling Community:</strong> The Legacy, Burlington</li>
-              <li><strong className="text-slate-100 font-mono text-xs uppercase">Upcoming Communities:</strong> Joshua Creek Montage Phase 3, Oakville; Abacot Hill, Mississauga; Rosemont Grove, Brampton</li>
+              <li><strong className="text-slate-100 font-mono text-xs uppercase">Developer:</strong> Castleridge Homes</li>
+              <li><strong className="text-slate-100 font-mono text-xs uppercase">Parent Company:</strong> Fercap Properties</li>
+              <li><strong className="text-slate-100 font-mono text-xs uppercase">Headquarters:</strong> Brampton, Ontario</li>
+              <li><strong className="text-slate-100 font-mono text-xs uppercase">Industry Experience:</strong> 35+ Years (Tarion Member Since 1995)</li>
+              <li><strong className="text-slate-100 font-mono text-xs uppercase">Property Types:</strong> Condos, Townhomes, Detached Homes, Custom Homes</li>
             </ul>
           </div>
 
@@ -114,20 +111,12 @@ export default async function HallettHomesPage() {
             </h2>
             <div className="space-y-4 text-sm text-slate-300 font-sans">
               <div>
-                <strong className="text-white font-mono text-xs uppercase block text-indigo-400">Burlington</strong>
-                <p className="text-xs mt-1">Current headquarters location and active market. The Legacy in Millcroft features 50' and 60' estate single-detached residences around two residential cul-de-sac enclaves near Appleby Line and Dundas Street West.</p>
+                <strong className="text-white font-mono text-xs uppercase block text-indigo-400">Peel Region & GTA</strong>
+                <p className="text-xs mt-1">Headquartered in Brampton with extensive past and active developments across Brampton, Mississauga, Vaughan, and Toronto.</p>
               </div>
               <div>
-                <strong className="text-white font-mono text-xs uppercase block text-indigo-400">Oakville</strong>
-                <p className="text-xs mt-1">Major market featuring Joshua Creek Montage Phase 3 (coming soon with 38' singles and back-to-back towns north of Dundas Street East), alongside past projects featuring three-storey towns and 42' to 60' singles.</p>
-              </div>
-              <div>
-                <strong className="text-white font-mono text-xs uppercase block text-indigo-400">Mississauga</strong>
-                <p className="text-xs mt-1">Home to Abacot Hill in Sherwood Forrest near Mississauga Road featuring an intimate collection of 33', 49', and 57' detached residences, plus historical activity with 34' to 55' detached homes.</p>
-              </div>
-              <div>
-                <strong className="text-white font-mono text-xs uppercase block text-indigo-400">Brampton</strong>
-                <p className="text-xs mt-1">Documented historical development footprint with past communities featuring 30' to 45' single-family homes, alongside upcoming opportunities like Rosemont Grove.</p>
+                <strong className="text-white font-mono text-xs uppercase block text-indigo-400">Halton & York Regions</strong>
+                <p className="text-xs mt-1">Boutique-style and condominium communities spanning Oakville (Gemini Condos) and Keswick.</p>
               </div>
             </div>
           </div>
@@ -136,8 +125,8 @@ export default async function HallettHomesPage() {
         {/* Property Grid Section */}
         <section>
           <div className="text-xs tracking-[0.2em] text-slate-400 uppercase mb-6 flex items-center justify-between border-b border-slate-800 pb-4">
-            <span>ACTIVE & FEATURED DEVELOPMENTS ({totalProjects})</span>
-            <span className="text-slate-500">GTA REGIONAL PIPELINE</span>
+            <span>ACTIVE & FEATURED DEVELOPMENTS ({totalProjects > 0 ? totalProjects : 2})</span>
+            <span className="text-slate-500">ONTARIO REGIONAL PORTFOLIO</span>
           </div>
 
           {developerProperties.length > 0 ? (
@@ -157,7 +146,7 @@ export default async function HallettHomesPage() {
                     />
                     <div className="absolute top-4 left-4">
                       <span className="inline-flex items-center rounded-lg px-3 py-1 text-[9px] font-mono tracking-widest uppercase font-bold bg-black/80 border backdrop-blur-sm border-emerald-500/50 text-emerald-300">
-                        ● {property.selling_status || 'Active'}
+                        ● {property.selling_status || 'Active Community'}
                       </span>
                     </div>
                   </div>
@@ -195,28 +184,16 @@ export default async function HallettHomesPage() {
             <div className="grid grid-cols-1 gap-y-12 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
               {/* Static Fallback Card Showcase if database query is empty during initial setup */}
               <div className="border border-slate-800 bg-slate-900/40 rounded-xl p-6">
-                <span className="text-[9px] text-emerald-400 font-bold uppercase">● Now Selling</span>
-                <h3 className="text-lg font-bold text-white mt-2">The Legacy</h3>
-                <p className="text-xs text-slate-400 mt-1">Millcroft, Burlington (Appleby Line & Dundas St W)</p>
-                <div className="mt-4 pt-4 border-t border-slate-800 text-xs text-slate-300">50' & 60' Estate Detached Homes</div>
+                <span className="text-[9px] text-emerald-400 font-bold uppercase">● Active Community</span>
+                <h3 className="text-lg font-bold text-white mt-2">Gemini Condos</h3>
+                <p className="text-xs text-slate-400 mt-1">Oakville, Ontario</p>
+                <div className="mt-4 pt-4 border-t border-slate-800 text-xs text-slate-300">Condominiums</div>
               </div>
               <div className="border border-slate-800 bg-slate-900/40 rounded-xl p-6">
-                <span className="text-[9px] text-indigo-400 font-bold uppercase">○ Coming Soon</span>
-                <h3 className="text-lg font-bold text-white mt-2">Joshua Creek Montage (Phase 3)</h3>
-                <p className="text-xs text-slate-400 mt-1">Joshua Creek, Oakville</p>
-                <div className="mt-4 pt-4 border-t border-slate-800 text-xs text-slate-300">Detached Homes & Back-to-Back Townhomes</div>
-              </div>
-              <div className="border border-slate-800 bg-slate-900/40 rounded-xl p-6">
-                <span className="text-[9px] text-indigo-400 font-bold uppercase">○ Coming Soon</span>
-                <h3 className="text-lg font-bold text-white mt-2">Abacot Hill</h3>
-                <p className="text-xs text-slate-400 mt-1">Sherwood Forrest, Mississauga</p>
-                <div className="mt-4 pt-4 border-t border-slate-800 text-xs text-slate-300">33', 49' & 57' Detached Residences</div>
-              </div>
-              <div className="border border-slate-800 bg-slate-900/40 rounded-xl p-6">
-                <span className="text-[9px] text-indigo-400 font-bold uppercase">○ Coming Soon</span>
-                <h3 className="text-lg font-bold text-white mt-2">Rosemont Grove</h3>
-                <p className="text-xs text-slate-400 mt-1">Heritage Rd & Steeles Ave W, Brampton</p>
-                <div className="mt-4 pt-4 border-t border-slate-800 text-xs text-slate-300">59 Detached Residences (38' & 41' Lots)</div>
+                <span className="text-[9px] text-emerald-400 font-bold uppercase">● Active Development Portfolio</span>
+                <h3 className="text-lg font-bold text-white mt-2">GTA Residential Communities</h3>
+                <p className="text-xs text-slate-400 mt-1">Greater Toronto Area</p>
+                <div className="mt-4 pt-4 border-t border-slate-800 text-xs text-slate-300">Townhomes & Detached Homes</div>
               </div>
             </div>
           )}
@@ -229,20 +206,20 @@ export default async function HallettHomesPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm font-sans">
             <div className="border border-slate-800 bg-slate-900/30 p-6 rounded-xl">
-              <h3 className="font-bold text-white font-mono uppercase text-xs mb-2 text-indigo-400">Who is Hallett Homes?</h3>
-              <p className="text-slate-300">Hallett Homes is an Ontario homebuilder and developer headquartered in Burlington, with residential development activity across the Greater Toronto Area. The company's documented portfolio includes Burlington, Oakville, Mississauga, and Brampton.</p>
+              <h3 className="font-bold text-white font-mono uppercase text-xs mb-2 text-indigo-400">Who is Castleridge Homes?</h3>
+              <p className="text-slate-300">Castleridge Homes is an Ontario homebuilder and developer operating as a division of Fercap Properties, with more than 35 years of experience in residential, condominium, and commercial development.</p>
             </div>
             <div className="border border-slate-800 bg-slate-900/30 p-6 rounded-xl">
-              <h3 className="font-bold text-white font-mono uppercase text-xs mb-2 text-indigo-400">Where does Hallett Homes build?</h3>
-              <p className="text-slate-300">Current Hallett Homes communities are associated with Burlington, Oakville, and Mississauga. The builder's historical community portfolio also includes Brampton.</p>
+              <h3 className="font-bold text-white font-mono uppercase text-xs mb-2 text-indigo-400">Where is Castleridge Homes headquartered?</h3>
+              <p className="text-slate-300">The company is headquartered in Brampton, Ontario, with ongoing projects throughout the Greater Toronto Area and surrounding municipalities.</p>
             </div>
             <div className="border border-slate-800 bg-slate-900/30 p-6 rounded-xl">
-              <h3 className="font-bold text-white font-mono uppercase text-xs mb-2 text-indigo-400">What types of homes does Hallett Homes build?</h3>
-              <p className="text-slate-300">The builder develops primarily low-rise residential communities, including detached and single-family homes as well as townhomes.</p>
+              <h3 className="font-bold text-white font-mono uppercase text-xs mb-2 text-indigo-400">What types of homes does Castleridge build?</h3>
+              <p className="text-slate-300">Castleridge Homes specializes in condominiums, freehold townhomes, detached family homes, and custom residential properties.</p>
             </div>
             <div className="border border-slate-800 bg-slate-900/30 p-6 rounded-xl">
-              <h3 className="font-bold text-white font-mono uppercase text-xs mb-2 text-indigo-400">What are Hallett Homes' current communities?</h3>
-              <p className="text-slate-300">The Legacy in Burlington is currently presented as selling. Joshua Creek Montage Phase 3 in Oakville, Abacot Hill in Mississauga, and Rosemont Grove in Brampton are currently presented as upcoming or registration opportunities.</p>
+              <h3 className="font-bold text-white font-mono uppercase text-xs mb-2 text-indigo-400">What are Castleridge's current communities?</h3>
+              <p className="text-slate-300">Current active communities include Gemini Condos in Oakville, alongside ongoing residential townhome and detached portfolios across the GTA.</p>
             </div>
           </div>
         </section>
