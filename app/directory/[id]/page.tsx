@@ -76,6 +76,15 @@ const getDeveloperPageRoute = (developerName?: string): string | null => {
   if (normalized.includes('losani') && normalized.includes('homes')) {
     return '/developers/losani-homes';
   }
+  if (normalized.includes('fusion') && normalized.includes('homes')) {
+    return '/developers/fusion-homes';
+  }
+  if (normalized.includes('great') && normalized.includes('gulf')) {
+    return '/developers/great-gulf';
+  }
+  if (normalized.includes('arista') && normalized.includes('homes')) {
+    return '/developers/arista-homes';
+  }
   return null;
 };
 
