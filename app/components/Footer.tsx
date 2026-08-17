@@ -181,6 +181,7 @@ export default function Footer() {
                   //{ label: "Investor's Guide", href: '#' },
                  // { label: 'Pre-Construction 101', href: '#' },
                   // { label: 'Mortgage Calculator', href: '/directory' },
+                  { label: "Findle journal", href:'/blogs'},
                   { label: 'Market Insights', href: '/marketInsights' },
                  // { label: 'Neighbourhood Guides', href: '#' },
                   { label: 'VIP Registration', href: '/directory' },

@@ -459,10 +459,10 @@ export default async function Home() {
           Browse All Properties →
         </Link>
         <Link
-          href="/portal"
+          href="/blogs"
           className="px-8 py-3.5 rounded-xl border border-slate-700 text-slate-400 hover:border-indigo-500/60 hover:text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 font-mono"
         >
-          Agent Login
+          Findle journal
         </Link>
       </div>
 
