@@ -682,12 +682,12 @@ export default function ProjectDetailPage({ params }: PageProps) {
               onClick={() => setIsModalOpen(false)}
               className="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors text-xs"
             >
-              [ESC_X]
+              [X]
             </button>
 
             <div className="mb-6">
-              <div className="text-[9px] text-indigo-400 tracking-[0.2em] uppercase mb-1">SECURE_CHANNEL // INITIALIZATION</div>
-              <h3 className="text-base font-black text-white uppercase">Request Asset Extraction</h3>
+              <div className="text-[9px] text-indigo-400 tracking-[0.2em] uppercase mb-1">SECURE REGISTRATION</div>
+              <h3 className="text-base font-black text-white uppercase">Request Assets and Floorplans</h3>
               <p className="text-[11px] text-slate-400 font-sans mt-1">
                 Targeting package profiles for: <span className="text-amber-400 font-bold uppercase">{project.title}</span>
               </p>
@@ -699,21 +699,21 @@ export default function ProjectDetailPage({ params }: PageProps) {
                 onClick={() => setLeadType('BUYER')}
                 className={`flex-1 py-2 rounded-lg transition-all ${leadType === 'BUYER' ? 'bg-indigo-600 text-white' : 'text-slate-500'}`}
               >
-                INDIVIDUAL_INVESTOR
+                INDIVIDUAL INVESTOR
               </button>
               <button
                 type="button"
                 onClick={() => setLeadType('END_USER')}
                 className={`flex-1 py-2 rounded-lg transition-all ${leadType === 'END_USER' ? 'bg-purple-600 text-white' : 'text-slate-500'}`}
                  >
-                 END_USER
+                 END USER
               </button>
               <button
                 type="button"
                 onClick={() => setLeadType('AGENT')}
                 className={`flex-1 py-2 rounded-lg transition-all ${leadType === 'AGENT' ? 'bg-purple-600 text-white' : 'text-slate-500'}`}
               >
-                LICENSED_BROKER
+                LICENSED BROKER
               </button>
             </div>
 
@@ -755,7 +755,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
               className="space-y-4 text-xs"
             >
               <div>
-                <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-1">LEAD_IDENTITY_NAME</label>
+                <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-1">YOUR NAME</label>
                 <input
                   type="text"
                   required
@@ -767,7 +767,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
               </div>
 
               <div>
-                <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-1">COMM_ROUTING_EMAIL</label>
+                <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-1">YOUR EMAIL ADDRESS</label>
                 <input
                   type="email"
                   required
@@ -787,7 +787,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
               </div>
 
               <div>
-                <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-1">TELEPHONY_MOBILE_SIGNAL</label>
+                <label className="block text-[9px] text-slate-500 uppercase tracking-widest mb-1">MOBILE NUMBER</label>
                 <input
                   type="tel"
                   required
@@ -802,7 +802,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
                 type="submit"
                 className="w-full py-3 mt-2 rounded-xl text-[10px] font-black tracking-widest uppercase transition-all duration-300 border border-indigo-500/50 bg-indigo-500/10 hover:bg-indigo-600 text-indigo-300 hover:text-white"
               >
-                AUTHORIZE_PLATINUM_UPLINK →
+                REGISTER →
               </button>
             </form>
 

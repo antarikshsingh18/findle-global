@@ -42,7 +42,7 @@ export default function PortalGateway() {
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
         
         <div className="mb-8 text-center">
-          <span className="text-[10px] tracking-widest text-purple-400 font-bold uppercase">// SECURE_GATEWAY_AUTH</span>
+          <span className="text-[10px] tracking-widest text-purple-400 font-bold uppercase"> SECURE LOGIN</span>
           <h1 className="text-xl font-black text-white uppercase mt-1 tracking-wider">Agent Workspace</h1>
           <p className="text-[11px] text-slate-500 mt-2">AUTHORIZED NETWORK PERSONNEL ONLY</p>
         </div>
@@ -55,7 +55,7 @@ export default function PortalGateway() {
 
         <form onSubmit={handleAgentLogin} className="space-y-4">
           <div>
-            <label className="block text-[10px] uppercase tracking-widest text-slate-400 mb-1.5 pl-1">Secure Email</label>
+            <label className="block text-[10px] uppercase tracking-widest text-slate-400 mb-1.5 pl-1"> Email</label>
             <input
               type="email"
               required
@@ -67,7 +67,7 @@ export default function PortalGateway() {
           </div>
 
           <div>
-            <label className="block text-[10px] uppercase tracking-widest text-slate-400 mb-1.5 pl-1">Passkey Node</label>
+            <label className="block text-[10px] uppercase tracking-widest text-slate-400 mb-1.5 pl-1">Password</label>
             <input
               type="password"
               required
@@ -83,7 +83,7 @@ export default function PortalGateway() {
             disabled={loading}
             className="w-full mt-6 bg-slate-100 hover:bg-white text-black font-bold uppercase tracking-widest text-xs py-3.5 rounded-xl transition-all disabled:opacity-50 shadow-[0_4px_20px_rgba(255,255,255,0.15)] flex items-center justify-center gap-2"
           >
-            {loading ? 'INITIALIZING UPLINK...' : 'DECRYPT & ENTER →'}
+            {loading ? 'INITIALIZING UPLINK...' : ' ENTER →'}
           </button>
         </form>
       </div>
