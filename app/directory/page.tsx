@@ -406,8 +406,8 @@ useEffect(() => {
             [ Coming soon.. ]
           </div>
           
-          <div className="grid grid-cols-1 gap-6">
-            {(properties.some(p => p.is_featured) ? properties.filter(p => p.is_featured) : properties.slice(0, 1)).map((featured: any) => (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {(properties.some(p => p.is_featured) ? properties.filter(p => p.is_featured) : properties).slice(0, 2).map((featured: any) => (
               <Link 
                 key={`featured-${featured.id}`}
                 href={`/directory/${featured.id}`}
